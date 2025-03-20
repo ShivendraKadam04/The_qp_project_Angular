@@ -1,0 +1,133 @@
+.quran-container {
+    display: grid;
+    gap: 20px; /* Increased gap for better spacing */
+    box-sizing: border-box;
+    padding: 0px 20px;
+  }
+  
+  /* Card styles */
+  .card {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: scale(1.03);
+    cursor: pointer; /* Slightly smaller scale for smoother hover */
+  }
+  
+  .card img {
+    width: 100%;
+    object-fit: cover;
+  }
+  
+  .card h3 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.93); /* Slightly darker overlay for better readability */
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    font-weight: 500;
+  }
+  
+  /* Mobile view (default) */
+  @media (max-width: 767px) {
+    .quran-container {
+      grid-template-columns: 1fr; /* Single column for mobile */
+    }
+  
+    .main-card img {
+      height: 220px; /* Slightly taller for the main card on mobile */
+    }
+  
+    .card:not(.main-card) img {
+      height: 180px; /* Taller small cards on mobile */
+      aspect-ratio: 1 / 1; /* More square-like */
+    }
+  
+    .card h3 {
+      font-size: 14px;
+    }
+  }
+  
+  /* Tablet view (768px to 1199px) */
+  @media (min-width: 768px) and (max-width: 1199px) {
+    .quran-container {
+      grid-template-columns: repeat(3, 1fr); /* 3 columns */
+      grid-template-rows: auto auto auto; /* Adjust rows for better wrapping */
+    }
+  
+    /* Main card spans 2 columns and 2 rows */
+    .main-card {
+      grid-column: 1 / 3; /* Span 2 columns */
+      grid-row: 1 / 3; /* Span 2 rows for more prominence */
+    }
+  
+    .main-card img {
+      height: 400px; /* Larger height for the main card */
+    }
+  
+    .main-card h3 {
+      font-size: 24px; /* Larger font for the main card */
+    }
+  
+    /* Smaller cards */
+    .card:not(.main-card) {
+      grid-column: auto;
+      grid-row: auto;
+    }
+  
+    .card:not(.main-card) img {
+      height: 200px; /* Taller and boxy small cards */
+      aspect-ratio: 1 / 1; /* Square shape */
+    }
+  
+    .card:not(.main-card) h3 {
+      font-size: 14px;
+    }
+  }
+  
+  /* Desktop view (1200px and above) */
+  @media (min-width: 1200px) {
+    .quran-container {
+      grid-template-columns: repeat(5, 1fr); /* 5 columns for desktop */
+      grid-template-rows: auto auto; /* 2 rows */
+    }
+  
+    /* Main card spans 2 columns and 2 rows */
+    .main-card {
+      grid-column: 1 / 3; /* Span 2 columns */
+      grid-row: 1 / 3; /* Span 2 rows */
+    }
+  
+    .main-card img {
+      height: 500px; /* Even larger for desktops */
+    }
+  
+    .main-card h3 {
+      font-size: 28px; /* Larger font for the main card */
+    }
+  
+    /* Smaller cards */
+    .card:not(.main-card) {
+      grid-column: auto;
+      grid-row: auto;
+    }
+  
+    .card:not(.main-card) img {
+      height: 220px; /* Taller and boxy small cards */
+      aspect-ratio: 1 / 1; /* Square shape */
+    }
+  
+    .card:not(.main-card) h3 {
+      font-size: 16px;
+    }
+  }

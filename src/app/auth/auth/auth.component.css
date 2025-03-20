@@ -1,0 +1,27 @@
+.auth-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  padding: 0px 100px;
+  gap: 50px;
+  background: url('/assets/icons/islamic-new-year-concept-with-copy-space.jpg') no-repeat center center/cover;
+  justify-content: space-between; /* Keeps layout for larger screens */
+  align-items: center;
+}
+
+@media (max-width: 700px) {
+  .auth-container {
+    justify-content: center; /* Center the content */
+    padding: 20px; /* Reduce padding */
+  }
+
+  .empty-box {
+    display: none; /* Hide the empty box */
+  }
+
+  .content-section {
+    width: 100%; /* Adjust width to be more flexible */
+    max-width: 400px; /* Optional: set a max width */
+    text-align: center; /* Center text if necessary */
+  }
+}

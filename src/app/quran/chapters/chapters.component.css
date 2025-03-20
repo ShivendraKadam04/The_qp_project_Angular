@@ -1,0 +1,70 @@
+.inner-layout {
+    display: flex;
+  }
+  
+  .sidebar-title {
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .sider-menu {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sider-menu li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .sider-menu li:hover {
+    background: #f0f0f0;
+  }
+  
+  .inner-content {
+    flex: 1;
+    padding: 20px;
+    
+  }
+  
+  .verses-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .verse-card {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+  
+  .select-message {
+    text-align: center;
+    font-size: 18px;
+    color: gray;
+    margin-top: 20px;
+  }
+  
+
+  .icon-wrapper {
+    cursor: pointer;
+    font-size: 25px;
+    font-weight: 700;
+    color: #6c6c6c; /* Default color */
+    transition: color 0.3s ease; /* Smooth color transition */
+  }
+  
+  .icon-wrapper:hover {
+    color: #E0BC5E; /* Change to red on hover */
+  }
+  
+  /* Ensure the nz-icon inherits the color */
+  .icon-wrapper nz-icon {
+    color: inherit;
+  }

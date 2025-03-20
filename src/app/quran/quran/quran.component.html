@@ -1,0 +1,82 @@
+<nz-layout >
+  <nz-header style="display: flex;justify-content: space-between;background-color: #14161b;height: 70px;">
+    <div routerLink="dashboard"  class="logo"><img  src="https://res.cloudinary.com/dpo0l887m/image/upload/v1741927962/jwdrqiontemuriteejgr.png" alt="The Quran Project Logo">
+    </div>
+
+    <div style="  display: flex;
+  align-items: center;gap: 50px;justify-content:space-between ;">
+  
+
+  <div >
+    <ul style="display: flex; list-style-type: none; gap: 28px; font-size: 16px; margin: 0;" nzMode="horizontal">
+      <li routerLink="dashboard"  routerLinkActive="active" #rla="routerLinkActive"  class="hover-underline-animation nav-item">
+        <img  [src]="rla.isActive ? 'assets/icons/home-active.svg' : 'assets/icons/home.svg'" style="margin-right: 5px;height: 14px;"  alt="">
+        Home
+      </li> 
+      <li routerLink="chapters" routerLinkActive="active" #rla2="routerLinkActive" class="hover-underline-animation nav-item">
+        <img  [src]="rla2.isActive ? 'assets/icons/chapters-active.svg' : 'assets/icons/chapters.svg'" style="margin-right: 5px;height: 14px;"  alt=""> Chapters
+      </li>
+      <!-- <li routerLink="profile" routerLinkActive="active" #rla3="routerLinkActive" class="hover-underline-animation nav-item">
+        <img  [src]="rla3.isActive ? 'assets/icons/profile-active.svg' : 'assets/icons/profile.svg'" style="margin-right: 5px;height: 14px;"  alt=""> Profile
+      </li> -->
+
+
+     
+
+    </ul>
+  </div>
+
+    <div style="display: flex;gap: 5px;">
+      <div  style="display: flex;align-items: center;">
+        <span style="border-radius: 50%; background-color: #f2f2f2;">
+          <div style="display: flex;align-items: center;" class="avatar-placeholder" *ngIf="userdata?.profilePhoto; else placeholder">
+            <img [src]="file" style="object-fit: cover; width: 55px;
+          height: 55px;border-radius: 50%;">
+          </div>
+          <ng-template #placeholder>
+            <div 
+              style="border-radius:  50%; background-color: #f2f2f2;height: 50px;display: flex;align-items: center;width: 50px;justify-content: center;font-size: 16px;">
+              <strong>{{firstName?.charAt(0).toUpperCase()}}{{lastName?.charAt(0).toUpperCase()}}</strong>
+            </div>
+          </ng-template>
+
+        </span>
+      </div>
+      <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" style="font-size: 16px">
+        {{ Username || firstName }}
+        <span nz-icon nzType="down"></span>
+      </a>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu style="display: flex; flex-direction: column">
+          <li nz-menu-item routerLink="profile">
+            <span nz-icon nzType="user" nzTheme="outline"></span>
+            <!-- <img src="assets/icons/category.svg" alt=""  > -->
+            <span style="padding-left: 10px;">Profile</span>
+          </li>
+          <!-- <li nz-menu-item style="padding-left: 10px;" (click)="toggleTheme()">
+            <span *ngIf="isDarkTheme"><img style="width: 22px;" src="assets/icons/sun.svg" alt=""> Light
+              Theme</span>
+
+            <span *ngIf="!isDarkTheme"><img style="width: 22px;" src="assets/icons/moon.svg" alt="">Dark
+              Theme</span>
+          </li> -->
+          <li nz-menu-item (click)="logout()">
+            <span nz-icon nzType="logout" nzTheme="outline"></span>
+            <!-- <img src="assets/icons/category.svg" alt=""  > -->
+            <span style="padding-left: 10px">Logout</span>
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+   
+
+  
+  </div>
+  </nz-header>
+  <nz-content>
+   
+    <div class="inner-content">
+      <router-outlet ></router-outlet></div>
+  </nz-content>
+  <nz-footer>The Quran Project ©2025 Implement By Way4Web</nz-footer>
+</nz-layout>

@@ -40,3 +40,25 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+src/environments/environment.prod.ts
+src/environments/environment.ts
+src/assets/icons/BG-01.jpg
+src/assets/icons/chapters-active.svg
+src/assets/icons/chapters.svg
+src/assets/icons/home-active.svg
+src/assets/icons/home.svg
+src/assets/icons/islamic-new-year-concept-with-copy-space.jpg
+src/assets/icons/profile-active.svg
+src/assets/icons/profile.svg
+src/assets/icons/religious-books-standing-with-bird-cage.jpg
+src/assets/icons/rm194-aew-01.jpg
+src/assets/images/Group 1631.svg
+src/assets/images/QP 6.svg
+src/assets/images/Rectangle 13.svg
+src/assets/images/Rectangle 14.svg
+src/assets/images/Rectangle 15.svg
+src/assets/images/Rectangle 16.svg
+src/assets/images/Rectangle 17.svg
+src/assets/images/Rectangle 18.svg
+src/assets/images/Rectangle 19.svg
+src/assets/images/Rectangle 20.svg

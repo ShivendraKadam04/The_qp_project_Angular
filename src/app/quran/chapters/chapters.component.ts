@@ -20,8 +20,10 @@ export class ChaptersComponent {
     this.fetchQuranData();
   }
 
+  loading:boolean = false
   // Fetch Quran data based on selected language
   fetchQuranData() {
+    this.loading = true
     this.quranService.getQuranData(this.selectedLanguage).subscribe(
       (response) => {
         if (response.success) {
@@ -32,15 +34,26 @@ export class ChaptersComponent {
               verse.versesText = verse.versesText.replace(/(\d+)/g, "<sup>$1</sup>");
             });
           });
-         
+          this.loading = false
+
+          // Automatically select the first Surah
+          if (this.quranData.length > 0) {
+            this.selectSurah(this.quranData[0]);
+          }
         }
       },
       (error) => {
+        this.loading = false
+
         console.error('Error fetching Quran data:', error);
       }
     );
-}
+  }
 
+
+  
+  
+  
 
   playAudio(audioUrl: string) {
 
@@ -64,13 +77,9 @@ selectedFootnotes: any[] = [];
 selectedVerseNumber: number | null = null; // Store the selected verse number
 
 openFootnoteModal(verse: any) {
-  console.log("Clicked Verse:", verse); // Debugging output
-  this.selectedFootnotes = verse.footnotes || []; // Get footnotes from the clicked verse
-  this.selectedVerseNumber = verse.versesNo; // Store the verse number for display
-  this.isFootnoteModalVisible = true;
-
-  console.log("Selected Footnotes:", this.selectedFootnotes); // Debugging output
-  this.cdr.detectChanges(); // Force Angular to update UI
+  if (verse.footnotes && verse.footnotes.length > 0) {
+    this.selectedFootnotes = verse.footnotes;
+  }
 }
 
 closeFootnoteModal() {

@@ -12,6 +12,9 @@ import { ChaptersComponent } from './chapters/chapters.component';
 import { ProfileComponent } from './profile/profile.component';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
+
 
 @NgModule({
   declarations: [
@@ -28,7 +31,9 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzIconModule,
     NzMenuModule,
     NzDropDownModule,
-    NzLayoutModule
+    NzLayoutModule,
+    NzSpinModule,
+    NzPopoverModule
 
   ]
 })

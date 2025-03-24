@@ -35,6 +35,13 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
+
+  .selected-surah {
+    background-color: #E0BC5E !important; 
+    color: white !important;
+    font-weight: bold;
+  }
+  
   
   .verse-card {
     background: #f9f9f9;
@@ -56,7 +63,7 @@
     cursor: pointer;
     font-size: 25px;
     font-weight: 700;
-    color: #6c6c6c; /* Default color */
+    color: #d5d5d5; /* Default color */
     transition: color 0.3s ease; /* Smooth color transition */
   }
   
@@ -68,3 +75,6 @@
   .icon-wrapper nz-icon {
     color: inherit;
   }
+
+  
+  

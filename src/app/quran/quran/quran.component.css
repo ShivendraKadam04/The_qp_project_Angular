@@ -31,11 +31,11 @@ nz-footer {
 }
 
 .inner-content {
-  background: #fff;
+  background:#fff;
   padding: 24px;
   min-height: 280px;
   border-radius: 10px;
-  height: 79vh;
+  height: 88vh;
 
 
 }
@@ -91,4 +91,17 @@ nz-footer {
   background-color: #E0BC5E;
   bottom: -2px;
   left: 0;
+}
+
+
+
+@media screen and (max-width: 900px) {
+.menulargeScreen{
+  display: none;
+}
+}
+@media screen and (min-width: 900px) {
+  .menuMobile{
+    display: none;
+  }
 }

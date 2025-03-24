@@ -7,7 +7,7 @@
   align-items: center;gap: 50px;justify-content:space-between ;">
   
 
-  <div >
+  <div class="menulargeScreen">
     <ul style="display: flex; list-style-type: none; gap: 28px; font-size: 16px; margin: 0;" nzMode="horizontal">
       <li routerLink="dashboard"  routerLinkActive="active" #rla="routerLinkActive"  class="hover-underline-animation nav-item">
         <img  [src]="rla.isActive ? 'assets/icons/home-active.svg' : 'assets/icons/home.svg'" style="margin-right: 5px;height: 14px;"  alt="">
@@ -24,6 +24,22 @@
      
 
     </ul>
+  </div>
+
+
+  <div class="menuMobile">
+    <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu2">
+      <nz-icon nzType="menu" style="color: #E0BC5E;" nzTheme="outline" />
+    </a>
+    <nz-dropdown-menu #menu2="nzDropdownMenu">
+      <ul nz-menu nzSelectable>
+        <li routerLink="dashboard"  nz-menu-item><img  [src]="rla.isActive ? 'assets/icons/home-active.svg' : 'assets/icons/home.svg'" style="margin-right: 5px;height: 14px;"  alt="">
+          Home</li>
+        <li routerLink="chapters" nz-menu-item>        <img  [src]="rla2.isActive ? 'assets/icons/chapters-active.svg' : 'assets/icons/chapters.svg'" style="margin-right: 5px;height: 14px;"  alt=""> Chapters
+        </li>
+       
+      </ul>
+    </nz-dropdown-menu>
   </div>
 
     <div style="display: flex;gap: 5px;">
@@ -78,5 +94,5 @@
     <div class="inner-content">
       <router-outlet ></router-outlet></div>
   </nz-content>
-  <nz-footer>The Quran Project ©2025 Implement By Way4Web</nz-footer>
+  <!-- <nz-footer>The Quran Project ©2025 Implement By Way4Web</nz-footer> -->
 </nz-layout>

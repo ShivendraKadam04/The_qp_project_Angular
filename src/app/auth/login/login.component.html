@@ -66,10 +66,10 @@
       <div>
       
       </div>
-      <span class="span">Forgot password?</span>
+      <span class="span" style="cursor: pointer;" routerLink="/auth/forgotpassword">Forgot password?</span>
     </div>
 
-    <button (click)="onSubmit()" [disabled]="loading" class="button-submit">
+    <button  (click)="onSubmit()"  [disabled]="loading"  class="button-submit">
       {{ loading ? 'Loging in...' : 'Log In' }}
     </button>
     <p class="p">Don't have an account? <span class="span"  routerLink="/auth/signup">Sign Up</span>

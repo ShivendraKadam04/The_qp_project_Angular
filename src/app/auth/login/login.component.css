@@ -83,6 +83,18 @@
   width: 100%;
   cursor: pointer;
 }
+.button-submit:disabled {
+  background-color: #d3d3d3; /* Gray out */
+  color: #a0a0a0; /* Light gray text */
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.btn google:disabled {
+  background-color: #d3d3d3; /* Gray out */
+  color: #a0a0a0; /* Light gray text */
+  cursor: not-allowed;
+  opacity: 0.6;
+}
 
 .p {
   text-align: center;

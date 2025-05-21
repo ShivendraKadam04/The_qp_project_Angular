@@ -1,4 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
-.ant-modal-body{
-    border-radius: 10px!important;
-}
+/* Custom Scrollbar for Webkit Browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light grey background */
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #E0BC5E; /* Darker grey scrollbar */
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #907329; /* Even darker on hover */
+    cursor: pointer;
+  }
+  
+  /* Custom Scrollbar for Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #E0BC5E #f1f1f1;
+  }
+
+  
+  .ant-popover {
+    border-radius: 20px!important;
+  }

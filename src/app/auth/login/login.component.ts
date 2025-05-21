@@ -14,6 +14,7 @@ export class LoginComponent {
   loginForm: FormGroup;
 
   loading = false;
+  googleloading = false;
   submitted = false;
   passwordVisible = false;
 
@@ -48,6 +49,8 @@ export class LoginComponent {
         this.router.navigate(['/quran'])
         sessionStorage.setItem('authToken', response.token);
         sessionStorage.setItem('userName', response.user.userName);
+        sessionStorage.setItem('isGoogleUser', response.user.isGoogleUser);
+
         this.loading = false;
       },
       error: (response) => {
@@ -61,21 +64,22 @@ export class LoginComponent {
 
 
   async onGoogleLogin() {
-    this.loading = true;
+    this.googleloading = true;
     try {
       const response: any = await this.authService.googleLogin();
       this.message.success(response.message);
       console.log('Response:', response);
-
+      
       // Store JWT in sessionStorage
       sessionStorage.setItem('authToken', response.token);
+      sessionStorage.setItem('isGoogleUser', response.user.isGoogleUser);
 
       // Redirect user after successful login
       this.router.navigate(['/quran']);
     } catch (error) {
       this.message.error('Google login failed');
     } finally {
-      this.loading = false;
+      this.googleloading = false;
     }
   }
 

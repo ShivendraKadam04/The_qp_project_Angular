@@ -23,12 +23,10 @@ nz-breadcrumb {
 nz-content {
   padding: 10px;
   border-radius: 10px;
-  height: 80vh;
+  height: 90vh;
 }
 
-nz-footer {
-  text-align: center;
-}
+
 
 .inner-content {
   background:#fff;
@@ -99,9 +97,14 @@ nz-footer {
 .menulargeScreen{
   display: none;
 }
+.largeScreenProfile{
+  display: none;
+}
+
 }
 @media screen and (min-width: 900px) {
   .menuMobile{
     display: none;
   }
+  
 }

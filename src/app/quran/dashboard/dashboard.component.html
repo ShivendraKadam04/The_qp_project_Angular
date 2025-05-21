@@ -1,6 +1,5 @@
 <div style="height: 85vh; display: flex; flex-direction: column; ">
 
-  <!-- RED SECTION -->
   <div class="teachingseafarermain" style=" flex-shrink: 0;">
     <div class="teachingseafarermain1">
       <div>
@@ -31,7 +30,9 @@
             display: inline-flex;">
             <div class="main-card">
               <img src="assets/images/QP 6.svg" alt="The Qur'an Project" />
-              <h3>The Qur'an Project <nz-icon style="color:#E0BC5E;" nzType="arrow-right" nzTheme="outline" /></h3>
+              <h3 class="largeLogo">The Qur'an Project <nz-icon style="color:#E0BC5E;" nzType="arrow-right" nzTheme="outline" /></h3>
+              <h3 class="smallLogo"><img src="assets/images/QPtransparentLogo.svg" alt=""></h3>
+
             </div>
           </div>
         </div>
@@ -39,8 +40,8 @@
     </div>
   </div>
 
-  <!-- GREEN SECTION (FULL REMAINING HEIGHT) -->
-  <div style="flex-grow: 1; display: flex; justify-content: center; align-items: center;">
+
+  <div class="horizontal-layout" >
     <div class="scroll-container" style="display: flex; justify-content: space-between; width: 100%; gap: 5px;">
       <button class="nav-button left-btn" id="scrollLeft" [disabled]="isAtStart" (click)="scrollLeft()">
         <nz-icon style="color: #E0BC5E; font-size: 30px;" nzType="left" nzTheme="outline" />
@@ -56,5 +57,14 @@
       </button>
     </div>
   </div>
+
+
+  <div class="grid-layout">
+    <div class="card" *ngFor="let item of cards">
+      <img [src]="item.image" [alt]="item.title" />
+      <h3>{{ item.title }}</h3>
+    </div>
+  </div>
+
 
 </div>

@@ -209,6 +209,22 @@ body::-webkit-scrollbar {
   align-items: center;
 }
 
+.grid-layout {
+  display: none;
+}
+
+.horizontal-layout {
+  flex-grow: 1;
+   display: flex;
+    justify-content: center;
+     align-items: center;
+}
+
+@media screen and (min-width: 680px) {
+
+.smallLogo{
+  display: none;
+}}
 
 @media screen and (max-width: 1000px) {
   
@@ -264,4 +280,50 @@ body::-webkit-scrollbar {
     height: 300px;
     width: 100%;
   }
+}
+
+
+@media screen and (max-width: 680px) {
+  .main-card {
+      width: 80vw;  /* 80% of viewport width */
+      height: calc(80vw * 0.58); /* Maintain aspect ratio similar to 600px x 350px */
+  }
+  .main-card h3 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    padding: 10px 20px;
+    font-weight: bold;
+    font-size: 24px;
+    border-radius: 5px;
+    width: 100%;
+}
+.horizontal-layout {
+  display: none; /* Hide horizontal scrolling */
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
+  gap: 10px;
+  justify-content: space-between; /* Space between cards in the same row */
+  padding: 10px;
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Makes sure each card takes full width of its column */
+}
+.largeLogo{
+  display: none;
+}
+
+.teachingseafarermain1{
+  display: none;
+}
+
 }

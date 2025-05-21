@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
@@ -25,9 +25,44 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/login`, credentials);
   }
 
+  generateOtpForPasswordReset(credentials: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/generate-otp-for-password-reset`, credentials);
+  }
+  verifyOtpForPasswordReset(formData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/verify-otp-for-password-reset`, formData);
+  }
+  resetPasswordViaOtp(formData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/update-password-otp`, formData);
+  }
+
+
   fetchUserByUserId(userId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/auth/users/${userId}`);
   }
+
+  updateUserProfile(userId: string, formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/update-profile`, formData);
+  }
+  
+ 
+  updateUserAddress(addressData: any) {
+    return this.http.post(`${this.apiUrl}/auth/update-address`, addressData);
+
+  }
+  
+  
+  changePassword(requestBody: any): Observable<any> {
+    const token = this.getToken(); // Retrieve token from sessionStorage
+  
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}` // Attach token
+    });
+  
+    return this.http.post(`${this.apiUrl}/auth/update-password`, requestBody, { headers });
+  }
+  
+  
 
   async googleLogin(): Promise<any> {
     try {
@@ -77,6 +112,8 @@ export class AuthService {
     sessionStorage.removeItem('userId');
     sessionStorage.removeItem('userRole');
     sessionStorage.removeItem('userName');
+    sessionStorage.removeItem('isGoogleUser');
+
   }
 
   // Function to decode JWT

@@ -296,6 +296,13 @@ button[nz-button] {
   border: 1px solid #d9d9d9;
   color: #333;
 }
+.empty-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Ensure the div takes the full height of its parent */
+  text-align: center;
+}
 
 .cancel-btn:hover {
   background-color: #e8e8e8;

@@ -57,12 +57,14 @@ export class CollectionComponent implements OnInit {
     // Fetch collections
     this.fetchCollections();
   }
+  collectionsLength:any
 
   fetchCollections(): void {
     if (this.userId) {
       this.quranService.getFavoriteVerses(this.userId, this.lang).subscribe({
         next: (res: { message: string; data: Collection[] }) => {
           this.collections = res.data;
+          this.collectionsLength = this.collections.length
           console.log("this.collections",this.collections)
         },
         error: (err: { error: { message: any } }) => {

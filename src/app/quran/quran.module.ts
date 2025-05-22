@@ -23,7 +23,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CollectionComponent } from './collection/collection.component'; 
-
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
 @NgModule({
   declarations: [
@@ -36,6 +36,7 @@ import { CollectionComponent } from './collection/collection.component';
   imports: [
     CommonModule,
     NzButtonModule,
+    NzEmptyModule,
     NzInputModule,
     QuranRoutingModule,
     NzModalModule,

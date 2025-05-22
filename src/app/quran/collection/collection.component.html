@@ -5,16 +5,24 @@
   <nz-icon nzType="folder-add" nzTheme="outline" /> New Collection
 </button>
   </div>
-<div class="collection-container">
+<div class="collection-container" >
 
+<div *ngIf="collectionsLength === 0" class="empty-container">
+  <nz-empty [nzNotFoundContent]="customEmptyContent"></nz-empty>
+  <ng-template #customEmptyContent>
+    <span>No collection, add one</span>
+  </ng-template>
+</div>
 
   <!-- Grid of collections -->
-  <div class="collection-grid">
+   <div *ngIf="collectionsLength > 0">
+     <div class="collection-grid">
     <div
       class="collection-box"
       *ngFor="let collection of collections"
       (click)="showVerses(collection)"
     >
+    
       <span nz-icon nzType="folder" style="color: #000" nzTheme="outline" class="folder-icon"></span>
       <div class="collection-info">
         <h3>{{ collection.collectionName }}</h3>
@@ -22,6 +30,8 @@
       </div>
     </div>
   </div>
+   </div>
+ 
 
   <!-- Modal for creating a new collection -->
  <!-- Custom Modal -->

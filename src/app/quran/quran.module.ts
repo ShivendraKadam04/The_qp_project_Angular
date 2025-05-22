@@ -21,14 +21,17 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { ReactiveFormsModule } from '@angular/forms'; 
+import { ReactiveFormsModule } from '@angular/forms';
+import { CollectionComponent } from './collection/collection.component'; 
+
 
 @NgModule({
   declarations: [
     DashboardComponent,
     QuranComponent,
     ChaptersComponent,
-    ProfileComponent
+    ProfileComponent,
+    CollectionComponent
   ],
   imports: [
     CommonModule,

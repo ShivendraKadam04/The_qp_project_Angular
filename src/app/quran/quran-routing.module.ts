@@ -4,6 +4,7 @@ import { QuranComponent } from './quran/quran.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ChaptersComponent } from './chapters/chapters.component';
 import { ProfileComponent } from './profile/profile.component';
+import { CollectionComponent } from './collection/collection.component';
 
 const routes: Routes = [
   { 
@@ -11,6 +12,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'chapters', component: ChaptersComponent },
       { path: 'profile', component: ProfileComponent },
+      { path: 'collection', component: CollectionComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }

@@ -1,13 +1,14 @@
 <nz-layout class="inner-layout">
-  
   <!-- Sidebar -->
-  <nz-sider nzWidth="250px" nzTheme="light" style="height: 80vh; overflow-y: auto;">          
+  <nz-sider nzWidth="250px" nzTheme="light" style="height: 80vh; overflow-y: auto;">
     <ul nz-menu nzMode="inline" class="sider-menu">
-      <li [ngClass]="{'selected-surah': selectedSurah?.surahNo === surah.surahNo}"
-          style="font-weight: 700;font-size: 18px;" 
-          *ngFor="let surah of quranData" 
-          nz-menu-item 
-          (click)="selectSurah(surah)">
+      <li
+        [ngClass]="{'selected-surah': selectedSurah?.surahNo === surah.surahNo}"
+        style="font-weight: 700; font-size: 18px;"
+        *ngFor="let surah of quranData"
+        nz-menu-item
+        (click)="selectSurah(surah)"
+      >
         {{ surah.surahNo }}. {{ surah.surahName }}
       </li>
     </ul>
@@ -16,16 +17,28 @@
   <!-- Content -->
   <nz-content class="inner-content" style="height: 80vh; overflow-y: auto;">
     <div>
-      <h2 style="color: #E0BC5E;font-weight: 700;font-size: 18px;">
-        {{ selectedSurah.surahNo }}. {{ selectedSurah.surahName }}
+      <h2 style="color: #E0BC5E; font-weight: 700; font-size: 18px;">
+        {{ selectedSurah?.surahNo }}. {{ selectedSurah?.surahName }}
       </h2>
-      
-      <div class="verses-container">
-        <div *ngFor="let verse of selectedSurah.verses" class="verse-card">
 
-          <div style="display: flex; width: 100%; justify-content: space-between;gap: 5px;">
+      <div class="verses-container">
+        <div *ngFor="let verse of selectedSurah?.verses" class="verse-card">
+          <div style="display: flex; width: 100%; justify-content: space-between; gap: 5px;">
             <div style="display: flex; flex-direction: column; gap: 5px; align-items: center;">
-              <div style="background-color: #DEDFE2; color: #E0BC5E; font-size: 18px; font-weight: 700; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;">
+              <div
+                style="
+                  background-color: #DEDFE2;
+                  color: #E0BC5E;
+                  font-size: 18px;
+                  font-weight: 700;
+                  border-radius: 50%;
+                  width: 40px;
+                  height: 40px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
                 {{ verse.versesNo }}
               </div>
 
@@ -34,58 +47,73 @@
                 <nz-icon nzType="play-circle" nzTheme="outline"></nz-icon>
               </div>
 
-              <!-- Favorite -->
-              <div class="icon-wrapper">
+              <!-- Favorite (Heart Icon) -->
+              <div class="icon-wrapper" (click)="openCollectionModal(verse)">
                 <nz-icon nzType="heart" nzTheme="outline"></nz-icon>
               </div>
             </div>
 
             <!-- Verse Text & Footnote Popover -->
-            <div 
-           
-            style="width: 85%; display: flex; align-items: center; cursor: pointer;justify-content: start;"
-            *ngIf="verse.footnotes && verse.footnotes.length > 0">
-            <h3 style="color: #6C6C6C;" [innerHTML]="verse.versesText"></h3>
-          </div>
-
-
-
-          
+            <div
+              style="
+                width: 85%;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                justify-content: start;
+              "
+              *ngIf="verse.footnotes && verse.footnotes.length > 0"
+            >
+              <h3 style="color: #6C6C6C;" [innerHTML]="verse.versesText"></h3>
+            </div>
 
             <!-- Show text without popover if no footnotes -->
-            <h3 *ngIf="!verse.footnotes || verse.footnotes.length === 0" 
-                style="color: #6C6C6C;width: 85%; display: flex; align-items: center; cursor: pointer;justify-content: start;">
+            <h3
+              *ngIf="!verse.footnotes || verse.footnotes.length === 0"
+              style="
+                color: #6C6C6C;
+                width: 85%;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                justify-content: start;
+              "
+            >
               {{ verse.versesText }}
             </h3>
 
-            
-          <div *ngIf="verse.footnotes.length > 0"  style="height: 100%;">
-            <div class="icon-wrapper"  [nzPopoverTrigger]="'click'" 
-            [nzPopoverTitle]="''" 
-            [nzPopoverContent]="verse.footnotes && verse.footnotes.length > 0 ? footnotesTemplate : undefined" 
-            nz-popover>
-            <nz-icon  nzType="info-circle" nzTheme="outline" />
+            <div *ngIf="verse.footnotes.length > 0" style="height: 100%;">
+              <div
+                class="icon-wrapper"
+                [nzPopoverTrigger]="'click'"
+                [nzPopoverTitle]="''"
+                [nzPopoverContent]="verse.footnotes && verse.footnotes.length > 0 ? footnotesTemplate : undefined"
+                nz-popover
+              >
+                <nz-icon nzType="info-circle" nzTheme="outline" />
+              </div>
             </div>
-                      </div>
-          <div *ngIf="verse.footnotes.length === 0"  style="height: 100%;">
-            <div class="icon-wrapper"  [nzPopoverTrigger]="'click'" 
-            [nzPopoverTitle]="''" 
-            [nzPopoverContent]="verse.footnotes && verse.footnotes.length > 0 ? footnotesTemplate : undefined" 
-            nz-popover>
-            <nz-icon style="color: transparent;"  nzType="info-circle" nzTheme="outline" />
+            <div *ngIf="verse.footnotes.length === 0" style="height: 100%;">
+              <div
+                class="icon-wrapper"
+                [nzPopoverTrigger]="'click'"
+                [nzPopoverTitle]="''"
+                [nzPopoverContent]="verse.footnotes && verse.footnotes.length > 0 ? footnotesTemplate : undefined"
+                nz-popover
+              >
+                <nz-icon style="color: transparent;" nzType="info-circle" nzTheme="outline" />
+              </div>
             </div>
-                      </div>
           </div>
 
           <!-- Popover Template -->
-          <ng-template #footnotesTemplate >
-            <div style="max-width: 300px;max-height: 400px;overflow-y: auto;">
-            <p *ngFor="let footnote of verse.footnotes" >
-              <strong style="color: #E0BC5E;">{{ footnote.footnoteNo }}]</strong> {{ footnote.note }}
-            </p>
-          </div>
+          <ng-template #footnotesTemplate>
+            <div style="max-width: 300px; max-height: 400px; overflow-y: auto;">
+              <p *ngFor="let footnote of verse.footnotes">
+                <strong style="color: #E0BC5E;">{{ footnote.footnoteNo }}]</strong> {{ footnote.note }}
+              </p>
+            </div>
           </ng-template>
-
         </div>
       </div>
     </div>
@@ -95,5 +123,27 @@
       <nz-spin nzSize="large"></nz-spin>
     </div>
   </nz-content>
-
 </nz-layout>
+
+<!-- Collection Modal -->
+<!-- Collection Modal -->
+<nz-modal
+  [(nzVisible)]="isCollectionModalVisible"
+  nzTitle="Add to Collection"
+  (nzOnCancel)="closeCollectionModal()"
+>
+  <ng-container *nzModalContent>
+    <ul style="list-style: none; padding: 0;">
+      <li
+        *ngFor="let collection of collections"
+        (click)="saveToCollection(collection)"
+        class="collection-item"
+      >
+        {{ collection }}
+      </li>
+    </ul>
+  </ng-container>
+  <ng-container *nzModalFooter>
+    <button nz-button nzType="default" (click)="closeCollectionModal()">Cancel</button>
+  </ng-container>
+</nz-modal>

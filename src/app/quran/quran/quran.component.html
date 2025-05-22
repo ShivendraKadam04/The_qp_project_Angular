@@ -16,6 +16,9 @@
       <li routerLink="chapters" routerLinkActive="active" #rla2="routerLinkActive" class="hover-underline-animation nav-item">
         <img  [src]="rla2.isActive ? 'assets/icons/chapters-active.svg' : 'assets/icons/chapters.svg'" style="margin-right: 5px;height: 14px;"  alt=""> Chapters
       </li>
+      <li routerLink="collection" routerLinkActive="active" #rla3="routerLinkActive" class="hover-underline-animation nav-item">
+        <img  [src]="rla3.isActive ? 'assets/icons/saved-active.svg' : 'assets/icons/saved.svg'" style="margin-right: 5px;height: 14px;"  alt=""> Saved
+      </li>
       <!-- <li routerLink="profile" routerLinkActive="active" #rla3="routerLinkActive" class="hover-underline-animation nav-item">
         <img  [src]="rla3.isActive ? 'assets/icons/profile-active.svg' : 'assets/icons/profile.svg'" style="margin-right: 5px;height: 14px;"  alt=""> Profile
       </li> -->
@@ -45,6 +48,11 @@
           <span nz-icon nzType="user" nzTheme="outline"></span>
           <!-- <img src="assets/icons/category.svg" alt=""  > -->
           <span style="padding-left: 10px;">Profile</span>
+        </li>
+        <li nz-menu-item routerLink="collection">
+          <span nz-icon nzType="user" nzTheme="outline"></span>
+          <!-- <img src="assets/icons/category.svg" alt=""  > -->
+          <span style="padding-left: 10px;">Saved</span>
         </li>
         <!-- <li nz-menu-item style="padding-left: 10px;" (click)="toggleTheme()">
           <span *ngIf="isDarkTheme"><img style="width: 22px;" src="assets/icons/sun.svg" alt=""> Light

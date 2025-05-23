@@ -5,9 +5,17 @@
   <nz-icon nzType="folder-add" nzTheme="outline" /> New Collection
 </button>
   </div>
+
+   <div *ngIf="isLoading" style="width: 100%;justify-content: center;height: 200px;display: flex;align-items: center;">
+<nz-spin nzSimple [nzSpinning]="isLoading" ></nz-spin>
+  </div>
+
 <div class="collection-container" >
 
-<div *ngIf="collectionsLength === 0" class="empty-container">
+ 
+  
+
+<div *ngIf="!isLoading && collectionsLength === 0" class="empty-container">
   <nz-empty [nzNotFoundContent]="customEmptyContent"></nz-empty>
   <ng-template #customEmptyContent>
     <span>No collection, add one</span>
@@ -15,7 +23,7 @@
 </div>
 
   <!-- Grid of collections -->
-   <div *ngIf="collectionsLength > 0">
+   <div *ngIf="!isLoading && collectionsLength > 0">
      <div class="collection-grid">
     <div
       class="collection-box"

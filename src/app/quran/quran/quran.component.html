@@ -1,107 +1,75 @@
-<nz-layout>
-  <nz-header style="display: flex; justify-content: space-between; background-color: #14161b; height: 70px;">
-    <div routerLink="dashboard" class="logo">
-      <img src="https://res.cloudinary.com/dpo0l887m/image/upload/v1741927962/jwdrqiontemuriteejgr.png" alt="The Quran Project Logo">
-    </div>
-
-    <!-- Search Input -->
-   
-
-    <div style="display: flex; align-items: center; gap: 50px; justify-content: space-between;">
-       <div style="display: flex; align-items: center; width: 350px;">
-      <nz-input-group [nzSuffix]="suffixIconSearch" style="background-color: transparent;color: white;height: 45px;border-radius: 50px;">
-        <input  style="background-color: transparent;color: white;border-radius: 50px;"
-          nz-input
-          placeholder="Search Surah, Verse, or Text..."
-          [(ngModel)]="searchQuery"
-          (ngModelChange)="onSearchChange($event)"
-          [nzAutocomplete]="autoComplete"
-        />
-        <nz-autocomplete #autoComplete>
-          <nz-auto-option
-            *ngFor="let suggestion of searchSuggestions"
-            [nzValue]="suggestion.text"
-            (click)="selectSuggestion(suggestion)"
-          >
-            {{ suggestion.text }}
-          </nz-auto-option>
-        </nz-autocomplete>
-      </nz-input-group>
-       <ng-template #suffixIconSearch>
-      <nz-icon  nzType="search" />
-    </ng-template>
-    </div>
-      <!-- Existing Menu (menulargeScreen, menuMobile, largeScreenProfile) -->
-      <div class="menulargeScreen">
-        <ul style="display: flex; list-style-type: none; gap: 28px; font-size: 16px; margin: 0;" nzMode="horizontal">
-          <li routerLink="dashboard" routerLinkActive="active" #rla="routerLinkActive" class="hover-underline-animation nav-item">
-            <img [src]="rla.isActive ? 'assets/icons/home-active.svg' : 'assets/icons/home.svg'" style="margin-right: 5px; height: 14px;" alt="">
-            Home
-          </li>
-          <li routerLink="chapters" routerLinkActive="active" #rla2="routerLinkActive" class="hover-underline-animation nav-item">
-            <img [src]="rla2.isActive ? 'assets/icons/chapters-active.svg' : 'assets/icons/chapters.svg'" style="margin-right: 5px; height: 14px;" alt="">
-            Chapters
-          </li>
-          <li routerLink="collection" routerLinkActive="active" #rla3="routerLinkActive" class="hover-underline-animation nav-item">
-            <img [src]="rla3.isActive ? 'assets/icons/saved-active.svg' : 'assets/icons/saved.svg'" style="margin-right: 5px; height: 14px;" alt="">
-            Saved
-          </li>
-        </ul>
+  <nz-layout>
+    <nz-header style="display: flex; justify-content: space-between; background-color: #14161b; height: 70px;">
+      <div routerLink="dashboard" class="logo">
+        <img src="https://res.cloudinary.com/dpo0l887m/image/upload/v1741927962/jwdrqiontemuriteejgr.png" alt="The Quran Project Logo">
       </div>
 
-      <div class="menuMobile">
-        <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu2">
-          <nz-icon nzType="menu" style="color: #E0BC5E;" nzTheme="outline" />
-        </a>
-        <nz-dropdown-menu #menu2="nzDropdownMenu">
-          <ul nz-menu nzSelectable>
-            <li routerLink="dashboard" nz-menu-item>
-              <nz-icon nzType="home" nzTheme="outline" />
-              <span style="padding-left: 10px;">Home</span>
+      <!-- Search Input -->
+    
+
+      <div style="display: flex; align-items: center; gap: 50px; justify-content: space-between;">
+        <div class="largeScreenSearch" >
+          <nz-input-group [nzSuffix]="suffixIconSearch" style="background-color: transparent; color: white; height: 45px; border-radius: 50px;">
+            <input style="background-color: transparent; color: white; border-radius: 50px;"
+              nz-input
+              placeholder="Search Surah, Verse, or Text..."
+              [(ngModel)]="searchQuery"
+              (ngModelChange)="onSearchChange($event)"
+              [nzAutocomplete]="autoComplete"
+            />
+            <nz-autocomplete #autoComplete>
+              <nz-auto-option
+                *ngFor="let suggestion of searchSuggestions"
+                [nzValue]="suggestion.text"
+                (click)="selectSuggestion(suggestion)"
+              >
+                {{ suggestion.text }}
+              </nz-auto-option>
+            </nz-autocomplete>
+          </nz-input-group>
+          <ng-template #suffixIconSearch>
+            <nz-icon nzType="search" />
+          </ng-template>
+        </div>
+        <!-- Existing Menu (menulargeScreen, menuMobile, largeScreenProfile) -->
+        <div class="menulargeScreen">
+          <ul style="display: flex; list-style-type: none; gap: 28px; font-size: 16px; margin: 0;" nzMode="horizontal">
+            <li routerLink="dashboard" routerLinkActive="active" #rla="routerLinkActive" class="hover-underline-animation nav-item">
+              <img [src]="rla.isActive ? 'assets/icons/home-active.svg' : 'assets/icons/home.svg'" style="margin-right: 5px; height: 14px;" alt="">
+              Home
             </li>
-            <li routerLink="chapters" nz-menu-item>
-              <nz-icon nzType="book" nzTheme="outline" />
-              <span style="padding-left: 10px;">Chapters</span>
+            <li routerLink="chapters" routerLinkActive="active" #rla2="routerLinkActive" class="hover-underline-animation nav-item">
+              <img [src]="rla2.isActive ? 'assets/icons/chapters-active.svg' : 'assets/icons/chapters.svg'" style="margin-right: 5px; height: 14px;" alt="">
+              Chapters
             </li>
-            <li nz-menu-item routerLink="profile">
-              <span nz-icon nzType="user" nzTheme="outline"></span>
-              <span style="padding-left: 10px;">Profile</span>
-            </li>
-            <li nz-menu-item routerLink="collection">
-              <span nz-icon nzType="user" nzTheme="outline"></span>
-              <span style="padding-left: 10px;">Saved</span>
-            </li>
-            <li nz-menu-item (click)="logout()">
-              <span nz-icon nzType="logout" nzTheme="outline"></span>
-              <span style="padding-left: 10px">Logout</span>
+            <li routerLink="collection" routerLinkActive="active" #rla3="routerLinkActive" class="hover-underline-animation nav-item">
+              <img [src]="rla3.isActive ? 'assets/icons/saved-active.svg' : 'assets/icons/saved.svg'" style="margin-right: 5px; height: 14px;" alt="">
+              Saved
             </li>
           </ul>
-        </nz-dropdown-menu>
-      </div>
+        </div>
 
-      <div class="largeScreenProfile">
-        <div style="display: flex; gap: 5px;">
-          <div style="display: flex; align-items: center;">
-            <span style="border-radius: 50%; background-color: #f2f2f2;">
-              <div style="display: flex; align-items: center;" class="avatar-placeholder" *ngIf="userdata?.profilePhoto; else placeholder">
-                <img [src]="file" style="object-fit: cover; width: 55px; height: 55px; border-radius: 50%;">
-              </div>
-              <ng-template #placeholder>
-                <div style="border-radius: 50%; background-color: #f2f2f2; height: 50px; display: flex; align-items: center; width: 50px; justify-content: center; font-size: 16px;">
-                  <strong>{{firstName?.charAt(0).toUpperCase()}}{{lastName?.charAt(0).toUpperCase()}}</strong>
-                </div>
-              </ng-template>
-            </span>
-          </div>
-          <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" style="font-size: 16px">
-            {{ Username || firstName }}
-            <span nz-icon nzType="down"></span>
+        <div class="menuMobile">
+          <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu2">
+            <nz-icon nzType="menu" style="color: #E0BC5E;" nzTheme="outline" />
           </a>
-          <nz-dropdown-menu #menu="nzDropdownMenu">
-            <ul nz-menu style="display: flex; flex-direction: column">
+          <nz-dropdown-menu #menu2="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li routerLink="dashboard" nz-menu-item>
+                <nz-icon nzType="home" nzTheme="outline" />
+                <span style="padding-left: 10px;">Home</span>
+              </li>
+              <li routerLink="chapters" nz-menu-item>
+                <nz-icon nzType="book" nzTheme="outline" />
+                <span style="padding-left: 10px;">Chapters</span>
+              </li>
               <li nz-menu-item routerLink="profile">
                 <span nz-icon nzType="user" nzTheme="outline"></span>
                 <span style="padding-left: 10px;">Profile</span>
+              </li>
+              <li nz-menu-item routerLink="collection">
+                <span nz-icon nzType="user" nzTheme="outline"></span>
+                <span style="padding-left: 10px;">Saved</span>
               </li>
               <li nz-menu-item (click)="logout()">
                 <span nz-icon nzType="logout" nzTheme="outline"></span>
@@ -110,12 +78,72 @@
             </ul>
           </nz-dropdown-menu>
         </div>
+
+        <div class="largeScreenProfile">
+          <div style="display: flex; gap: 5px;">
+            <div style="display: flex; align-items: center;">
+              <span style="border-radius: 50%; background-color: #f2f2f2;">
+                <div style="display: flex; align-items: center;" class="avatar-placeholder" *ngIf="userdata?.profilePhoto; else placeholder">
+                  <img [src]="file" style="object-fit: cover; width: 55px; height: 55px; border-radius: 50%;">
+                </div>
+                <ng-template #placeholder>
+                  <div style="border-radius: 50%; background-color: #f2f2f2; height: 50px; display: flex; align-items: center; width: 50px; justify-content: center; font-size: 16px;">
+                    <strong>{{firstName?.charAt(0).toUpperCase()}}{{lastName?.charAt(0).toUpperCase()}}</strong>
+                  </div>
+                </ng-template>
+              </span>
+            </div>
+            <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" style="font-size: 16px">
+              {{ Username || firstName }}
+              <span nz-icon nzType="down"></span>
+            </a>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu style="display: flex; flex-direction: column">
+                <li nz-menu-item routerLink="profile">
+                  <span nz-icon nzType="user" nzTheme="outline"></span>
+                  <span style="padding-left: 10px;">Profile</span>
+                </li>
+                <li nz-menu-item (click)="logout()">
+                  <span nz-icon nzType="logout" nzTheme="outline"></span>
+                  <span style="padding-left: 10px">Logout</span>
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+          </div>
+        </div>
+      </div>
+    </nz-header>
+    <!-- Sub-header for Search on Mobile -->
+     <nz-header class="sub-header">
+    <div  >
+      <div style="display: flex; align-items: center; width: 100%;">
+        <nz-input-group [nzSuffix]="suffixIconSearchMobile" style="background-color: transparent; color: white; height: 45px; border-radius: 50px;">
+          <input style="background-color: transparent; color: white; border-radius: 50px;"
+            nz-input
+            placeholder="Search Surah, Verse, or Text..."
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="onSearchChange($event)"
+            [nzAutocomplete]="autoCompleteMobile"
+          />
+          <nz-autocomplete #autoCompleteMobile>
+            <nz-auto-option
+              *ngFor="let suggestion of searchSuggestions"
+              [nzValue]="suggestion.text"
+              (click)="selectSuggestion(suggestion)"
+            >
+              {{ suggestion.text }}
+            </nz-auto-option>
+          </nz-autocomplete>
+        </nz-input-group>
+        <ng-template #suffixIconSearchMobile>
+          <nz-icon nzType="search" />
+        </ng-template>
       </div>
     </div>
-  </nz-header>
-  <nz-content>
-    <div class="inner-content">
-      <router-outlet></router-outlet>
-    </div>
-  </nz-content>
-</nz-layout>
+    </nz-header>
+    <nz-content >
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>

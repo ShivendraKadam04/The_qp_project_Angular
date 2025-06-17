@@ -23,6 +23,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CollectionComponent } from './collection/collection.component';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
+import { AppendiceComponent } from './appendice/appendice.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
     QuranComponent,
     ChaptersComponent,
     ProfileComponent,
-    CollectionComponent
+    CollectionComponent,
+    AppendiceComponent
   ],
   imports: [
     CommonModule,

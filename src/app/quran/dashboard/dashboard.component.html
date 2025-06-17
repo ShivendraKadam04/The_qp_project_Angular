@@ -47,7 +47,7 @@
         <nz-icon style="color: #E0BC5E; font-size: 30px;" nzType="left" nzTheme="outline" />
       </button>
       <div class="scroll-wrapper" #scrollWrapper (scroll)="checkScroll()" style="display: flex; align-items: center;">
-        <div class="card" *ngFor="let item of cards">
+        <div class="card" *ngFor="let item of cards" (click)="navigateToAppendice(item.title)">
           <img [src]="item.image" [alt]="item.title" />
           <h3>{{ item.title }}</h3>
         </div>
@@ -60,7 +60,7 @@
 
 
   <div class="grid-layout">
-    <div class="card" *ngFor="let item of cards">
+    <div class="card" *ngFor="let item of cards" (click)="navigateToAppendice(item.title)">
       <img [src]="item.image" [alt]="item.title" />
       <h3>{{ item.title }}</h3>
     </div>

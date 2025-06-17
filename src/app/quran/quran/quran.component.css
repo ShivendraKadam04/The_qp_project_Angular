@@ -134,9 +134,27 @@ nz-header {
   padding: 0 20px;
 }
 
-@media (max-width: 768px) {
+
+
+@media screen and (max-width: 768px) {
+  .largeScreenSearch {
+    display: none;
+  }
+
   nz-input-group {
     width: 100%;
-    margin: 10px 0;
+    margin: 0;
+  }
+    .sub-header {
+    background-color: #14161b; padding: 10px 20px;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .largeScreenSearch{
+  display: flex; align-items: center; width: 350px;
+}
+  .sub-header {
+    display: none; /* Hide sub-header on larger screens */
   }
 }

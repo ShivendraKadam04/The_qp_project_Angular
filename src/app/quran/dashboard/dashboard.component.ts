@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-dashboard',
   standalone: false,
@@ -8,12 +9,11 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent {
   @ViewChild('scrollWrapper', { static: false }) scrollWrapper!: ElementRef;
-  
+
   isAtStart: boolean = true;
   isAtEnd: boolean = false;
-  scrollAmount: number = 200; // Adjust scrolling speed
+  scrollAmount: number = 200;
 
-  // Sample Data (Replace with your dynamic data)
   cards = [
     { image: 'assets/images/Rectangle 13.svg', title: 'Scientific Miracles of the Qur’ān' },
     { image: 'assets/images/Rectangle 14.svg', title: 'Preservation and Literary Challenge of the Qur’ān' },
@@ -48,8 +48,8 @@ export class DashboardComponent {
   }
 
   navigateToAppendice(title: string) {
-    // Encode title to handle spaces and special characters
-    const encodedTitle = encodeURIComponent(title);
-    this.router.navigate(['/quran/appendice', encodedTitle]);
+    this.router.navigate(['/quran/appendice'], {
+      state: { title } // Pass title in router state
+    });
   }
 }

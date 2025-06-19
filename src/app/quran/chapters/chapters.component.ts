@@ -33,6 +33,18 @@ export class ChaptersComponent implements AfterViewInit {
     private router: Router
   ) {}
 
+   isCollapsed = false;
+
+  // tz–responsive callback:
+  onBreakpoint(broken: boolean) {
+    // broken === true when width < md (i.e. < 768px)
+    this.isCollapsed = broken;
+  }
+
+  toggleCollapsed() {
+    this.isCollapsed = !this.isCollapsed;
+  }
+
   ngOnInit() {
     this.userId = this.authService.getUserId();
     if (!this.userId) {
@@ -160,6 +172,7 @@ export class ChaptersComponent implements AfterViewInit {
   }
 
   selectSurahByNumber(surahNo: number) {
+   
     const surah = this.quranData.find(s => s.surahNo === surahNo);
     if (surah) {
       this.selectSurah(surah);
@@ -170,6 +183,7 @@ export class ChaptersComponent implements AfterViewInit {
   }
 
   selectSurah(surah: any) {
+    this.isCollapsed = true
     this.selectedSurah = surah;
     this.cdr.detectChanges();
     // Scroll to verse if targetVerseNo is set

@@ -1,12 +1,20 @@
-<nz-layout class="inner-layout">
+<nz-layout class="inner-layout" style="max-height: 80vh; overflow-y: auto;">
   <!-- Sidebar -->
-  <nz-sider nzWidth="250px" nzTheme="light" style="height: 80vh; overflow-y: auto;">
+  <nz-sider
+    nzWidth="250px"
+  nzTheme="light"
+  nzCollapsible
+  [nzCollapsed]="isCollapsed"
+  (nzCollapsedChange)="isCollapsed = $event"
+  [nzCollapsedWidth]="0"
+  nzBreakpoint="md"
+  style="height: 80vh; overflow-y: auto;"
+  >
     <ul nz-menu nzMode="inline" class="sider-menu">
       <li
-        [ngClass]="{'selected-surah': selectedSurah?.surahNo === surah.surahNo}"
-        style="font-weight: 700; font-size: 18px;"
         *ngFor="let surah of quranData"
         nz-menu-item
+        [ngClass]="{ 'selected-surah': selectedSurah?.surahNo === surah.surahNo }"
         (click)="selectSurah(surah)"
       >
         {{ surah.surahNo }}. {{ surah.surahName }}
@@ -14,8 +22,26 @@
     </ul>
   </nz-sider>
 
+
+   <nz-layout  class="main-layout" style="max-height: 80vh; overflow-y: auto;" >
+    <!-- Mobile toggle button -->
+    <button
+      nz-button
+      nzShape="circle"
+      nzType="default"
+      class="mobile-toggle"
+      (click)="toggleCollapsed()"
+      
+    >
+    <i
+    nz-icon
+    [nzType]="isCollapsed ? 'right' : 'left'"
+    nzTheme="outline"
+  ></i>
+    </button>
+
   <!-- Content -->
-  <nz-content class="inner-content" style="height: 80vh; overflow-y: auto;" #verseContainer>
+  <nz-content  style="max-height: 80vh; overflow-y: auto;padding: 10px;" >
     <div>
       <h2 style="color: #E0BC5E; font-weight: 700; font-size: 18px;">
         {{ selectedSurah?.surahNo }}. {{ selectedSurah?.surahName }}
@@ -126,6 +152,7 @@
       <nz-spin nzSize="large"></nz-spin>
     </div>
   </nz-content>
+    </nz-layout>
 </nz-layout>
 
 <!-- Collection Modal -->

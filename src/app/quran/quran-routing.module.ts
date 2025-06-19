@@ -14,7 +14,7 @@ const routes: Routes = [
       { path: 'chapters', component: ChaptersComponent },
       { path: 'profile', component: ProfileComponent },
       { path: 'collection', component: CollectionComponent },
-      { path: 'appendice/:title', component: AppendiceComponent },
+      { path: 'appendice', component: AppendiceComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }

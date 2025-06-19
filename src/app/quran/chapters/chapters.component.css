@@ -1,91 +1,125 @@
+/* Layout Containers */
 .inner-layout {
-    display: flex;
+  display: flex;
+  height: 100vh;
+}
+.sidebar {
+  transition: all 0.3s ease;
+  overflow-y: auto;
+  background: #fff;
+}
+.main-layout {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sidebar Menu */
+.sider-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sider-menu li {
+  padding: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.sider-menu li:hover {
+  background: #f0f0f0;
+}
+.selected-surah {
+  background-color: #E0BC5E !important;
+  color: white !important;
+}
+
+/* Mobile “Hamburger” Toggle */
+.mobile-toggle {
+  position: fixed;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: none;
+}
+@media (max-width: 767px) {
+  .mobile-toggle {
+    display: inline-flex;
+    display: flex;justify-content: center;align-items: center;
   }
-  
-  .sidebar-title {
-    padding: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-  }
-  
-  .sider-menu {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .sider-menu li {
-    padding: 10px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .sider-menu li:hover {
-    background: #f0f0f0;
-  }
-  
-  .inner-content {
-    flex: 1;
-    padding: 20px;
-    
-  }
-  
+}
+
+/* Content Area */
+.inner-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Surah Title */
+.surah-title {
+  color: #E0BC5E;
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 1rem;
+}
+
+/* Verses Grid */
+.verses-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+@media (max-width: 767px) {
   .verses-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    grid-template-columns: 1fr !important;
   }
+}
 
-  .selected-surah {
-    background-color: #E0BC5E !important; 
-    color: white !important;
-    font-weight: bold;
-  }
-  
-  
-  .verse-card {
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-  }
-  
-  .select-message {
-    text-align: center;
-    font-size: 18px;
-    color: gray;
-    margin-top: 20px;
-  }
-  
+/* Verse Card */
+.verse-card {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
 
-  .icon-wrapper {
-    cursor: pointer;
-    font-size: 25px;
-    font-weight: 700;
-    color: #d5d5d5; /* Default color */
-    transition: color 0.3s ease; /* Smooth color transition */
-  }
-  
-  .icon-wrapper:hover {
-    color: #E0BC5E; /* Change to red on hover */
-  }
-  
-  /* Ensure the nz-icon inherits the color */
-  .icon-wrapper nz-icon {
-    color: inherit;
-  }
+/* Icons */
+.icon-wrapper {
+  cursor: pointer;
+  font-size: 25px;
+  font-weight: 700;
+  color: #d5d5d5;
+  transition: color 0.3s ease;
+}
+.icon-wrapper:hover {
+  color: #E0BC5E;
+}
+.icon-wrapper nz-icon {
+  color: inherit;
+}
 
-  
-  .collection-item {
+/* Loading Spinner */
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+}
+
+/* Collection Modal Items */
+.collection-item {
   padding: 10px;
   cursor: pointer;
   border-bottom: 1px solid #e8e8e8;
   font-size: 16px;
   color: #333;
-  transition: background-color 0.2s ease; /* Smooth transition for hover effect */
+  transition: background-color 0.2s ease;
 }
-
 .collection-item:hover {
   background-color: #f5f5f5;
 }

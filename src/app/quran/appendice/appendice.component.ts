@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Observable, catchError, map } from 'rxjs';
+import { catchError, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -16,35 +16,36 @@ export class AppendiceComponent implements OnInit {
   title: string | null = null;
   content: SafeHtml | null = null;
   error: string | null = null;
-  loading: boolean = true; // Add loading state
+  loading: boolean = true;
 
   constructor(
-    private route: ActivatedRoute,
+    private router: Router,
     private http: HttpClient,
     private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
-    // Get the title from the route parameters
-    this.route.paramMap.subscribe(params => {
-      this.title = params.get('title');
-      if (this.title) {
-        // Decode the title in case it was encoded
-        this.title = decodeURIComponent(this.title);
-        this.fetchAppendixContent(this.title);
-      }
-    });
+    // Get the title from history.state
+    this.title = history.state.title || null;
+    console.log('this.title', this.title);
+
+    if (this.title) {
+      this.fetchAppendixContent(this.title);
+    } else {
+      this.error = 'No title provided.';
+      this.loading = false;
+    }
   }
 
   private fetchAppendixContent(title: string) {
-    this.loading = true; // Set loading to true when starting the fetch
+    this.loading = true;
     const url = `${this.apiUrl}/quran/english/appendices/${encodeURIComponent(title)}`;
-    this.http.get<{ success: boolean, message: string, data: { title: string, content: string } }>(url)
+    this.http
+      .get<{ success: boolean; message: string; data: { title: string; content: string } }>(url)
       .pipe(
         map(response => {
           if (response.success) {
-            console.log("response", response);
-            // Sanitize the HTML content to prevent XSS attacks
+            console.log('response', response);
             return this.sanitizer.bypassSecurityTrustHtml(response.data.content);
           } else {
             throw new Error(response.message);
@@ -53,13 +54,13 @@ export class AppendiceComponent implements OnInit {
         catchError(error => {
           this.error = 'Failed to load content. Please try again later.';
           console.error('API Error:', error);
-          this.loading = false; // Stop loading on error
+          this.loading = false;
           return [];
         })
       )
       .subscribe(safeContent => {
         this.content = safeContent;
-        this.loading = false; // Stop loading when data is fetched
+        this.loading = false;
       });
   }
 }

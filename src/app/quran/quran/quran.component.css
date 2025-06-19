@@ -148,6 +148,21 @@ nz-header {
     .sub-header {
     background-color: #14161b; padding: 10px 20px;
   }
+
+  
+.inner-content {
+ 
+  max-height: 84vh;
+
+
+}
+
+nz-content {
+ 
+ max-height: 84vh;
+}
+
+  
 }
 
 @media screen and (min-width: 769px) {

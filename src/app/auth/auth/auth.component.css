@@ -13,6 +13,8 @@
   .auth-container {
     justify-content: center; /* Center the content */
     padding: 20px; /* Reduce padding */
+    background: white;
+   
   }
 
   .empty-box {
@@ -21,7 +23,8 @@
 
   .content-section {
     width: 100%; /* Adjust width to be more flexible */
-    max-width: 400px; /* Optional: set a max width */
+   
     text-align: center; /* Center text if necessary */
+  
   }
 }

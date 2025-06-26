@@ -24,6 +24,15 @@ export class AuthService {
   login(credentials: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/login`, credentials);
   }
+async guestLogin(): Promise<any> {
+    try {
+      return await this.http.post(`${this.apiUrl}/auth/guest-login`, {}).toPromise();
+    } catch (error) {
+      console.error('Guest login failed:', error);
+      throw error;
+    }
+  }
+
 
   generateOtpForPasswordReset(credentials: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/generate-otp-for-password-reset`, credentials);
@@ -106,14 +115,38 @@ export class AuthService {
     return !!this.getToken();
   }
 
+    async deleteGuestUser(): Promise<any> {
+    try {
+      const token = this.getToken();
+      if (!token) {
+        throw new Error('No token available');
+      }
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      });
+      return await this.http.delete(`${this.apiUrl}/auth/delete-guest`, { headers }).toPromise();
+    } catch (error) {
+      console.error('Delete guest user failed:', error);
+      throw error;
+    }
+  }
+
   // Method to log out
-  logout(): void {
+   async logout(): Promise<void> {
+    if (sessionStorage.getItem('isGuest') === 'true') {
+      try {
+        await this.deleteGuestUser();
+      } catch (error) {
+        console.error('Failed to delete guest user on logout:', error);
+      }
+    }
     sessionStorage.removeItem('authToken');
     sessionStorage.removeItem('userId');
     sessionStorage.removeItem('userRole');
     sessionStorage.removeItem('userName');
     sessionStorage.removeItem('isGoogleUser');
-
+    sessionStorage.removeItem('isGuest');
   }
 
   // Function to decode JWT

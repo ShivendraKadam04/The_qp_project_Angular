@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router } from '@angular/router'; 
+import { HttpErrorResponse } from '@angular/common/http';
+
 @Component({
   selector: 'app-login',
   standalone: false,
@@ -12,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   loginForm: FormGroup;
-
+guestLoading = false;
   loading = false;
   googleloading = false;
   submitted = false;
@@ -62,6 +64,31 @@ export class LoginComponent {
     });
   }
 
+  
+  async onGuestLogin() {
+    this.guestLoading = true;
+    try {
+      const response: any = await this.authService.guestLogin();
+      this.message.success(response.message);
+      console.log('Guest login response:', response);
+
+      sessionStorage.setItem('authToken', response.token);
+      sessionStorage.setItem('userName', response.user.userName);
+      sessionStorage.setItem('userRole', response.user.userRole);
+      sessionStorage.setItem('isGuest', response.user.isGuest);
+
+      this.router.navigate(['/quran']);
+    } catch (err: any) {
+      const error = err as HttpErrorResponse;
+      const errorMessage = error?.error?.message || 'Guest login failed';
+      console.error('Guest login failed', error);
+      this.message.error(errorMessage);
+    } finally {
+      this.guestLoading = false;
+    }
+  }
+
+
 
   async onGoogleLogin() {
     this.googleloading = true;
@@ -76,8 +103,19 @@ export class LoginComponent {
 
       // Redirect user after successful login
       this.router.navigate(['/quran']);
-    } catch (error) {
-      this.message.error('Google login failed');
+
+    }  catch (err: any) {
+      const error = err as HttpErrorResponse;
+      let errorMessage = 'Something went wrong';
+
+      if (error?.error?.error?.includes('E11000')) {
+        errorMessage = 'This email is already registered. Please log in instead.';
+      } else {
+        errorMessage = error?.error?.error || error?.error?.message || errorMessage;
+      }
+
+      console.error('Google login failed', error);
+      this.message.error(errorMessage);
     } finally {
       this.googleloading = false;
     }

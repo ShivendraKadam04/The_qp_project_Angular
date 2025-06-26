@@ -183,7 +183,7 @@ export class ChaptersComponent implements AfterViewInit {
   }
 
   selectSurah(surah: any) {
-    this.isCollapsed = true
+   
     this.selectedSurah = surah;
     this.cdr.detectChanges();
     // Scroll to verse if targetVerseNo is set

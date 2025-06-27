@@ -19,6 +19,18 @@ export class QuranService {
 
     }
 
+    deleteCollection(userId: string, lang: string, collectionName: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/quran/delete-collection`, {
+      body: { userId, lang, collectionName }
+    });
+  }
+
+  deleteVerse(userId: string, lang: string, collectionName: string, surahNo: number, versesNo: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/quran/delete-verse`, {
+      body: { userId, lang, collectionName, surahNo, versesNo }
+    });
+  }
+
     createCollection(userId: string, lang: string, collectionName: string): Observable<any> {
     const token = sessionStorage.getItem('authToken');
     const headers = new HttpHeaders({

@@ -71,12 +71,12 @@
           </div>
 
           <!-- Play Audio -->
-          <div class="icon-wrapper" (click)="playAudio(verse.audioFile)">
+          <!-- <div  class="icon-wrapper" (click)="playAudio(verse.audioFile)">
             <nz-icon nzType="play-circle" nzTheme="outline"></nz-icon>
-          </div>
+          </div> -->
 
           <!-- Favorite (Heart Icon) -->
-          <div class="icon-wrapper" (click)="openCollectionModal(verse)">
+          <div *ngIf="userRole !== 'guestuser'"  class="icon-wrapper" (click)="openCollectionModal(verse)">
             <nz-icon nzType="heart" nzTheme="outline"></nz-icon>
           </div>
         </div>
@@ -156,23 +156,70 @@
 </nz-layout>
 
 <!-- Collection Modal -->
+
+
 <nz-modal
   [(nzVisible)]="isCollectionModalVisible"
   nzTitle="Add to Collection"
   (nzOnCancel)="closeCollectionModal()"
+ [nzFooter]="null"
 >
   <ng-container *nzModalContent>
-    <ul style="list-style: none; padding: 0;">
-      <li
-        *ngFor="let collection of collections"
-        (click)="saveToCollection(collection)"
-        class="collection-item"
-      >
-        {{ collection }}
-      </li>
-    </ul>
+    <div *ngIf="collections.length > 0; else noCollections">
+      <ul style="list-style: none; padding: 0;">
+        <li
+          *ngFor="let collection of collections"
+          (click)="saveToCollection(collection)"
+          class="collection-item"
+          style="padding: 8px; cursor: pointer; border-bottom: 1px solid #f0f0f0;"
+        >
+          {{ collection }}
+        </li>
+      </ul>
+    </div>
+    <ng-template #noCollections>
+      <div style="display: flex;justify-content: center;flex-direction: column;align-items: center;">
+      <p>No collections found!</p>
+      <button nz-button nzType="primary" (click)="openCreateCollectionModal()">
+        <i nz-icon nzType="folder-add" nzTheme="outline"></i> New Collection
+      </button>
+      </div>
+    </ng-template>
   </ng-container>
-  <ng-container *nzModalFooter>
-    <button nz-button nzType="default" (click)="closeCollectionModal()">Cancel</button>
+</nz-modal>
+
+<!-- Create Collection Modal -->
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  nzTitle="Create New Collection"
+  (nzOnCancel)="handleCancel()"
+  nzOkText="Create"
+  nzOkType="primary"
+  [nzOkDisabled]="collectionForm.invalid"
+  (nzOnOk)="submitCollection()"
+>
+  <ng-container *nzModalContent >
+    <div style="padding: 0px 25px;">
+    <form [formGroup]="collectionForm"  nz-form [nzLayout]="'vertical'">
+      <nz-form-item>
+        <nz-form-label nzRequired>Collection Name</nz-form-label>
+        <nz-form-control [nzErrorTip]="nameErrorTip">
+          <input
+            nz-input
+            formControlName="collectionName"
+            placeholder="Enter collection name"
+          />
+          <ng-template #nameErrorTip>
+            <span *ngIf="collectionForm.get('collectionName')?.hasError('required')">
+              Collection name is required
+            </span>
+            <span *ngIf="collectionForm.get('collectionName')?.hasError('minlength')">
+              Minimum 3 characters required
+            </span>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+    </div>
   </ng-container>
 </nz-modal>

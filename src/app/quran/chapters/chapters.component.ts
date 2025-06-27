@@ -5,12 +5,13 @@ import { AuthService } from '../../services/auth.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router, NavigationExtras } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-chapters',
   standalone: false,
   templateUrl: './chapters.component.html',
-  styleUrl: './chapters.component.css'
+  styleUrls: ['./chapters.component.css']
 })
 export class ChaptersComponent implements AfterViewInit {
   quranData: any[] = [];
@@ -19,25 +20,33 @@ export class ChaptersComponent implements AfterViewInit {
   userId: any;
   collections: string[] = [];
   isCollectionModalVisible = false;
+  isModalVisible = false;
   selectedVerse: any = null;
   loading: boolean = false;
-  targetVerseNo: number | null = null; // Store the verse number to scroll to
+  targetVerseNo: number | null = null;
+  userRole: any;
+  lang = 'english';
+  collectionForm: FormGroup;
 
-  @ViewChild('verseContainer') verseContainer!: ElementRef; // Reference to the verses container
+  @ViewChild('verseContainer') verseContainer!: ElementRef;
 
   constructor(
     private quranService: QuranService,
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private notification: NzNotificationService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private fb: FormBuilder,
+    private message: NzMessageService
+  ) {
+    this.collectionForm = this.fb.group({
+      collectionName: ['', [Validators.required, Validators.minLength(3)]]
+    });
+  }
 
-   isCollapsed = false;
+  isCollapsed = false;
 
-  // tz–responsive callback:
   onBreakpoint(broken: boolean) {
-    // broken === true when width < md (i.e. < 768px)
     this.isCollapsed = broken;
   }
 
@@ -45,18 +54,49 @@ export class ChaptersComponent implements AfterViewInit {
     this.isCollapsed = !this.isCollapsed;
   }
 
+  openCreateCollectionModal(): void {
+    this.isModalVisible = true;
+    this.isCollectionModalVisible = false;
+  }
+
+  submitCollection(): void {
+    if (this.collectionForm.invalid || !this.userId) {
+      this.message.error('Please fill all required fields.');
+      return;
+    }
+
+    const { collectionName } = this.collectionForm.value;
+    this.quranService.createCollection(this.userId, this.lang, collectionName).subscribe({
+      next: (res: { message: any }) => {
+        this.message.success(res.message || 'Collection created successfully');
+        this.collectionForm.reset({ lang: 'en' });
+        this.isModalVisible = false;
+        this.isCollectionModalVisible = true; // Reopen collection modal after creation
+        this.fetchCollections();
+      },
+      error: (err: { error: { message: any } }) => {
+        this.message.error(err.error?.message || 'Failed to create collection.');
+      }
+    });
+  }
+
+  handleCancel(): void {
+    this.isModalVisible = false;
+    this.collectionForm.reset();
+  }
+
   ngOnInit() {
     this.userId = this.authService.getUserId();
+    this.userRole = this.authService.getUserRole();
     if (!this.userId) {
       console.log('User not logged in. Please log in to create a collection.');
       return;
     }
 
-    // Get navigation state
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as { surahNo: number; verseNo?: number };
     if (state) {
-      this.targetVerseNo = state.verseNo || null; // Store verse number for scrolling
+      this.targetVerseNo = state.verseNo || null;
     }
 
     this.fetchQuranData();
@@ -64,7 +104,6 @@ export class ChaptersComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // Scroll to verse after the view is initialized
     if (this.targetVerseNo) {
       this.scrollToVerse(this.targetVerseNo);
     }
@@ -94,7 +133,6 @@ export class ChaptersComponent implements AfterViewInit {
 
   saveToCollection(collectionName: string) {
     if (!this.selectedVerse || !this.selectedSurah) {
-      console.error('Selected verse or surah is not defined');
       this.notification.create('error', 'Error', 'Selected verse or surah is not defined');
       return;
     }
@@ -106,7 +144,6 @@ export class ChaptersComponent implements AfterViewInit {
       versesNo: this.selectedVerse.versesNo,
       collectionName: collectionName
     };
-    console.log('Payload for saveVerseToCollection:', payload);
 
     this.quranService
       .saveVerseToCollection(
@@ -139,7 +176,6 @@ export class ChaptersComponent implements AfterViewInit {
       (response) => {
         if (response.success) {
           this.quranData = response.data;
-          console.log('Fetched Quran Data:', this.quranData);
           this.quranData.forEach(surah => {
             surah.verses.forEach((verse: { versesText: string }) => {
               verse.versesText = verse.versesText.replace(/(\d+)/g, '<sup>$1</sup>');
@@ -147,7 +183,6 @@ export class ChaptersComponent implements AfterViewInit {
           });
           this.loading = false;
 
-          // Select Surah from navigation state if available
           const navigation = this.router.getCurrentNavigation();
           const state = navigation?.extras.state as { surahNo: number; verseNo?: number };
           if (state?.surahNo) {
@@ -162,7 +197,6 @@ export class ChaptersComponent implements AfterViewInit {
         console.error('Error fetching Quran data:', error);
       },
       () => {
-        // Ensure selection happens after data is loaded
         const state = history.state as { surahNo: number; verseNo?: number };
         if (state?.surahNo) {
           this.selectSurahByNumber(state.surahNo);
@@ -172,7 +206,6 @@ export class ChaptersComponent implements AfterViewInit {
   }
 
   selectSurahByNumber(surahNo: number) {
-   
     const surah = this.quranData.find(s => s.surahNo === surahNo);
     if (surah) {
       this.selectSurah(surah);
@@ -183,32 +216,26 @@ export class ChaptersComponent implements AfterViewInit {
   }
 
   selectSurah(surah: any) {
-   
     this.selectedSurah = surah;
     this.cdr.detectChanges();
-    // Scroll to verse if targetVerseNo is set
     if (this.targetVerseNo) {
       this.scrollToVerse(this.targetVerseNo);
     }
   }
 
- scrollToVerse(verseNo: number) {
+  scrollToVerse(verseNo: number) {
     if (verseNo === 0) {
       console.warn('Verse 0 is not displayed');
       return;
     }
-    console.log(`Attempting to scroll to verse ${verseNo}`);
-    // Increased delay to 1000ms to ensure DOM is fully rendered
     setTimeout(() => {
-      const verseElement = this.verseContainer.nativeElement.querySelector(`#verse-${verseNo}`);
+      const verseElement = this.verseContainer?.nativeElement.querySelector(`#verse-${verseNo}`);
       if (verseElement) {
-        console.log(`Found verse element #verse-${verseNo}, scrolling now`);
         verseElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } else {
-        console.error(`Verse ${verseNo} not found in the DOM. Element #verse-${verseNo} does not exist.`);
-        console.log('Current DOM content of verseContainer:', this.verseContainer.nativeElement.innerHTML);
+        console.error(`Verse ${verseNo} not found in the DOM.`);
       }
-    }, 1000); // Increased delay to 1000ms
+    }, 1000);
   }
 
   playAudio(audioUrl: string) {

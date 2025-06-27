@@ -42,10 +42,13 @@
               <img [src]="rla2.isActive ? 'assets/icons/chapters-active.svg' : 'assets/icons/chapters.svg'" style="margin-right: 5px; height: 14px;" alt="">
               Chapters
             </li>
-            <li routerLink="collection" routerLinkActive="active" #rla3="routerLinkActive" class="hover-underline-animation nav-item">
+            <div *ngIf="userRole !== 'guestuser'">
+                <li routerLink="collection"  routerLinkActive="active" #rla3="routerLinkActive" class="hover-underline-animation nav-item">
               <img [src]="rla3.isActive ? 'assets/icons/saved-active.svg' : 'assets/icons/saved.svg'" style="margin-right: 5px; height: 14px;" alt="">
               Saved
             </li>
+            </div>
+          
           </ul>
         </div>
 
@@ -63,14 +66,17 @@
                 <nz-icon nzType="book" nzTheme="outline" />
                 <span style="padding-left: 10px;">Chapters</span>
               </li>
-              <li nz-menu-item routerLink="profile">
+              <li nz-menu-item routerLink="profile" *ngIf="userRole !== 'guestuser'">
                 <span nz-icon nzType="user" nzTheme="outline"></span>
                 <span style="padding-left: 10px;">Profile</span>
               </li>
-              <li nz-menu-item routerLink="collection">
+              <div *ngIf="userRole !== 'guestuser'">
+ <li nz-menu-item routerLink="collection" >
                 <span nz-icon nzType="user" nzTheme="outline"></span>
                 <span style="padding-left: 10px;">Saved</span>
               </li>
+              </div>
+             
               <li nz-menu-item (click)="logout()">
                 <span nz-icon nzType="logout" nzTheme="outline"></span>
                 <span style="padding-left: 10px">Logout</span>
@@ -88,7 +94,9 @@
                 </div>
                 <ng-template #placeholder>
                   <div style="border-radius: 50%; background-color: #f2f2f2; height: 50px; display: flex; align-items: center; width: 50px; justify-content: center; font-size: 16px;">
-                    <strong>{{firstName?.charAt(0).toUpperCase()}}{{lastName?.charAt(0).toUpperCase()}}</strong>
+                  <strong>
+  {{ userRole === 'guestuser' ? 'GS' : (firstName?.charAt(0).toUpperCase() + lastName?.charAt(0).toUpperCase()) }}
+</strong>
                   </div>
                 </ng-template>
               </span>
@@ -99,7 +107,7 @@
             </a>
             <nz-dropdown-menu #menu="nzDropdownMenu">
               <ul nz-menu style="display: flex; flex-direction: column">
-                <li nz-menu-item routerLink="profile">
+                <li nz-menu-item routerLink="profile" *ngIf="userRole !== 'guestuser'">
                   <span nz-icon nzType="user" nzTheme="outline"></span>
                   <span style="padding-left: 10px;">Profile</span>
                 </li>

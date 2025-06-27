@@ -1,6 +1,6 @@
 <!-- collection.component.html -->
    <div style="display: flex; justify-content: space-between; align-items: center;">
-    <h2>My Collections</h2>
+    <h2 style="margin: 0;">Saved</h2>
  <button class="custom-primary-button" (click)="showModal()">
   <nz-icon nzType="folder-add" nzTheme="outline" /> New Collection
 </button>
@@ -28,14 +28,26 @@
     <div
       class="collection-box"
       *ngFor="let collection of collections"
-      (click)="showVerses(collection)"
-    >
     
-      <span nz-icon nzType="folder" style="color: #000" nzTheme="outline" class="folder-icon"></span>
+      
+    >
+
+    <div style="display: flex;width: 100%;">
+      <div style="width: 90%;display: flex;"   (click)="showVerses(collection)"> 
+        <span nz-icon nzType="folder" style="color: #000" nzTheme="outline" class="folder-icon"></span>
       <div class="collection-info">
         <h3>{{ collection.collectionName }}</h3>
         <p style="color: #E0BC5E;font-weight :700;">{{ collection.verses.length }} items</p>
       </div>
+    </div>
+      <div >
+  <button nz-button nzType="text" nzDanger (click)="deleteCollection(collection.collectionName)">
+                        <i nz-icon nzType="delete" nzTheme="outline"></i>
+                    </button>
+      </div>
+    </div>
+    
+     
     </div>
   </div>
    </div>
@@ -95,9 +107,17 @@
     </div>
    <div class="verse-list" *ngIf="selectedCollection && selectedCollection.verses && selectedCollection.verses.length > 0">
   <div class="verse-item" *ngFor="let verse of selectedCollection?.verses">
-    <div class="verse-header">
-      <span class="verse-number">{{ verse.versesNo }}</span>
+    <div class="verse-header" style="display: flex;justify-content: space-between;">
+      <div style="display: flex;">
+        <span class="verse-number">{{ verse.versesNo }}</span>
       <h4>{{ verse.surahName }} </h4>
+      </div>
+      <div>
+  <button nz-button nzType="text" nzDanger (click)="deleteVerse(verse, selectedCollection.collectionName)">
+                            <i nz-icon nzType="delete" nzTheme="outline"></i>
+                        </button>
+      </div>
+      
     </div>
     <p>{{ verse.versesText }}</p>
   </div>

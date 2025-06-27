@@ -36,12 +36,12 @@ h2 {
   color: #E0BC5E;
   border: none;
   border-radius: 4px; /* Rounded corners */
-  padding: 4px 30px; /* Padding similar to NzButton */
+  padding: 1px 30px; /* Padding similar to NzButton */
   font-size: 16px;
   font-weight: 500;
-  line-height: 22px;
+  line-height: 18px;
   border-radius: 50px;
-  height: 45px; /* Standard height for Ng-Zorro buttons */
+  height: 40px; /* Standard height for Ng-Zorro buttons */
   cursor: pointer;
   transition: background-color 0.3s, box-shadow 0.3s;
 }

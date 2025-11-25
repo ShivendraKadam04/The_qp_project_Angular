@@ -42,6 +42,10 @@
               <img [src]="rla2.isActive ? 'assets/icons/chapters-active.svg' : 'assets/icons/chapters.svg'" style="margin-right: 5px; height: 14px;" alt="">
               Chapters
             </li>
+            <li routerLink="aboutus" routerLinkActive="active" #rla4="routerLinkActive" class="hover-underline-animation nav-item">
+              <img [src]="rla4.isActive ? 'assets/icons/aboutus-active.svg' : 'assets/icons/aboutus.svg'" style="margin-right: 5px; height: 22px;" alt="">
+              About us
+            </li>
             <div *ngIf="userRole !== 'guestuser'">
                 <li routerLink="collection"  routerLinkActive="active" #rla3="routerLinkActive" class="hover-underline-animation nav-item">
               <img [src]="rla3.isActive ? 'assets/icons/saved-active.svg' : 'assets/icons/saved.svg'" style="margin-right: 5px; height: 14px;" alt="">
@@ -65,6 +69,10 @@
               <li routerLink="chapters" nz-menu-item>
                 <nz-icon nzType="book" nzTheme="outline" />
                 <span style="padding-left: 10px;">Chapters</span>
+              </li>
+               <li routerLink="aboutus" nz-menu-item>
+                <nz-icon nzType="bars" nzTheme="outline" />
+                <span style="padding-left: 10px;">About us</span>
               </li>
               <li nz-menu-item routerLink="profile" *ngIf="userRole !== 'guestuser'">
                 <span nz-icon nzType="user" nzTheme="outline"></span>

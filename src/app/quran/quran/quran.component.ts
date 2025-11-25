@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { QuranService } from '../../services/quran.service';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-quran',
@@ -25,7 +26,8 @@ export class QuranComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private quranService: QuranService
+    private quranService: QuranService,
+    private searchService: SearchService
   ) {}
 
   ngOnInit() {
@@ -65,7 +67,7 @@ export class QuranComponent {
     });
   }
 
-  onSearchChange(query: string) {
+onSearchChange(query: string) {
     this.searchQuery = query;
     this.searchSuggestions = [];
 
@@ -106,9 +108,16 @@ export class QuranComponent {
   }
 
   selectSuggestion(suggestion: { text: string; surahNo: number; verseNo?: number }) {
-    this.router.navigate(['/quran/chapters'], {
-      state: { surahNo: suggestion.surahNo, verseNo: suggestion.verseNo }
-    });
+    const currentRoute = this.router.url;
+    if (currentRoute.includes('/quran/chapters')) {
+      // If already in ChaptersComponent, trigger search locally
+      this.searchService.triggerSearch(suggestion.surahNo, suggestion.verseNo);
+    } else {
+      // Navigate to ChaptersComponent
+      this.router.navigate(['/quran/chapters'], {
+        state: { surahNo: suggestion.surahNo, verseNo: suggestion.verseNo }
+      });
+    }
     this.searchQuery = '';
     this.searchSuggestions = [];
   }

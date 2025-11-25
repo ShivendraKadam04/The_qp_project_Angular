@@ -160,6 +160,9 @@
   color: white;
 }
 
+
+
+
 .ok-btn:hover {
   background-color: #E0BC5E;
 }
@@ -276,6 +279,20 @@ color: #F6F3EC;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
+
+.verse-card.highlighted {
+  background-color: #ffeb3b; /* Warm yellow, a visually appealing highlight */
+  box-shadow: 0 4px 8px rgba(255, 235, 59, 0.3); /* Subtle glow effect */
+  border: 2px solid #fdd835; /* Matching border for emphasis */
+  color: #333; /* Darker text for readability */
+  transition: all 0.3s ease; /* Ensure smooth transition */
+}
+
+.verse-card.highlighted h3 {
+  color: #333; /* Ensure text inside h3 remains readable */
+}
+
+/* Other existing CSS remains unchanged */
 
 /* Icons */
 .icon-wrapper {

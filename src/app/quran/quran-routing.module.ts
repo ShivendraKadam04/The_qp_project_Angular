@@ -6,6 +6,7 @@ import { ChaptersComponent } from './chapters/chapters.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CollectionComponent } from './collection/collection.component';
 import { AppendiceComponent } from './appendice/appendice.component';
+import { AboutusComponent } from './aboutus/aboutus.component';
 
 const routes: Routes = [
   { 
@@ -15,6 +16,7 @@ const routes: Routes = [
       { path: 'profile', component: ProfileComponent },
       { path: 'collection', component: CollectionComponent },
       { path: 'appendice', component: AppendiceComponent },
+      { path: 'aboutus', component: AboutusComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }

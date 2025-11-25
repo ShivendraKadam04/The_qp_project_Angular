@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "generate": "ng g",
     "build:prod": "ng build --configuration production",
     "test": "ng test",
     "serve:ssr:quran-angular-app": "node dist/quran-angular-app/server/server.mjs"

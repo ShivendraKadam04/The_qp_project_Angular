@@ -1,12 +1,13 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit,OnDestroy } from '@angular/core';
 import { QuranService } from '../../services/quran.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Router, NavigationExtras } from '@angular/router';
+import { Router, NavigationExtras, NavigationEnd } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { filter } from 'rxjs/operators';
+import { SearchService } from '../../services/search.service';
 @Component({
   selector: 'app-chapters',
   standalone: false,
@@ -27,6 +28,8 @@ export class ChaptersComponent implements AfterViewInit {
   userRole: any;
   lang = 'english';
   collectionForm: FormGroup;
+  highlightedVerse: number | null = null; // Track the highlighted verse
+  private scrollTriggered = false;
 
   @ViewChild('verseContainer') verseContainer!: ElementRef;
 
@@ -37,14 +40,38 @@ export class ChaptersComponent implements AfterViewInit {
     private notification: NzNotificationService,
     private router: Router,
     private fb: FormBuilder,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private searchService: SearchService
   ) {
     this.collectionForm = this.fb.group({
       collectionName: ['', [Validators.required, Validators.minLength(3)]]
     });
-  }
 
+    // Listen to navigation events to check state after navigation
+   this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
+      const state = history.state as { surahNo: number; verseNo?: number };
+      if (state?.verseNo && !this.scrollTriggered) {
+        this.targetVerseNo = state.verseNo;
+        this.scrollToVerse(this.targetVerseNo);
+        this.scrollTriggered = true;
+      }
+    });
+  }
   isCollapsed = false;
+
+  handleSearch(surahNo: number, verseNo?: number) {
+    const surah = this.quranData.find(s => s.surahNo === surahNo);
+    if (surah) {
+      this.selectSurah(surah);
+      if (verseNo) {
+        setTimeout(() => {
+          this.scrollToVerse(verseNo);
+        }, 1000); // 1-second delay
+      }
+    } else {
+      this.message.error(`Surah ${surahNo} not found`);
+    }
+  }
 
   onBreakpoint(broken: boolean) {
     this.isCollapsed = broken;
@@ -71,7 +98,7 @@ export class ChaptersComponent implements AfterViewInit {
         this.message.success(res.message || 'Collection created successfully');
         this.collectionForm.reset({ lang: 'en' });
         this.isModalVisible = false;
-        this.isCollectionModalVisible = true; // Reopen collection modal after creation
+        this.isCollectionModalVisible = true;
         this.fetchCollections();
       },
       error: (err: { error: { message: any } }) => {
@@ -85,28 +112,38 @@ export class ChaptersComponent implements AfterViewInit {
     this.collectionForm.reset();
   }
 
-  ngOnInit() {
-    this.userId = this.authService.getUserId();
-    this.userRole = this.authService.getUserRole();
-    if (!this.userId) {
-      console.log('User not logged in. Please log in to create a collection.');
-      return;
-    }
-
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state as { surahNo: number; verseNo?: number };
-    if (state) {
-      this.targetVerseNo = state.verseNo || null;
-    }
-
-    this.fetchQuranData();
-    this.fetchCollections();
+ngOnInit() {
+  this.userId = this.authService.getUserId();
+  this.userRole = this.authService.getUserRole();
+  if (!this.userId) {
+    console.log('User not logged in. Please log in to create a collection.');
+    return;
   }
 
-  ngAfterViewInit() {
-    if (this.targetVerseNo) {
+  const navigation = this.router.getCurrentNavigation();
+  const state = navigation?.extras.state as { surahNo: number; verseNo?: number };
+  if (state) {
+    this.targetVerseNo = state.verseNo || null;
+  }
+
+  this.fetchQuranData();
+  this.fetchCollections();
+
+  // Subscribe to search events
+  this.searchService.search$.subscribe(({ surahNo, verseNo }) => {
+    this.handleSearch(surahNo, verseNo);
+  });
+}
+
+ ngAfterViewInit() {
+    if (this.targetVerseNo && !this.scrollTriggered) {
       this.scrollToVerse(this.targetVerseNo);
+      this.scrollTriggered = true;
     }
+  }
+
+  ngOnDestroy() {
+    this.scrollTriggered = false; // Reset on component destroy
   }
 
   fetchCollections() {
@@ -182,6 +219,7 @@ export class ChaptersComponent implements AfterViewInit {
             });
           });
           this.loading = false;
+          console.log('Quran data fetched, length:', this.quranData.length);
 
           const navigation = this.router.getCurrentNavigation();
           const state = navigation?.extras.state as { surahNo: number; verseNo?: number };
@@ -209,33 +247,57 @@ export class ChaptersComponent implements AfterViewInit {
     const surah = this.quranData.find(s => s.surahNo === surahNo);
     if (surah) {
       this.selectSurah(surah);
+      console.log('Selected surah:', surah.surahNo, surah.surahName);
       this.cdr.detectChanges();
     } else {
       console.warn(`Surah with number ${surahNo} not found`);
     }
   }
+  @ViewChild('contentContainer', { read: ElementRef }) contentContainer!: ElementRef<HTMLElement>;
+
+    onSurahClick(surah: any) {
+    // 1. select it
+    this.selectSurah(surah);
+    // 2. then scroll the content pane back to top
+    //    use a small timeout so that the new verses have rendered
+    setTimeout(() => {
+      this.contentContainer.nativeElement.scrollTop = 0;
+    }, 0);
+  }
 
   selectSurah(surah: any) {
     this.selectedSurah = surah;
+    console.log('Selected surah in selectSurah:', this.selectedSurah.surahNo, this.selectedSurah.surahName);
     this.cdr.detectChanges();
     if (this.targetVerseNo) {
       this.scrollToVerse(this.targetVerseNo);
     }
   }
 
-  scrollToVerse(verseNo: number) {
+scrollToVerse(verseNo: number) {
     if (verseNo === 0) {
       console.warn('Verse 0 is not displayed');
       return;
     }
+    this.highlightedVerse = verseNo;
     setTimeout(() => {
       const verseElement = this.verseContainer?.nativeElement.querySelector(`#verse-${verseNo}`);
       if (verseElement) {
         verseElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        verseElement.style.backgroundColor = '#E0BC5E';
+        verseElement.style.color = 'white';
+        setTimeout(() => {
+          this.highlightedVerse = null;
+          verseElement.style.backgroundColor = '';
+          verseElement.style.color = '';
+          this.targetVerseNo = null;
+          this.scrollTriggered = false;
+          this.cdr.detectChanges();
+        }, 2000);
       } else {
-        console.error(`Verse ${verseNo} not found in the DOM.`);
+        console.error(`Verse ${verseNo} not found in the DOM. Check if #verse-${verseNo} exists.`);
       }
-    }, 1000);
+    }, 500);
   }
 
   playAudio(audioUrl: string) {

@@ -339,12 +339,83 @@ body::-webkit-scrollbar {
   align-items: center;
   width: 100%; /* Makes sure each card takes full width of its column */
 }
-.largeLogo{
+/* .largeLogo{
   display: none;
-}
+} */
 
 .teachingseafarermain1{
   display: none;
 }
 
+}
+/* Responsive "Tap to Read" – always stays close to "The Qur'an" text */
+.tap-to-read {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+  white-space: nowrap;
+
+      font-size: 15px;
+
+
+  /* Key: Use top instead of bottom + calculate distance from center */
+  top: 60%;                         /* Start a bit below center */
+  transform: translateX(-50%) translateY(20px);
+
+  /* Dual animation: show text + push title up */
+  animation: showTap 6s infinite, pushTitleUp 6s infinite;
+  animation-delay: 2s, 2s;
+}
+
+@keyframes showTap {
+  0%, 12% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(30px);
+  }
+  18%, 42% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  50%, 100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(30px);
+  }
+}
+
+@keyframes pushTitleUp {
+  0%, 15%   { transform: translate(-50%, -50%); }
+  20%, 40%  { transform: translate(-50%, -66%); }   /* pushes up smoothly */
+  48%, 100% { transform: translate(-50%, -50%); }
+}
+
+/* Make sure the main title animates smoothly */
+.largeLogo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-size: clamp(20px, 4vw, 28px);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 0;
+  text-align: center;
+  z-index: 2;
+}
+
+/* Optional: Fine-tune distance on very small screens */
+@media (max-width: 480px) {
+  .tap-to-read {
+    top: 65%;
+    font-size: 15px;
+  }
+  @keyframes pushTitleUp {
+    20%, 40% { transform: translate(-50%, -70%); }
+  }
 }

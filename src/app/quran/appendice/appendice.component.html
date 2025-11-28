@@ -1,13 +1,10 @@
-<div style="max-height: 80vh; overflow-y: auto; padding: 10px; max-width: 100%; background-color: #fff; position: relative;">
-  <!-- Show loader while loading -->
+<div class="content-container" style="max-height: 80vh; overflow-y: auto; padding: 10px; background-color: #fff;">
   <div *ngIf="loading" class="loader-container">
     <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
   </div>
-  <!-- Show content when not loading -->
-  <div *ngIf="!loading">
-    <span [innerHTML]="content"></span>
-  </div>
-  <!-- Show error if fetch fails -->
+
+  <div *ngIf="!loading && content" [innerHTML]="content"></div>
+
   <div *ngIf="error && !loading" class="error-message">
     {{ error }}
   </div>

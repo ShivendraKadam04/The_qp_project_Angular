@@ -113,6 +113,8 @@ export class ChaptersComponent implements AfterViewInit {
   }
 
 ngOnInit() {
+  this.fetchQuranData();
+  this.fetchCollections();
   this.userId = this.authService.getUserId();
   this.userRole = this.authService.getUserRole();
   if (!this.userId) {
@@ -147,6 +149,7 @@ ngOnInit() {
   }
 
   fetchCollections() {
+     
     this.quranService.getFavoriteVerses(this.userId, this.selectedLanguage).subscribe({
       next: (response) => {
         this.collections = response.data.map((collection: any) => collection.collectionName);
@@ -158,10 +161,17 @@ ngOnInit() {
     });
   }
 
-  openCollectionModal(verse: any) {
-    this.selectedVerse = verse;
-    this.isCollectionModalVisible = true;
+openCollectionModal(verse: any) {
+  // Check if user is logged in (userId exists AND userRole is not null/guest)
+  if (!this.userId || this.userRole == null || this.userRole === 'guestuser') {
+    this.message.error('Please log in to save verses to your collection.');
+    return;
   }
+
+  // If user is logged in → proceed normally
+  this.selectedVerse = verse;
+  this.isCollectionModalVisible = true;
+}
 
   closeCollectionModal() {
     this.isCollectionModalVisible = false;
@@ -208,6 +218,7 @@ ngOnInit() {
   }
 
   fetchQuranData() {
+   
     this.loading = true;
     this.quranService.getQuranData(this.selectedLanguage).subscribe(
       (response) => {
@@ -273,6 +284,19 @@ ngOnInit() {
       this.scrollToVerse(this.targetVerseNo);
     }
   }
+
+ 
+splitIntroduction(text: string): string[] {
+  if (!text) return [];
+  
+  // Replace literal "/n" and actual "\n" with real newlines, then split
+  return text
+    .replace(/\/n/g, '\n')        // Replace "/n" → actual newline
+    .replace(/\\n/g, '\n')        // In case it's escaped as \\n
+    .split('\n')
+    .map(line => line.trim())
+    .filter(line => line.length > 0); // Remove empty lines
+}
 
 scrollToVerse(verseNo: number) {
     if (verseNo === 0) {

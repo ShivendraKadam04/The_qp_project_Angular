@@ -19,6 +19,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CollectionComponent } from './collection/collection.component';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
@@ -56,7 +57,8 @@ import { AboutusComponent } from './aboutus/aboutus.component';
     NzFormModule,
     NzSelectModule,
     NzAutocompleteModule, // Added for autocomplete
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NzCollapseModule
   ]
 })
 export class QuranModule {}

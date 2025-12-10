@@ -42,6 +42,24 @@
         <h2 style="color: #E0BC5E; font-weight: 700; font-size: 18px;">
           {{ selectedSurah?.surahNo }}. {{ selectedSurah?.surahName }}
         </h2>
+        
+        <nz-collapse style="margin: 16px 0; background: #f8f9fa; border-radius: 8px;">
+  <nz-collapse-panel nzHeader="Introduction" [nzActive]="false">
+    <div class="introduction-text">
+      <ng-container *ngIf="selectedSurah?.introduction; else noIntro">
+        <p 
+      
+          *ngFor="let paragraph of splitIntroduction(selectedSurah.introduction)" 
+          class="intro-paragraph"
+          [innerHTML]="paragraph"
+        ></p>
+      </ng-container>
+      <ng-template #noIntro>
+        <p style="color: #888; font-style: italic;">No introduction available for this Surah.</p>
+      </ng-template>
+    </div>
+  </nz-collapse-panel>
+</nz-collapse>
 
         <div class="verses-container">
           <ng-container *ngFor="let verse of selectedSurah?.verses">
@@ -71,7 +89,7 @@
                   </div> -->
 
                   <!-- Favorite (Heart Icon) -->
-                  <div *ngIf="userRole !== 'guestuser'" class="icon-wrapper" (click)="openCollectionModal(verse)">
+                  <div  class="icon-wrapper" (click)="openCollectionModal(verse)">
                     <nz-icon nzType="heart" nzTheme="outline"></nz-icon>
                   </div>
                 </div>

@@ -47,17 +47,94 @@
               <img [src]="rla4.isActive ? 'assets/icons/aboutus-active.svg' : 'assets/icons/aboutus.svg'" style="margin-right: 5px; height: 22px;" alt="">
               About us
             </li>
-            <div *ngIf="userRole !== 'guestuser'">
+            <div *ngIf="userRole !== 'guestuser' && userRole != null">
                 <li routerLink="collection"  routerLinkActive="active" #rla3="routerLinkActive" class="hover-underline-animation nav-item">
               <img [src]="rla3.isActive ? 'assets/icons/saved-active.svg' : 'assets/icons/saved.svg'" style="margin-right: 5px; height: 14px;" alt="">
               Saved
             </li>
             </div>
+
+            <!-- NEW: More Dropdown (after Saved) -->
+          <li nz-dropdown [nzDropdownMenu]="moreMenu" nzTrigger="hover" class="hover-underline-animation nav-item" style="cursor: pointer;">
+            <nz-icon nzType="appstore" nzTheme="fill" style="margin-right: 5px;" />
+            More
+            <span nz-icon nzType="down" style="font-size: 12px; margin-left: 4px;"></span>
+          </li>
+
+          <nz-dropdown-menu #moreMenu="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item>
+  <a href="https://www.quranproject.org/The-Quran-Project-1-p" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+    <span nz-icon nzType="book" nzTheme="outline"></span>
+     Order Free Copy
+  </a>
+</li>
+              <li nz-menu-item >
+                 <a href="https://www.quranproject.org/donations" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="heart" nzTheme="outline"></span>
+                Make a Donation
+                 </a>
+              </li>
+              <li nz-menu-item >
+                <a href="https://www.quranproject.org/go_files/pdf/Online-Version-9th-Edition.pdf" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="download" nzTheme="outline"></span>
+                Download PDF
+                  </a>
+              </li>
+              <li nz-menu-item >
+                 <a href="https://www.quranproject.org/feedback" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="message" nzTheme="outline"></span>
+                Feedback
+                 </a>
+              </li>
+              
+            </ul>
+          </nz-dropdown-menu>
           
           </ul>
         </div>
 
         <div class="menuMobile">
+           <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu3">
+            <nz-icon nzType="appstore" style="color: #E0BC5E;margin-right:15px;" nzTheme="outline" />
+          </a>
+          <nz-dropdown-menu #menu3="nzDropdownMenu">
+             <ul nz-menu>
+              <li nz-menu-item>
+  <a href="https://www.quranproject.org/The-Quran-Project-1-p" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+    <span nz-icon nzType="book" nzTheme="outline"></span>
+     Order Free Copy
+  </a>
+</li>
+              <li nz-menu-item >
+                 <a href="https://www.quranproject.org/donations" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="heart" nzTheme="outline"></span>
+                Make a Donation
+                 </a>
+              </li>
+              <li nz-menu-item >
+                <a href="https://www.quranproject.org/go_files/pdf/Online-Version-9th-Edition.pdf" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="download" nzTheme="outline"></span>
+                Download PDF
+                  </a>
+              </li>
+              <li nz-menu-item >
+                 <a href="https://www.quranproject.org/feedback" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="message" nzTheme="outline"></span>
+                Feedback
+                 </a>
+              </li>
+              
+            </ul>
+          </nz-dropdown-menu>
           <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu2">
             <nz-icon nzType="menu" style="color: #E0BC5E;" nzTheme="outline" />
           </a>
@@ -75,18 +152,22 @@
                 <nz-icon nzType="bars" nzTheme="outline" />
                 <span style="padding-left: 10px;">About us</span>
               </li>
-              <li nz-menu-item routerLink="profile" *ngIf="userRole !== 'guestuser'">
+              <li nz-menu-item routerLink="profile" *ngIf="userRole !== 'guestuser' && userRole != null">
                 <span nz-icon nzType="user" nzTheme="outline"></span>
                 <span style="padding-left: 10px;">Profile</span>
               </li>
-              <div *ngIf="userRole !== 'guestuser'">
+              <div *ngIf="userRole !== 'guestuser' && userRole != null">
  <li nz-menu-item routerLink="collection" >
                 <span nz-icon nzType="user" nzTheme="outline"></span>
                 <span style="padding-left: 10px;">Saved</span>
               </li>
               </div>
+                <li nz-menu-item (click)="logout()" *ngIf="userRole === null">
+                <span nz-icon nzType="login" nzTheme="outline"></span>
+                <span style="padding-left: 10px">Login</span>
+              </li>
              
-              <li nz-menu-item (click)="logout()">
+              <li nz-menu-item (click)="logout()" *ngIf="userRole != null">
                 <span nz-icon nzType="logout" nzTheme="outline"></span>
                 <span style="padding-left: 10px">Logout</span>
               </li>
@@ -104,23 +185,31 @@
                 <ng-template #placeholder>
                   <div style="border-radius: 50%; background-color: #f2f2f2; height: 50px; display: flex; align-items: center; width: 50px; justify-content: center; font-size: 16px;">
                   <strong>
-  {{ userRole === 'guestuser' ? 'GS' : (firstName?.charAt(0).toUpperCase() + lastName?.charAt(0).toUpperCase()) }}
+  {{ userRole === 'guestuser' || userRole == null ? 'GS' : (firstName?.charAt(0).toUpperCase() + lastName?.charAt(0).toUpperCase()) }}
 </strong>
                   </div>
                 </ng-template>
               </span>
             </div>
             <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" style="font-size: 16px">
-              {{ Username || firstName }}
+              {{ 
+    userRole == null 
+      ? 'Profile' 
+      : (Username || firstName || 'Profile') 
+  }}
               <span nz-icon nzType="down"></span>
             </a>
             <nz-dropdown-menu #menu="nzDropdownMenu">
               <ul nz-menu style="display: flex; flex-direction: column">
-                <li nz-menu-item routerLink="profile" *ngIf="userRole !== 'guestuser'">
+                <li nz-menu-item routerLink="profile" *ngIf="userRole !== 'guestuser' && userRole != null">
                   <span nz-icon nzType="user" nzTheme="outline"></span>
                   <span style="padding-left: 10px;">Profile</span>
                 </li>
-                <li nz-menu-item (click)="logout()">
+                 <li nz-menu-item (click)="logout()" *ngIf="userRole === null">
+                <span nz-icon nzType="login" nzTheme="outline"></span>
+                <span style="padding-left: 10px">Login</span>
+              </li>
+                <li nz-menu-item (click)="logout()" *ngIf="userRole != null">
                   <span nz-icon nzType="logout" nzTheme="outline"></span>
                   <span style="padding-left: 10px">Logout</span>
                 </li>

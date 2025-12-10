@@ -34,6 +34,7 @@ export class QuranComponent {
     this.userId = this.authService.getUserId();
     this.userRole = this.authService.getUserRole();
     this.Username = sessionStorage.getItem('userName');
+   
     this.fetchUserByUserId();
     this.fetchQuranData();
   }

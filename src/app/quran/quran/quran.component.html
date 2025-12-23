@@ -1,16 +1,9 @@
   <nz-layout>
     <nz-header style="display: flex; justify-content: space-between; background-color: #14161b; height: 70px;">
-      <div routerLink="dashboard" class="logo">
+      <div routerLink="dashboard" class="logo" style="display: flex;gap: 30px;">
         <img src="assets/images/White Logo.png" alt="">
-        <!-- <img src="https://res.cloudinary.com/dpo0l887m/image/upload/v1741927962/jwdrqiontemuriteejgr.png" alt="The Quran Project Logo"> -->
-      </div>
-
-      <!-- Search Input -->
-    
-
-      <div style="display: flex; align-items: center; gap: 50px; justify-content: space-between;">
-        <div class="largeScreenSearch" >
-          <nz-input-group [nzSuffix]="suffixIconSearch" style="background-color: transparent; color: white; height: 45px; border-radius: 50px;">
+         <div class="largeScreenSearch" >
+          <nz-input-group [nzSuffix]="suffixIconSearch" style="background-color: transparent; color: white; height: 40px; border-radius: 50px;width: 250px;">
             <input style="background-color: transparent; color: white; border-radius: 50px;"
               nz-input
               placeholder="Search Surah, Verse, or Text..."
@@ -32,6 +25,14 @@
             <nz-icon nzType="search" />
           </ng-template>
         </div>
+        <!-- <img src="https://res.cloudinary.com/dpo0l887m/image/upload/v1741927962/jwdrqiontemuriteejgr.png" alt="The Quran Project Logo"> -->
+      </div>
+
+      <!-- Search Input -->
+    
+
+      <div style="display: flex; align-items: center; gap: 50px; justify-content: space-between;">
+       
         <!-- Existing Menu (menulargeScreen, menuMobile, largeScreenProfile) -->
         <div class="menulargeScreen">
           <ul style="display: flex; list-style-type: none; gap: 28px; font-size: 16px; margin: 0;" nzMode="horizontal">

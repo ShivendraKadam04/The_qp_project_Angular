@@ -93,7 +93,7 @@ nz-content {
 
 
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1180px) {
 .menulargeScreen{
   display: none;
 }
@@ -102,7 +102,7 @@ nz-content {
 }
 
 }
-@media screen and (min-width: 900px) {
+@media screen and (min-width: 1180px) {
   .menuMobile{
     display: none;
   }

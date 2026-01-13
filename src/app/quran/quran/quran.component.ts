@@ -105,7 +105,7 @@ onSearchChange(query: string) {
       });
     });
 
-    this.searchSuggestions = suggestions.slice(0, 5);
+    this.searchSuggestions = suggestions
   }
 
   selectSuggestion(suggestion: { text: string; surahNo: number; verseNo?: number }) {

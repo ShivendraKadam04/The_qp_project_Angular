@@ -1,4 +1,7 @@
 /* Custom Scrollbar for Webkit Browsers (Chrome, Safari) */
+html, body, * {
+  font-family: 'Poppins', sans-serif !important;
+}
 ::-webkit-scrollbar {
     width: 8px;
   }

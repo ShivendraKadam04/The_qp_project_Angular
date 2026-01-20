@@ -10,6 +10,11 @@ export class AppComponent {
   title = 'quran-angular-app';
    constructor(private authService: AuthService) {}
 
+   async ngOnInit() {
+  await this.authService.handleGoogleRedirectOnce();
+}
+
+
   @HostListener('window:beforeunload', ['$event'])
   async onBeforeUnload(event: Event) {
     if (sessionStorage.getItem('isGuest') === 'true') {

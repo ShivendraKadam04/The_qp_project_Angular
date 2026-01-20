@@ -3,32 +3,24 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
-  getAuth,
-} from 'firebase/auth';
-import { initializeApp } from 'firebase/app';
+// NOTE: No firebase imports at top-level on purpose (iOS Safari stability)
+type FirebaseAuth = any;
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   private apiUrl = environment.apiUrl;
 
-  // ✅ Firebase init (keep like this for now)
-  private firebaseAuth = getAuth(initializeApp(environment.firebase));
+  // ✅ Lazy-loaded auth instance (created only when needed)
+  private firebaseAuth: FirebaseAuth | null = null;
 
-  // ✅ Prevent redirect-result infinite loop (iOS)
-  private readonly redirectHandledKey = 'google_redirect_handled_v1';
+  // ✅ Prevent redirect loops
+  private readonly redirectHandledKey = 'google_redirect_handled_v2';
 
   constructor(private http: HttpClient) {}
 
-  // ------------------------------
-  // Normal Auth APIs (unchanged)
-  // ------------------------------
+  // -----------------------------
+  // Normal APIs (same as yours)
+  // -----------------------------
 
   signup(userData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/signup`, userData);
@@ -40,9 +32,7 @@ export class AuthService {
 
   async guestLogin(): Promise<any> {
     try {
-      return await firstValueFrom(
-        this.http.post(`${this.apiUrl}/auth/guest-login`, {})
-      );
+      return await firstValueFrom(this.http.post(`${this.apiUrl}/auth/guest-login`, {}));
     } catch (error) {
       console.error('Guest login failed:', error);
       throw error;
@@ -75,51 +65,84 @@ export class AuthService {
 
   changePassword(requestBody: any): Observable<any> {
     const token = this.getToken();
-
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     });
-
     return this.http.post(`${this.apiUrl}/auth/update-password`, requestBody, { headers });
   }
 
-  // ------------------------------
-  // ✅ Google Login (iOS Safe)
-  // ------------------------------
+  // -----------------------------
+  // ✅ iOS helpers
+  // -----------------------------
 
   private isIosSafari(): boolean {
     const ua = navigator.userAgent;
-
-    // iOS device?
     const isIOS = /iPad|iPhone|iPod/.test(ua);
-
-    // Safari on iOS (exclude Chrome/Firefox/Edge on iOS)
     const isSafari = /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua);
-
     return isIOS && isSafari;
   }
 
   /**
-   * ✅ Call ONLY on user click
-   * - iOS Safari => redirect
-   * - Others => popup
+   * ✅ Create auth only when needed (prevents iOS boot crash)
+   * Also sets "safe" persistence.
+   */
+  private async ensureFirebaseAuth(): Promise<any> {
+    if (this.firebaseAuth) return this.firebaseAuth;
+
+    const firebaseAppMod = await import('firebase/app');
+    const firebaseAuthMod = await import('firebase/auth');
+
+    const { getApps, initializeApp } = firebaseAppMod;
+    const {
+      getAuth,
+      setPersistence,
+      browserSessionPersistence,
+      inMemoryPersistence,
+    } = firebaseAuthMod;
+
+    // ✅ avoid duplicate init
+    const app = getApps().length ? getApps()[0] : initializeApp(environment.firebase);
+
+    const auth = getAuth(app);
+
+    // ✅ iOS Safari: session/in-memory persistence is safer than local (IndexedDB issues)
+    try {
+      await setPersistence(auth, this.isIosSafari() ? inMemoryPersistence : browserSessionPersistence);
+    } catch (e) {
+      // Even if persistence fails, keep going
+      console.log('Persistence set failed (safe to ignore):', e);
+    }
+
+    this.firebaseAuth = auth;
+    return auth;
+  }
+
+  // -----------------------------
+  // ✅ Google login (iOS safe)
+  // -----------------------------
+
+  /**
+   * Call ONLY from a button click.
    */
   async googleLogin(): Promise<any> {
     try {
+      const auth = await this.ensureFirebaseAuth();
+
+      const firebaseAuthMod = await import('firebase/auth');
+      const { GoogleAuthProvider, signInWithPopup, signInWithRedirect } = firebaseAuthMod;
+
       const provider = new GoogleAuthProvider();
 
-      // ✅ iOS Safari: use redirect (popup can crash/loop)
+      // ✅ iOS Safari: Redirect
       if (this.isIosSafari()) {
-        // clear the handled flag so next load can process redirect result once
         sessionStorage.removeItem(this.redirectHandledKey);
-
-        await signInWithRedirect(this.firebaseAuth, provider);
-        return; // redirect happens
+        await signInWithRedirect(auth, provider);
+        return;
       }
 
-      // ✅ Other browsers: popup is fine
-      const result = await signInWithPopup(this.firebaseAuth, provider);
+      // ✅ Others: Popup
+      const result = await signInWithPopup(auth, provider);
       const idToken = await result.user.getIdToken();
 
       return await firstValueFrom(
@@ -132,19 +155,19 @@ export class AuthService {
   }
 
   /**
-   * ✅ Call ONCE when app starts (AppComponent)
-   * This will finish Google redirect flow on iOS Safari.
+   * Call ONCE when app starts (AppComponent ngOnInit)
    */
   async handleGoogleRedirectOnce(): Promise<void> {
     try {
-      // ✅ Prevent infinite loops
       if (sessionStorage.getItem(this.redirectHandledKey) === 'true') return;
       sessionStorage.setItem(this.redirectHandledKey, 'true');
 
-      const result = await getRedirectResult(this.firebaseAuth);
+      const auth = await this.ensureFirebaseAuth();
+      const firebaseAuthMod = await import('firebase/auth');
+      const { getRedirectResult } = firebaseAuthMod;
 
-      // If user didn't just come from redirect, nothing to do
-      if (!result || !result.user) return;
+      const result = await getRedirectResult(auth);
+      if (!result?.user) return;
 
       const idToken = await result.user.getIdToken();
 
@@ -152,25 +175,21 @@ export class AuthService {
         this.http.post(`${this.apiUrl}/auth/firebase-google-auth`, { idToken })
       );
 
-      // ✅ If backend returns token, store it here (adjust key names if needed)
-      if (res?.token) {
-        sessionStorage.setItem('authToken', res.token);
-      }
-      if (res?.user?.userName) {
-        sessionStorage.setItem('userName', res.user.userName);
-      }
-
-      // optional flags
+      // If backend returns a token, store it
+      if (res?.token) sessionStorage.setItem('authToken', res.token);
       sessionStorage.setItem('isGoogleUser', 'true');
+
+      // optional:
+      // sessionStorage.removeItem(this.redirectHandledKey);
     } catch (e) {
       console.error('handleGoogleRedirectOnce failed:', e);
-      // keep the flag so it doesn't loop forever on iOS
+      // keep flag to prevent loops
     }
   }
 
-  // ------------------------------
-  // Token / User Helpers (unchanged)
-  // ------------------------------
+  // -----------------------------
+  // Session helpers (same)
+  // -----------------------------
 
   getToken(): string | null {
     return sessionStorage.getItem('authToken');
@@ -197,30 +216,23 @@ export class AuthService {
   }
 
   async deleteGuestUser(): Promise<any> {
-    try {
-      const token = this.getToken();
-      if (!token) throw new Error('No token available');
+    const token = this.getToken();
+    if (!token) throw new Error('No token available');
 
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      });
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
 
-      return await firstValueFrom(
-        this.http.delete(`${this.apiUrl}/auth/delete-guest`, { headers })
-      );
-    } catch (error) {
-      console.error('Delete guest user failed:', error);
-      throw error;
-    }
+    return await firstValueFrom(this.http.delete(`${this.apiUrl}/auth/delete-guest`, { headers }));
   }
 
   async logout(): Promise<void> {
     if (sessionStorage.getItem('isGuest') === 'true') {
       try {
         await this.deleteGuestUser();
-      } catch (error) {
-        console.error('Failed to delete guest user on logout:', error);
+      } catch (e) {
+        console.error('Failed to delete guest user on logout:', e);
       }
     }
 
@@ -230,8 +242,6 @@ export class AuthService {
     sessionStorage.removeItem('userName');
     sessionStorage.removeItem('isGoogleUser');
     sessionStorage.removeItem('isGuest');
-
-    // ✅ Also reset redirect flag
     sessionStorage.removeItem(this.redirectHandledKey);
   }
 

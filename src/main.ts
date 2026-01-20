@@ -12,8 +12,5 @@ window.onunhandledrejection = function (event) {
   console.log(event.reason);
 };
 
-platformBrowserDynamic()
-  .bootstrapModule(AppModule, {
-    ngZoneEventCoalescing: true,
-  })
+platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));

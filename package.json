@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "generate": "ng g",
-    "build:prod": "ng build --configuration production --source-map",
+    "build:prod": "ng build --configuration iosdebug --source-map",
     "test": "ng test",
     "serve:ssr:quran-angular-app": "node dist/quran-angular-app/server/server.mjs"
   },

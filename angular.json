@@ -26,6 +26,7 @@
     "outputPath": "dist/quran-angular-app",
     "index": "src/index.html",
     "browser": "src/main.ts",
+    "crossOrigin": "anonymous",
     "polyfills": [
       "zone.js"
     ],
@@ -49,44 +50,67 @@
     ],
     "scripts": []
   },
-  "configurations": {
-    "production": {
-      "fileReplacements": [
-        {
-          "replace": "src/environments/environment.ts",
-          "with": "src/environments/environment.prod.ts"
-        }
-      ],
-      "optimization": {
-        "scripts": true,
-        "styles": {
-          "minify": true,
-          "inlineCritical": true
-        },
-        "fonts": true
+"configurations": {
+  "production": {
+    "fileReplacements": [
+      {
+        "replace": "src/environments/environment.ts",
+        "with": "src/environments/environment.prod.ts"
+      }
+    ],
+    "optimization": {
+      "scripts": true,
+      "styles": {
+        "minify": true,
+        "inlineCritical": true
       },
-      "outputHashing": "all",
-      "sourceMap": true,
-      "extractLicenses": true,
-      "budgets": [
-        {
-          "type": "initial",
-          "maximumWarning": "10MB",
-          "maximumError": "10MB"
-        },
-        {
-          "type": "anyComponentStyle",
-          "maximumWarning": "10MB",
-          "maximumError": "10MB"
-        }
-      ]
+      "fonts": true
     },
-    "development": {
-      "optimization": false,
-      "sourceMap": true,
-      "extractLicenses": false
-    }
+    "outputHashing": "all",
+    "sourceMap": true,
+    "extractLicenses": true,
+    "budgets": [
+      {
+        "type": "initial",
+        "maximumWarning": "10MB",
+        "maximumError": "10MB"
+      },
+      {
+        "type": "anyComponentStyle",
+        "maximumWarning": "10MB",
+        "maximumError": "10MB"
+      }
+    ]
   },
+
+  "development": {
+    "optimization": false,
+    "sourceMap": true,
+    "extractLicenses": false
+  },
+
+  "iosdebug": {
+    "fileReplacements": [
+      {
+        "replace": "src/environments/environment.ts",
+        "with": "src/environments/environment.prod.ts"
+      }
+    ],
+    "optimization": {
+      "scripts": false,
+      "styles": {
+        "minify": false,
+        "inlineCritical": false
+      },
+      "fonts": false
+    },
+    "outputHashing": "all",
+    "sourceMap": true,
+    "extractLicenses": false,
+    "namedChunks": true
+  }
+},
+
   "defaultConfiguration": "production"
 },
         "serve": {

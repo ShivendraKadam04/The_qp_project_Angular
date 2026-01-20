@@ -18,25 +18,20 @@
 
   <noscript>
     <div style="padding: 50px; text-align: center; color: red; font-size: 1.2rem;">
-      JavaScript is required to view this app. Please enable it.
+      JavaScript is required. Please enable it or update Safari.
     </div>
   </noscript>
 
-  <app-root ngSkipHydration="true"></app-root>  <!-- as per step 1 -->
+  <app-root ngSkipHydration="true"></app-root>  <!-- Move here – skips entire app hydration -->
 
   <script>
     window.addEventListener('load', () => {
-      const loading = document.getElementById('app-loading');
-      if (loading) loading.remove();
+      document.getElementById('app-loading')?.remove();
     });
 
-    // Log bootstrap errors globally
-    window.addEventListener('error', (e) => {
-      console.error('Global error:', e.message, e.filename, e.lineno);
-    });
-    window.addEventListener('unhandledrejection', (e) => {
-      console.error('Unhandled promise rejection:', e.reason);
-    });
+    // Extra logging for debug
+    window.addEventListener('error', (e) => console.error('Global error:', e));
+    window.addEventListener('unhandledrejection', (e) => console.error('Promise rejection:', e.reason));
   </script>
 </body>
 </html>

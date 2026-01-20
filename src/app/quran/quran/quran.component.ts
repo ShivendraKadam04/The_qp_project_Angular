@@ -39,7 +39,7 @@ export class QuranComponent {
       this.fetchUserByUserId();
     }
     
-    this.fetchQuranData();
+    // this.fetchQuranData();
   }
 
   async fetchUserByUserId() {
@@ -57,19 +57,19 @@ export class QuranComponent {
     });
   }
 
-  fetchQuranData() {
-    this.quranService.getQuranData('english').subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.quranData = response.data;
-          console.log('Fetched Quran Data for Search:', this.quranData);
-        }
-      },
-      error: (error) => {
-        console.error('Error fetching Quran data:', error);
-      }
-    });
-  }
+  // fetchQuranData() {
+  //   this.quranService.getQuranData('english').subscribe({
+  //     next: (response) => {
+  //       if (response.success) {
+  //         this.quranData = response.data;
+  //         console.log('Fetched Quran Data for Search:', this.quranData);
+  //       }
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching Quran data:', error);
+  //     }
+  //   });
+  // }
 
 onSearchChange(query: string) {
     this.searchQuery = query;

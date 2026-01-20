@@ -77,7 +77,8 @@ guestLoading = false;
       sessionStorage.setItem('userRole', response.user.userRole);
       sessionStorage.setItem('isGuest', response.user.isGuest);
 
-      this.router.navigate(['/quran']);
+      window.location.href = '/quran';
+
     } catch (err: any) {
       const error = err as HttpErrorResponse;
       const errorMessage = error?.error?.message || 'Guest login failed';

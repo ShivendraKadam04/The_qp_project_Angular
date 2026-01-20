@@ -17,9 +17,7 @@ const routes: Routes = [
       { path: 'collection', component: CollectionComponent },
       { path: 'appendice', component: AppendiceComponent },
       { path: 'aboutus', component: AboutusComponent },
-      { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-        { path: '**', redirectTo: '/dashboard' } // Wildcard route
-
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }
 ];

@@ -17,7 +17,7 @@ const routes: Routes = [
       { path: 'collection', component: CollectionComponent },
       { path: 'appendice', component: AppendiceComponent },
       { path: 'aboutus', component: AboutusComponent },
-      { path: '', redirectTo: 'aboutus', pathMatch: 'full' }
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }
 ];

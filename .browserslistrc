@@ -1,6 +1,6 @@
-# Browsers that we support
-last 3 versions
-last 3 iOS versions
-Safari >= 15
-iOS >= 15
+last 4 Chrome versions
+last 3 Firefox versions
+last 3 Edge versions
+Safari >= 13
+iOS >= 13
 not dead

@@ -36,7 +36,7 @@ export class QuranComponent {
     this.Username = sessionStorage.getItem('userName');
    
     this.fetchUserByUserId();
-    // this.fetchQuranData();
+    this.fetchQuranData();
   }
 
   async fetchUserByUserId() {

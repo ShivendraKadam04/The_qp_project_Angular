@@ -23,6 +23,7 @@
       "build": {
   "builder": "@angular-devkit/build-angular:application",
   "options": {
+    "statsJson": true,
     "outputPath": "dist/quran-angular-app",
     "index": "src/index.html",
     "browser": "src/main.ts",
@@ -81,6 +82,30 @@
         }
       ]
     },
+    "iosdebug": {
+  "fileReplacements": [
+    {
+      "replace": "src/environments/environment.ts",
+      "with": "src/environments/environment.prod.ts"
+    }
+  ],
+  "optimization": {
+    "scripts": false,
+    "styles": {
+      "minify": false,
+      "inlineCritical": false
+    },
+    "fonts": false
+  },
+  "outputHashing": "all",
+  "sourceMap": {
+    "scripts": true,
+    "styles": true,
+    "vendor": true
+  },
+  "extractLicenses": false,
+  "namedChunks": true
+},
     "development": {
       "optimization": false,
       "sourceMap": true,
@@ -107,6 +132,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
+            
             "polyfills": [
               "zone.js",
               "zone.js/testing"

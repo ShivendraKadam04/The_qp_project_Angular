@@ -12,6 +12,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <app-root></app-root>
+  <div id="app-loading" style="position: fixed; inset: 0; background: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-family: 'Poppins', sans-serif; color: #333; z-index: 9999;">
+    Loading The Quran Project...
+  </div>
+
+  <noscript>
+    <div style="padding: 50px; text-align: center; color: red; font-size: 1.2rem;">
+      JavaScript is required to view this app. Please enable it.
+    </div>
+  </noscript>
+
+  <app-root ngSkipHydration="true"></app-root>  <!-- as per step 1 -->
+
+  <script>
+    window.addEventListener('load', () => {
+      const loading = document.getElementById('app-loading');
+      if (loading) loading.remove();
+    });
+
+    // Log bootstrap errors globally
+    window.addEventListener('error', (e) => {
+      console.error('Global error:', e.message, e.filename, e.lineno);
+    });
+    window.addEventListener('unhandledrejection', (e) => {
+      console.error('Unhandled promise rejection:', e.reason);
+    });
+  </script>
 </body>
 </html>

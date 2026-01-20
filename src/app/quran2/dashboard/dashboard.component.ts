@@ -15,14 +15,14 @@ export class DashboardComponent {
   scrollAmount: number = 200;
 
   cards = [
-    { image: 'assets/images/Rectangle 13.png', title: 'Scientific Miracles of the Qur’ān' },
-    { image: 'assets/images/Rectangle 14.png', title: 'Preservation and Literary Challenge of the Qur’ān' },
-    { image: 'assets/images/Rectangle 15.png', title: 'Miracles Performed' },
-    { image: 'assets/images/Rectangle 16.png', title: 'Short Guide to Ablution and Prayer' },
-    { image: 'assets/images/Rectangle 17.png', title: 'Women in Islām' },
-    { image: 'assets/images/Rectangle 18.png', title: 'The Unique Qur’ānic Generation' },
-    { image: 'assets/images/Rectangle 19.png', title: 'How do I become a Muslim?' },
-    { image: 'assets/images/Rectangle 20.png', title: 'Old and New Testament Prophecies of Muhammad' }
+    { image: 'assets/images/Rectangle2.jpeg', title: 'Scientific Miracles of the Qur’ān' },
+    { image: 'assets/images/Rectangle2.jpeg', title: 'Preservation and Literary Challenge of the Qur’ān' },
+    { image: 'assets/images/Rectangle2.jpeg', title: 'Miracles Performed' },
+    { image: 'assets/images/Rectangle2.jpeg', title: 'Short Guide to Ablution and Prayer' },
+    { image: 'assets/images/Rectangle2.jpeg', title: 'Women in Islām' },
+    { image: 'assets/images/Rectangle2.jpeg', title: 'The Unique Qur’ānic Generation' },
+    { image: 'assets/images/Rectangle2.jpeg', title: 'How do I become a Muslim?' },
+    { image: 'assets/images/Rectangle2.jpeg', title: 'Old and New Testament Prophecies of Muhammad' }
   ];
 
   constructor(private router: Router) {}

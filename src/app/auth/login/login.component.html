@@ -1,101 +1,266 @@
-<form class="form" [formGroup]="loginForm"  >
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+    <nz-layout>
+    <nz-header style="display: flex; justify-content: space-between; background-color: #14161b; height: 70px;">
+      <div routerLink="dashboard" class="logo" style="display: flex;gap: 30px;">
+        <img src="assets/images/White Logo.png" alt="">
+         <div class="largeScreenSearch" >
+          <nz-input-group [nzSuffix]="suffixIconSearch" style="background-color: transparent; color: white; height: 40px; border-radius: 50px;width: 250px;">
+            <input style="background-color: transparent; color: white; border-radius: 50px;"
+              nz-input
+              placeholder="Search Surah, Verse, or Text..."
+              [(ngModel)]="searchQuery"
+              (ngModelChange)="onSearchChange($event)"
+              [nzAutocomplete]="autoComplete"
+            />
+            <nz-autocomplete #autoComplete>
+              <nz-auto-option
+                *ngFor="let suggestion of searchSuggestions"
+                [nzValue]="suggestion.text"
+                (click)="selectSuggestion(suggestion)"
+              >
+                {{ suggestion.text }}
+              </nz-auto-option>
+            </nz-autocomplete>
+          </nz-input-group>
+          <ng-template #suffixIconSearch>
+            <nz-icon nzType="search" />
+          </ng-template>
+        </div>
+        <!-- <img src="https://res.cloudinary.com/dpo0l887m/image/upload/v1741927962/jwdrqiontemuriteejgr.png" alt="The Quran Project Logo"> -->
+      </div>
 
-  <div>
-    <div  class="flex-column"><label>Email</label></div>
-    <div class="inputForm">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
-        <path d="M22 6L12 13L2 6"></path>
-      </svg>      <input formControlName="email" placeholder="Enter your Email" class="input" type="text">
-      </div>
-      <div class="error" *ngIf="submitted && f['email'].errors">
-        <span *ngIf="f['email'].errors['required']">Email is required</span>
-        <span *ngIf="f['email'].errors['email']">Invalid email format</span>
-      </div>
-    </div>
-  
-    <div>
-  
-    <div class="flex-column"><label>Password</label></div>
-    <div class="inputForm">
-      <svg 
-      *ngIf="!passwordVisible" 
-      (click)="togglePasswordVisibility()" 
-      style="cursor: pointer;" 
-      xmlns="http://www.w3.org/2000/svg" 
-      width="20" 
-      height="20" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-    >
-      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-      <circle cx="12" cy="12" r="3"></circle>
-    </svg>
-  
-    <!-- Eye-slash icon when password is visible -->
-    <svg 
-      *ngIf="passwordVisible" 
-      (click)="togglePasswordVisibility()" 
-      style="cursor: pointer;" 
-      xmlns="http://www.w3.org/2000/svg" 
-      width="20" 
-      height="20" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-    >
-      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-      <line x1="1" y1="1" x2="23" y2="23"></line>
-    </svg>      <input formControlName="password" placeholder="Enter your Password" class="input" [type]="passwordVisible ? 'text' : 'password'">
-      
-       </div>
-       <div class="error" *ngIf="submitted && f['password'].errors">
-        <span *ngIf="f['password'].errors['required']">Password is required</span>
-      </div>
-  
-    </div>
+      <!-- Search Input -->
     
-    <div class="flex-row">
-      <div>
-      
+
+      <div style="display: flex; align-items: center; gap: 50px; justify-content: space-between;">
+       
+        <!-- Existing Menu (menulargeScreen, menuMobile, largeScreenProfile) -->
+        <div class="menulargeScreen">
+          <ul style="display: flex; list-style-type: none; gap: 28px; font-size: 16px; margin: 0;" nzMode="horizontal">
+            <li routerLink="dashboard" routerLinkActive="active" #rla="routerLinkActive" class="hover-underline-animation nav-item">
+              <img [src]="rla.isActive ? 'assets/icons/homeactive.svg' : 'assets/icons/homenonactive.svg'" style="margin-right: 5px; height: 14px;" alt="">
+              Home
+            </li>
+            <li routerLink="chapters" routerLinkActive="active" #rla2="routerLinkActive" class="hover-underline-animation nav-item">
+              <img [src]="rla2.isActive ? 'assets/icons/chaptersactive.svg' : 'assets/icons/chaptersnonactive.svg'" style="margin-right: 5px; height: 14px;" alt="">
+              Surahs
+            </li>
+            <li routerLink="aboutus" routerLinkActive="active" #rla4="routerLinkActive" class="hover-underline-animation nav-item">
+              <img [src]="rla4.isActive ? 'assets/icons/aboutus-active.svg' : 'assets/icons/aboutus.svg'" style="margin-right: 5px; height: 22px;" alt="">
+              About us
+            </li>
+            <div *ngIf="userRole !== 'guestuser' && userRole != null">
+                <li routerLink="collection"  routerLinkActive="active" #rla3="routerLinkActive" class="hover-underline-animation nav-item">
+              <img [src]="rla3.isActive ? 'assets/icons/saved-active.svg' : 'assets/icons/saved.svg'" style="margin-right: 5px; height: 14px;" alt="">
+              Saved
+            </li>
+            </div>
+
+            <!-- NEW: More Dropdown (after Saved) -->
+          <li nz-dropdown [nzDropdownMenu]="moreMenu" nzTrigger="hover" class="hover-underline-animation nav-item" style="cursor: pointer;">
+            <nz-icon nzType="appstore" nzTheme="fill" style="margin-right: 5px;" />
+            More
+            <span nz-icon nzType="down" style="font-size: 12px; margin-left: 4px;"></span>
+          </li>
+
+          <nz-dropdown-menu #moreMenu="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item>
+  <a href="https://www.quranproject.org/The-Quran-Project-1-p" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+    <span nz-icon nzType="book" nzTheme="outline"></span>
+     Order Free Copy
+  </a>
+</li>
+              <li nz-menu-item >
+                 <a href="https://www.quranproject.org/donations" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="heart" nzTheme="outline"></span>
+                Make a Donation
+                 </a>
+              </li>
+              <li nz-menu-item >
+                <a href="https://www.quranproject.org/go_files/pdf/Online-Version-9th-Edition.pdf" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="download" nzTheme="outline"></span>
+                Download PDF
+                  </a>
+              </li>
+              <li nz-menu-item >
+                 <a href="https://www.quranproject.org/feedback" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="message" nzTheme="outline"></span>
+                Feedback
+                 </a>
+              </li>
+              
+            </ul>
+          </nz-dropdown-menu>
+          
+          </ul>
+        </div>
+
+        <div class="menuMobile">
+           <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu3">
+            <nz-icon nzType="appstore" style="color: #E0BC5E;margin-right:15px;" nzTheme="outline" />
+          </a>
+          <nz-dropdown-menu #menu3="nzDropdownMenu">
+             <ul nz-menu>
+              <li nz-menu-item>
+  <a href="https://www.quranproject.org/The-Quran-Project-1-p" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+    <span nz-icon nzType="book" nzTheme="outline"></span>
+     Order Free Copy
+  </a>
+</li>
+              <li nz-menu-item >
+                 <a href="https://www.quranproject.org/donations" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="heart" nzTheme="outline"></span>
+                Make a Donation
+                 </a>
+              </li>
+              <li nz-menu-item >
+                <a href="https://www.quranproject.org/go_files/pdf/Online-Version-9th-Edition.pdf" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="download" nzTheme="outline"></span>
+                Download PDF
+                  </a>
+              </li>
+              <li nz-menu-item >
+                 <a href="https://www.quranproject.org/feedback" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="message" nzTheme="outline"></span>
+                Feedback
+                 </a>
+              </li>
+              
+            </ul>
+          </nz-dropdown-menu>
+          <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu2">
+            <nz-icon nzType="menu" style="color: #E0BC5E;" nzTheme="outline" />
+          </a>
+          <nz-dropdown-menu #menu2="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li routerLink="dashboard" nz-menu-item>
+                <nz-icon nzType="home" nzTheme="outline" />
+                <span style="padding-left: 10px;">Home</span>
+              </li>
+              <li routerLink="chapters" nz-menu-item>
+                <nz-icon nzType="book" nzTheme="outline" />
+                <span style="padding-left: 10px;">Surahs</span>
+              </li>
+               <li routerLink="aboutus" nz-menu-item>
+                <nz-icon nzType="bars" nzTheme="outline" />
+                <span style="padding-left: 10px;">About us</span>
+              </li>
+              <li nz-menu-item routerLink="profile" *ngIf="userRole !== 'guestuser' && userRole != null">
+                <span nz-icon nzType="user" nzTheme="outline"></span>
+                <span style="padding-left: 10px;">Profile</span>
+              </li>
+              <div *ngIf="userRole !== 'guestuser' && userRole != null">
+ <li nz-menu-item routerLink="collection" >
+                <span nz-icon nzType="user" nzTheme="outline"></span>
+                <span style="padding-left: 10px;">Saved</span>
+              </li>
+              </div>
+                <li nz-menu-item (click)="logout()" *ngIf="userRole === null">
+                <span nz-icon nzType="login" nzTheme="outline"></span>
+                <span style="padding-left: 10px">Login</span>
+              </li>
+             
+              <li nz-menu-item (click)="logout()" *ngIf="userRole != null">
+                <span nz-icon nzType="logout" nzTheme="outline"></span>
+                <span style="padding-left: 10px">Logout</span>
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+
+        <div class="largeScreenProfile">
+          <div style="display: flex; gap: 5px;">
+            <div style="display: flex; align-items: center;">
+              <span style="border-radius: 50%; background-color: #f2f2f2;">
+                <div style="display: flex; align-items: center;" class="avatar-placeholder" *ngIf="userdata?.profilePhoto; else placeholder">
+                  <img [src]="file" style="object-fit: cover; width: 55px; height: 55px; border-radius: 50%;">
+                </div>
+                <ng-template #placeholder>
+                  <div style="border-radius: 50%; background-color: #f2f2f2; height: 50px; display: flex; align-items: center; width: 50px; justify-content: center; font-size: 16px;">
+                  <strong>
+  {{ userRole === 'guestuser' || userRole == null ? 'GS' : (firstName?.charAt(0).toUpperCase() + lastName?.charAt(0).toUpperCase()) }}
+</strong>
+                  </div>
+                </ng-template>
+              </span>
+            </div>
+            <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" style="font-size: 16px">
+              {{ 
+    userRole == null 
+      ? 'Profile' 
+      : (Username || firstName || 'Profile') 
+  }}
+              <span nz-icon nzType="down"></span>
+            </a>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu style="display: flex; flex-direction: column">
+                <li nz-menu-item routerLink="profile" *ngIf="userRole !== 'guestuser' && userRole != null">
+                  <span nz-icon nzType="user" nzTheme="outline"></span>
+                  <span style="padding-left: 10px;">Profile</span>
+                </li>
+                 <li nz-menu-item (click)="logout()" *ngIf="userRole === null">
+                <span nz-icon nzType="login" nzTheme="outline"></span>
+                <span style="padding-left: 10px">Login</span>
+              </li>
+                <li nz-menu-item (click)="logout()" *ngIf="userRole != null">
+                  <span nz-icon nzType="logout" nzTheme="outline"></span>
+                  <span style="padding-left: 10px">Logout</span>
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+          </div>
+        </div>
       </div>
-      <span class="span" style="cursor: pointer;" routerLink="/auth/forgotpassword">Forgot password?</span>
+    </nz-header>
+    <!-- Sub-header for Search on Mobile -->
+     <nz-header class="sub-header">
+    <div  >
+      <div style="display: flex; align-items: center; width: 100%;">
+        <nz-input-group [nzSuffix]="suffixIconSearchMobile" style="background-color: transparent; color: white; height: 45px; border-radius: 50px;">
+          <input style="background-color: transparent; color: white; border-radius: 50px;"
+            nz-input
+            placeholder="Search Surah, Verse, or Text..."
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="onSearchChange($event)"
+            [nzAutocomplete]="autoCompleteMobile"
+          />
+          <nz-autocomplete #autoCompleteMobile>
+            <nz-auto-option
+              *ngFor="let suggestion of searchSuggestions"
+              [nzValue]="suggestion.text"
+              (click)="selectSuggestion(suggestion)"
+            >
+              {{ suggestion.text }}
+            </nz-auto-option>
+          </nz-autocomplete>
+        </nz-input-group>
+        <ng-template #suffixIconSearchMobile>
+          <nz-icon nzType="search" />
+        </ng-template>
+      </div>
     </div>
-
-    <button  (click)="onSubmit()"  [disabled]="loading"  class="button-submit">
-      {{ loading ? 'Loging in...' : 'Log In' }}
-    </button>
-    <p class="p">Don't have an account? <span class="span"  routerLink="/auth/signup">Sign Up</span>
-
-    <div class="flex-row">
-      <button class="btn google" (click)="onGoogleLogin()">
-        <svg xml:space="preserve" style="enable-background:new 0 0 512 512;" viewBox="0 0 512 512" y="0px" x="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" id="Layer_1" width="20" version="1.1">
-<path d="M113.47,309.408L95.648,375.94l-65.139,1.378C11.042,341.211,0,299.9,0,256
-	c0-42.451,10.324-82.483,28.624-117.732h0.014l57.992,10.632l25.404,57.644c-5.317,15.501-8.215,32.141-8.215,49.456
-	C103.821,274.792,107.225,292.797,113.47,309.408z" style="fill:#FBBB00;"></path>
-<path d="M507.527,208.176C510.467,223.662,512,239.655,512,256c0,18.328-1.927,36.206-5.598,53.451
-	c-12.462,58.683-45.025,109.925-90.134,146.187l-0.014-0.014l-73.044-3.727l-10.338-64.535
-	c29.932-17.554,53.324-45.025,65.646-77.911h-136.89V208.176h138.887L507.527,208.176L507.527,208.176z" style="fill:#518EF8;"></path>
-<path d="M416.253,455.624l0.014,0.014C372.396,490.901,316.666,512,256,512
-	c-97.491,0-182.252-54.491-225.491-134.681l82.961-67.91c21.619,57.698,77.278,98.771,142.53,98.771
-	c28.047,0,54.323-7.582,76.87-20.818L416.253,455.624z" style="fill:#28B446;"></path>
-<path d="M419.404,58.936l-82.933,67.896c-23.335-14.586-50.919-23.012-80.471-23.012
-	c-66.729,0-123.429,42.957-143.965,102.724l-83.397-68.276h-0.014C71.23,56.123,157.06,0,256,0
-	C318.115,0,375.068,22.126,419.404,58.936z" style="fill:#F14336;"></path>
-
-</svg>
-   
-        Login with Google 
-        
-      </button></div>
-      <!-- <nz-divider style="margin: 0;" nzPlain nzText="Or" nzVariant="solid"></nz-divider>
-      <button class="button-submit" style="background-color: #F7F4EB;color: #0C1A30;margin-top: 0px;" (click)="onGuestLogin()">Skip & Continue As Guest</button> -->
-
-    </form>
+    </nz-header>
+    <nz-content >
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</body>
+</html>

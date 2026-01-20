@@ -1,0 +1,71 @@
+<div style="height: 85vh; display: flex; flex-direction: column; ">
+
+  <div class="teachingseafarermain" style=" flex-shrink: 0;">
+    <div class="teachingseafarermain1">
+      <div>
+        <div class="teachingtext">The Qur'an Project</div>
+      </div>
+      <div class="courssecategoriesdiv2">
+        <p style="color: #828282; font-size: 30px;">
+          Read,Think and Discover
+        </p>
+      </div>
+    </div>
+    <div class="teachingseafarermain2" routerLink="/quran/chapters">
+      <div class="teachingseafarermain2box">
+        <div style="
+          background: transparent;
+          border-radius: 20px;
+          overflow: hidden;
+          border: 1px #cbd5e1 solid;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: center;
+          display: inline-flex;">
+          <div style="
+            background-image: url(https://via.placeholder.com/600x399);
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            display: inline-flex;">
+            <div class="main-card">
+              <img src="assets/images/QPmain.svg" alt="The Qur'an Project" />
+              <h3 class="largeLogo">The Qur'an <nz-icon style="color:#E0BC5E;" nzType="arrow-right" nzTheme="outline" /></h3>
+              <!-- <h3 class="smallLogo"><img src="assets/images/QPtransparentLogo.svg" alt=""></h3> -->
+<!-- NEW: Clean "Tap to Read" – no background -->
+  <div class="tap-to-read">Tap to Read</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="horizontal-layout" >
+    <div class="scroll-container" style="display: flex; justify-content: space-between; width: 100%; gap: 5px;">
+      <button class="nav-button left-btn" id="scrollLeft" [disabled]="isAtStart" (click)="scrollLeft()">
+        <nz-icon style="color: #E0BC5E; font-size: 30px;" nzType="left" nzTheme="outline" />
+      </button>
+      <div class="scroll-wrapper" #scrollWrapper (scroll)="checkScroll()" style="display: flex; align-items: center;">
+        <div class="card" *ngFor="let item of cards" (click)="navigateToAppendice(item.title)">
+          <img [src]="item.image" [alt]="item.title" />
+          <h3>{{ item.title }}</h3>
+        </div>
+      </div>
+      <button class="nav-button right-btn" id="scrollRight" [disabled]="isAtEnd" (click)="scrollRight()">
+        <nz-icon style="color: #E0BC5E; font-size: 30px;" nzType="right" nzTheme="outline" />
+      </button>
+    </div>
+  </div>
+
+
+  <div class="grid-layout">
+    <div class="card" *ngFor="let item of cards" (click)="navigateToAppendice(item.title)">
+      <img [src]="item.image" [alt]="item.title" />
+      <h3>{{ item.title }}</h3>
+    </div>
+  </div>
+
+
+</div>

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { QuranComponent } from './quran/quran.component';
+import { Quran2Component } from './quran2.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ChaptersComponent } from './chapters/chapters.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -8,9 +8,7 @@ import { CollectionComponent } from './collection/collection.component';
 import { AppendiceComponent } from './appendice/appendice.component';
 import { AboutusComponent } from './aboutus/aboutus.component';
 
-const routes: Routes = [
-  { 
-    path: '', component: QuranComponent, children: [
+const routes: Routes = [{ path: '', component: Quran2Component, children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'chapters', component: ChaptersComponent },
       { path: 'profile', component: ProfileComponent },
@@ -18,12 +16,10 @@ const routes: Routes = [
       { path: 'appendice', component: AppendiceComponent },
       { path: 'aboutus', component: AboutusComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
-    ]
-  }
-];
+    ] }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class QuranRoutingModule { }
+export class Quran2RoutingModule { }

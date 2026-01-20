@@ -1,0 +1,115 @@
+.about-us-page {
+  padding: 3rem 0.5rem;
+  background: #ffffff;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.main-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #E0BC5E;
+  margin-bottom: 3rem;
+  letter-spacing: 1px;
+}
+
+.content {
+  font-size: 1.15rem;
+  line-height: 2.1;
+  color: #2d3748;
+  text-align: justify;
+}
+
+.content p {
+  margin-bottom: 1.8rem;
+}
+
+.products-title {
+  font-size: 1.3rem !important;
+  margin: 2.5rem 0 1.5rem 0 !important;
+  text-align: center;
+}
+
+.products-list {
+  padding-left: 2rem;
+  margin: 2rem 0;
+  font-size: 1.15rem;
+  line-height: 2.4;
+  text-align: left;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.link {
+  color: #2563eb !important;
+  font-weight: 600;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #1d4ed8 !important;
+  }
+}
+
+.closing-section {
+  margin-top: 5rem;
+  padding: 3rem 2rem;
+  background: linear-gradient(to bottom, #f8fafc, #e2e8f0);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.closing-section h2 {
+  font-size: 1.5rem;
+  color: #E0BC5E;
+  margin-bottom: 0.5rem;
+  font-style: italic;
+}
+
+.project-name {
+  font-size: 1.5rem;
+  color: #1e293b;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-title {
+    font-size: 2.4rem;
+  }
+  
+  .content {
+    font-size: 1.05rem;
+    line-height: 2;
+  }
+  
+  .products-list {
+    padding-left: 1.5rem;
+    font-size: 1.05rem;
+  }
+  
+  .closing-section h2 {
+    font-size: 1.2rem;
+  }
+  
+  .project-name {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 2rem;
+  }
+  
+  .closing-section {
+    padding: 2rem 1rem;
+  }
+}

@@ -1,0 +1,325 @@
+/* collection.component.css */
+.collection-container {
+  padding: 10px;
+
+  margin: 0 auto;
+
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #333;
+  font-weight: 700;
+}
+
+.add-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.collection-grid {
+    max-height: 70vh;
+    padding: 0px 20px;
+    overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.custom-primary-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px; /* Space between icon and text */
+  background-color: #F6F3EC; /* Ng-Zorro primary blue */
+  color: #E0BC5E;
+  border: none;
+  border-radius: 4px; /* Rounded corners */
+  padding: 1px 30px; /* Padding similar to NzButton */
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 18px;
+  border-radius: 50px;
+  height: 40px; /* Standard height for Ng-Zorro buttons */
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.custom-primary-button:hover {
+  background-color: #E0BC5E; /* Lighter blue on hover */
+color: #F6F3EC;
+}
+
+.custom-primary-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2); /* Focus ring */
+}
+
+.custom-primary-button:disabled {
+  background-color: #d9d9d9;
+  color: #00000040;
+  cursor: not-allowed;
+}
+
+/* Optional: Style for the icon if using Unicode */
+.plus-circle-icon {
+  font-size: 16px;
+}
+
+/* If using Font Awesome */
+.fas.fa-plus-circle {
+  font-size: 16px;
+}
+
+.collection-box {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #FAFAFA;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.collection-box:hover {
+  background: #e8e8e8;
+}
+
+.folder-icon {
+  font-size: 24px;
+  margin-right: 12px;
+  color: #1890ff;
+}
+
+.collection-info h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.collection-info p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #666;
+}
+
+nz-modal {
+  max-width: 500px;
+}
+
+nz-form-item {
+  margin-bottom: 16px;
+}
+
+nz-select {
+  width: 100%;
+}
+
+button[nz-button] {
+  margin-bottom: 16px;
+}
+.verse-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.verse-item {
+  margin-bottom: 16px;
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e8e8e8;
+}
+
+.verse-item:last-child {
+  margin-bottom: 0;
+}
+
+.verse-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.verse-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28 px;
+ background-color: #dedfe2ac; color: #E0BC5E;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 700;
+
+  margin-right: 12px;
+}
+
+.verse-item h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.verse-item p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+
+/* Modal Overlay (background) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure modal is on top */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: white;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Modal Header */
+.modal-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid #e8e8e8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-close-btn:hover {
+  color: #333;
+}
+
+/* Modal Body */
+.modal-body {
+  padding: 24px;
+}
+
+.vertical-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-item {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.form-label .required {
+  color: #ff4d4f; /* Red asterisk for required fields */
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  border-color: #1890ff; /* Blue border on focus */
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.input-error {
+  border-color: #ff4d4f; /* Red border for invalid input */
+}
+
+.error-message {
+  color: #ff4d4f;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Modal Footer */
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e8e8e8;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.cancel-btn, .ok-btn {
+  padding: 4px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cancel-btn {
+  background-color: #f5f5f5;
+  border: 1px solid #d9d9d9;
+  color: #333;
+}
+.empty-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Ensure the div takes the full height of its parent */
+  text-align: center;
+}
+
+.cancel-btn:hover {
+  background-color: #e8e8e8;
+}
+
+.ok-btn {
+  background-color: #E0BC5E;
+  border: none;
+  color: white;
+}
+
+.ok-btn:hover {
+  background-color: #E0BC5E;
+}
+
+.ok-btn:disabled {
+  background-color: #d9d9d9;
+  color: #00000040;
+  cursor: not-allowed;
+}

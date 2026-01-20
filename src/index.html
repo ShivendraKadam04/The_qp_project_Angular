@@ -12,26 +12,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div id="app-loading" style="position: fixed; inset: 0; background: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-family: 'Poppins', sans-serif; color: #333; z-index: 9999;">
-    Loading The Quran Project...
-  </div>
-
-  <noscript>
-    <div style="padding: 50px; text-align: center; color: red; font-size: 1.2rem;">
-      JavaScript is required. Please enable it or update Safari.
-    </div>
-  </noscript>
-
-  <app-root ngSkipHydration="true"></app-root>  <!-- Move here – skips entire app hydration -->
-
-  <script>
-    window.addEventListener('load', () => {
-      document.getElementById('app-loading')?.remove();
-    });
-
-    // Extra logging for debug
-    window.addEventListener('error', (e) => console.error('Global error:', e));
-    window.addEventListener('unhandledrejection', (e) => console.error('Promise rejection:', e.reason));
-  </script>
+  <app-root ngSkipHydration="true"></app-root>
 </body>
 </html>

@@ -48,12 +48,10 @@ guestLoading = false;
       next: (response) => {
         console.log('Login successful', response);
         this.message.success(response.message);  // Show success message
-        
+        this.router.navigate(['/quran'])
         sessionStorage.setItem('authToken', response.token);
         sessionStorage.setItem('userName', response.user.userName);
         sessionStorage.setItem('isGoogleUser', response.user.isGoogleUser);
-// this.router.navigate(['/quran'])
-window.location.href = '/quran';
 
         this.loading = false;
       },

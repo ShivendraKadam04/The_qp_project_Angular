@@ -25,42 +25,15 @@ export class ProfileComponent implements OnInit {
   passwordVisible3 = false;
   passwordMismatch = false;
 
-  locationForm!: FormGroup;
-
-  listCountry: any[] = [];
-  listState: any[] = [];
-  listCity: any[] = [];
-
-  isStateDisabled: boolean = true;
-  isCityDisabled: boolean = true;
-
-  isFormChanged: boolean = false;
-  isAddressFormChanged: boolean = false;
-
   selectedFile: any;
 
-  // ✅ NEW: dynamic import cache
-  private csc: any | null = null;
+  isFormChanged: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private message: NzMessageService
-  ) {
-    this.locationForm = this.fb.group({
-      country: [null, Validators.required],
-      state: [null, Validators.required],
-      city: [null],
-      streetAddress: ['', Validators.required]
-    });
-  }
-
-  // ✅ NEW: load country-state-city only when needed (creates separate chunk)
-  private async loadCSC() {
-    if (this.csc) return this.csc;
-    this.csc = await import('country-state-city');
-    return this.csc;
-  }
+  ) {}
 
   ngOnInit() {
     this.userForm = this.fb.group({
@@ -76,10 +49,6 @@ export class ProfileComponent implements OnInit {
       this.isFormChanged = this.userForm.dirty;
     });
 
-    this.locationForm.valueChanges.subscribe(() => {
-      this.isAddressFormChanged = this.locationForm.dirty;
-    });
-
     this.passwordForm = this.fb.group({
       oldPassword: ['', Validators.required],
       newPassword: ['', Validators.required],
@@ -90,9 +59,6 @@ export class ProfileComponent implements OnInit {
     this.isGoogleUser = sessionStorage.getItem('isGoogleUser');
 
     this.fetchUserByUserId();
-
-    // ✅ IMPORTANT: now async loads the lib only on Profile open
-    this.loadCountries();
   }
 
   async fetchUserByUserId() {
@@ -112,22 +78,6 @@ export class ProfileComponent implements OnInit {
             gender: res.user.gender,
             profilePhoto: res.user.profilePhoto || ''
           });
-
-          this.locationForm.patchValue({
-            country: res.user.country || null,
-            state: res.user.state || null,
-            city: res.user.city || null,
-            streetAddress: res.user.streetAddress || ''
-          });
-
-          // If country/state exist, load dropdown values
-          // NOTE: these are now async, so call without await is fine
-          if (res.user.country) {
-            this.onCountrySelected(res.user.country);
-          }
-          if (res.user.state) {
-            this.onStateSelected(res.user.state);
-          }
         }
       },
       error: (err) => {
@@ -205,107 +155,6 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         this.message.error('Error changing password: ' + (err.error?.message || 'Unknown error'));
-      }
-    });
-  }
-
-  // ✅ UPDATED: now async
-  async loadCountries(): Promise<void> {
-    try {
-      const csc = await this.loadCSC();
-      this.listCountry = csc.Country.getAllCountries().map((country: any) => ({
-        name: country.name,
-        isoCode: country.isoCode
-      }));
-    } catch (e) {
-      console.error('Failed to load countries:', e);
-      this.message.error('Failed to load country list.');
-    }
-  }
-
-  // ✅ UPDATED: now async
-  async onCountrySelected(countryCode: string): Promise<void> {
-    try {
-      const csc = await this.loadCSC();
-
-      if (countryCode) {
-        this.listState = csc.State.getStatesOfCountry(countryCode).map((state: any) => ({
-          name: state.name,
-          isoCode: state.isoCode
-        }));
-
-        this.isStateDisabled = false;
-
-        this.listCity = [];
-        this.isCityDisabled = true;
-
-        // Clear previous selections (optional but safer)
-        this.locationForm.patchValue({ state: null, city: null }, { emitEvent: false });
-      } else {
-        this.listState = [];
-        this.isStateDisabled = true;
-        this.listCity = [];
-        this.isCityDisabled = true;
-
-        this.locationForm.patchValue({ state: null, city: null }, { emitEvent: false });
-      }
-    } catch (e) {
-      console.error('Failed to load states:', e);
-      this.message.error('Failed to load states.');
-    }
-  }
-
-  // ✅ UPDATED: now async
-  async onStateSelected(stateCode: string): Promise<void> {
-    try {
-      const csc = await this.loadCSC();
-
-      const countryCode = this.locationForm.get('country')?.value;
-
-      if (stateCode && countryCode) {
-        this.listCity = csc.City.getCitiesOfState(countryCode, stateCode).map((city: any) => ({
-          name: city.name
-        }));
-        this.isCityDisabled = false;
-
-        // Clear city selection (optional)
-        this.locationForm.patchValue({ city: null }, { emitEvent: false });
-      } else {
-        this.listCity = [];
-        this.isCityDisabled = true;
-        this.locationForm.patchValue({ city: null }, { emitEvent: false });
-      }
-    } catch (e) {
-      console.error('Failed to load cities:', e);
-      this.message.error('Failed to load cities.');
-    }
-  }
-
-  updateAddress() {
-    if (!this.isAddressFormChanged) return;
-
-    if (this.locationForm.invalid) {
-      this.message.error('Please fill all required fields.');
-      return;
-    }
-
-    const locationData = {
-      id: this.authService.getUserId(),
-      country: this.locationForm.value.country,
-      state: this.locationForm.value.state,
-      city: this.locationForm.value.city,
-      streetAddress: this.locationForm.value.streetAddress
-    };
-
-    this.authService.updateUserAddress(locationData).subscribe({
-      next: () => {
-        this.message.success('Address updated successfully');
-        this.isAddressFormChanged = false;
-        this.fetchUserByUserId();
-      },
-      error: (err) => {
-        console.error('Error updating address:', err);
-        this.message.error('Failed to update address.');
       }
     });
   }

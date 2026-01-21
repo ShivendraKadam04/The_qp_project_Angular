@@ -26,6 +26,7 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { AppendiceComponent } from './appendice/appendice.component';
 import { AboutusComponent } from './aboutus/aboutus.component';
+import { DeleteuserComponent } from './deleteuser/deleteuser.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { AboutusComponent } from './aboutus/aboutus.component';
     ProfileComponent,
     CollectionComponent,
     AppendiceComponent,
-    AboutusComponent
+    AboutusComponent,
+    DeleteuserComponent
   ],
   imports: [
     CommonModule,

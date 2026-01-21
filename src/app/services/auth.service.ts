@@ -63,6 +63,14 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/update-address`, addressData);
   }
 
+  generateOtpForAccountDeletion(payload: { email: string }) {
+  return this.http.post<any>(`${this.apiUrl}/auth/generate-otp-delete`, payload);
+}
+
+verifyOtpAndDeleteAccount(payload: { email: string; otp: string }) {
+  return this.http.post<any>(`${this.apiUrl}/auth/verify-otp-delete`, payload);
+}
+
   changePassword(requestBody: any): Observable<any> {
     const token = this.getToken();
     const headers = new HttpHeaders({

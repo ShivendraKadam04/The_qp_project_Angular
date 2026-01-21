@@ -7,6 +7,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { CollectionComponent } from './collection/collection.component';
 import { AppendiceComponent } from './appendice/appendice.component';
 import { AboutusComponent } from './aboutus/aboutus.component';
+import { DeleteuserComponent } from './deleteuser/deleteuser.component';
 
 const routes: Routes = [
   { 
@@ -17,6 +18,8 @@ const routes: Routes = [
       { path: 'collection', component: CollectionComponent },
       { path: 'appendice', component: AppendiceComponent },
       { path: 'aboutus', component: AboutusComponent },
+            { path: 'deleteuser', component: DeleteuserComponent },
+
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }

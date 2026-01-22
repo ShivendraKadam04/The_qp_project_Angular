@@ -79,7 +79,7 @@ export class DeleteuserComponent {
 
     this.authService.verifyOtpAndDeleteAccount(payload).subscribe({
       next: (response) => {
-        this.message.success(response.message || 'Account has been permanently deleted');
+        // this.message.success(response.message || 'Account has been schedule for deletation');
         this.loading = false;
 
         // ──────────────────────────────────────────────
@@ -94,10 +94,9 @@ export class DeleteuserComponent {
         // ──────────────────────────────────────────────
         // Navigate + force full reload
         // ──────────────────────────────────────────────
-        this.router.navigate(['/dashboard']).then(() => {
-          // Force full page refresh to reset app state completely
-          window.location.reload();
-        });
+        this.router.navigate(['/dashboard'])
+        this.message.success(response.message || 'Account has been schedule for deletation');
+
       },  
       error: (response) => {
         this.message.error(response.error?.message || 'Verification failed');

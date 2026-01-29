@@ -13,3 +13,48 @@
   text-align: center;
   padding: 20px;
 }
+
+
+.content-container img {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  margin: 12px auto !important;
+  object-fit: contain !important;
+}
+
+@media (max-width: 660px) {
+  .content-container img {
+    width: 100% !important;
+    max-width: 100vw !important;
+  }
+}
+
+
+.content-container table {
+  width: 90%;
+  max-width: 90%;
+}
+
+.content-container table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.content-container table thead,
+.content-container table tbody {
+  display: table;
+  width: 90%;
+}
+
+.content-container table tr {
+  display: table-row;
+}
+
+.content-container table th,
+.content-container table td {
+  display: table-cell;
+  white-space: nowrap;           /* ← key: prevents wrapping, forces scroll */
+}

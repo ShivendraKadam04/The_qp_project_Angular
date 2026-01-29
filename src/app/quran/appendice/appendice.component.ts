@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewChecked, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ElementRef,ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -9,7 +9,8 @@ import { environment } from '../../../environments/environment';
   selector: 'app-appendice',
   standalone: false,
   templateUrl: './appendice.component.html',
-  styleUrl: './appendice.component.css'
+  styleUrl: './appendice.component.css',
+  encapsulation: ViewEncapsulation.None   // ← Add this line
 })
 export class AppendiceComponent implements OnInit, AfterViewChecked {
   private apiUrl = environment.apiUrl;

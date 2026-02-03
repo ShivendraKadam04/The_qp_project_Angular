@@ -15,6 +15,7 @@ export class DashboardComponent {
   scrollAmount: number = 200;
 
   cards = [
+    { image: 'assets/images/introtoquran.jpg', title: 'Introduction to the Study of the Qur’ān' },
     { image: 'assets/images/Rectangle 13.png', title: 'Scientific Miracles of the Qur’ān' },
     { image: 'assets/images/Rectangle 14.png', title: 'Preservation and Literary Challenge of the Qur’ān' },
     { image: 'assets/images/Rectangle 15.png', title: 'Miracles Performed' },

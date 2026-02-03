@@ -60,12 +60,22 @@
   </div>
 
 
+  <div class="card introcard" style="margin: 0px 10px;width:95%;height: 100px;"  (click)="navigateToAppendice('Introduction to the Study of the Qur’ān')" >
+      <img src="assets/images/introtoquran.jpg"  />
+      <h3>Introduction to the Study of the Qur’ān</h3>
+
+  </div>
+
   <div class="grid-layout">
-    <div class="card" *ngFor="let item of cards" (click)="navigateToAppendice(item.title)">
+  <ng-container *ngFor="let item of cards">
+    <div class="card" 
+         *ngIf="item.title !== 'Introduction to the Study of the Qur’ān'"
+         (click)="navigateToAppendice(item.title)">
       <img [src]="item.image" [alt]="item.title" />
       <h3>{{ item.title }}</h3>
     </div>
-  </div>
+  </ng-container>
+</div>
 
 
 </div>

@@ -240,7 +240,16 @@ body::-webkit-scrollbar {
      align-items: center;
 }
 
+.introcard{
+  
+
+}
+
 @media screen and (min-width: 680px) {
+
+  .introcard{
+    display: none;
+  }
 
 .smallLogo{
   display: none;
@@ -250,7 +259,7 @@ body::-webkit-scrollbar {
   
   .teachingseafarermain {
     width: 100%;
-    padding: 25px 10px;
+    padding: 25px 0px;
     gap: 30px;
     display: flex;
     flex-direction: column;
@@ -304,7 +313,7 @@ body::-webkit-scrollbar {
 
 @media screen and (max-width: 680px) {
   .main-card {
-      width: 80vw;  /* 80% of viewport width */
+      width: 85vw;  /* 80% of viewport width */
       height: calc(80vw * 0.58); /* Maintain aspect ratio similar to 600px x 350px */
   }
   .main-card h3 {

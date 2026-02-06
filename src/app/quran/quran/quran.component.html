@@ -46,7 +46,7 @@
             </li>
             <li routerLink="aboutus" routerLinkActive="active" #rla4="routerLinkActive" class="hover-underline-animation nav-item">
               <img [src]="rla4.isActive ? 'assets/icons/aboutus-active.svg' : 'assets/icons/aboutus.svg'" style="margin-right: 5px; height: 22px;" alt="">
-              About us
+              About Us
             </li>
             <div *ngIf="userRole !== 'guestuser' && userRole != null">
                 <li routerLink="collection"  routerLinkActive="active" #rla3="routerLinkActive" class="hover-underline-animation nav-item">
@@ -92,6 +92,22 @@
                 Feedback
                  </a>
               </li>
+
+               <li nz-menu-item >
+                 <a href="https://play.google.com/store/apps/details?id=com.thequranproject" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="google" nzTheme="outline"></span>
+                Available on Play store
+                 </a>
+              </li>
+
+              <li nz-menu-item >
+                 <a href="https://apps.apple.com/in/app/quran-project/id525443558" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="apple" nzTheme="outline"></span>
+                Available on ios
+                 </a>
+              </li>
               
             </ul>
           </nz-dropdown-menu>
@@ -133,6 +149,22 @@
                 Feedback
                  </a>
               </li>
+
+               <li nz-menu-item >
+                 <a href="https://play.google.com/store/apps/details?id=com.thequranproject" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="google" nzTheme="outline"></span>
+                Available on Play Store
+                 </a>
+              </li>
+
+               <li nz-menu-item >
+                 <a href="https://apps.apple.com/in/app/quran-project/id525443558" target="_blank" rel="noopener noreferrer"
+     style=" color: inherit; text-decoration: none;">
+                <span nz-icon nzType="apple" nzTheme="outline"></span>
+                Available on App Store
+                 </a>
+              </li>
               
             </ul>
           </nz-dropdown-menu>
@@ -151,7 +183,7 @@
               </li>
                <li routerLink="aboutus" nz-menu-item>
                 <nz-icon nzType="bars" nzTheme="outline" />
-                <span style="padding-left: 10px;">About us</span>
+                <span style="padding-left: 10px;">About Us</span>
               </li>
               <li nz-menu-item routerLink="profile" *ngIf="userRole !== 'guestuser' && userRole != null">
                 <span nz-icon nzType="user" nzTheme="outline"></span>

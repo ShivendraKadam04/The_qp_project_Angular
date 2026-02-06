@@ -4,7 +4,7 @@
   height: 100vh;
   padding: 0px 100px;
   gap: 50px;
-  background: url('/assets/icons/islamicbg.jpg') no-repeat center center/cover;
+  background: url('/assets/icons/islamicbg.png') no-repeat center center/cover;
   justify-content: space-between; /* Keeps layout for larger screens */
   align-items: center;
 }

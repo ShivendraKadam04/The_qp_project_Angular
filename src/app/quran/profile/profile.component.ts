@@ -38,8 +38,8 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this.userForm = this.fb.group({
       email: [{ value: '', disabled: true }],
-      firstName: [{ value: '', disabled: true }],
-      lastName: [{ value: '', disabled: true }],
+      firstName: [{ value: '',  }],
+      lastName: [{ value: '',  }],
       userName: [''],
       gender: [''],
       profilePhoto: ['']
@@ -110,6 +110,8 @@ export class ProfileComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('id', this.userId);
+    formData.append('firstName',   this.userForm.value.firstName?.trim()   || '');
+  formData.append('lastName',    this.userForm.value.lastName?.trim()    || '');
     formData.append('userName', this.userForm.value.userName);
     formData.append('gender', this.userForm.value.gender);
 

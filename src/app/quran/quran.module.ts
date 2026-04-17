@@ -27,6 +27,8 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { AppendiceComponent } from './appendice/appendice.component';
 import { AboutusComponent } from './aboutus/aboutus.component';
 import { DeleteuserComponent } from './deleteuser/deleteuser.component';
+import { FeedbackComponent } from './feedback/feedback.component';
+import { NzMessageModule } from 'ng-zorro-antd/message';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { DeleteuserComponent } from './deleteuser/deleteuser.component';
     CollectionComponent,
     AppendiceComponent,
     AboutusComponent,
-    DeleteuserComponent
+    DeleteuserComponent,
+    FeedbackComponent
   ],
   imports: [
     CommonModule,
@@ -60,7 +63,8 @@ import { DeleteuserComponent } from './deleteuser/deleteuser.component';
     NzSelectModule,
     NzAutocompleteModule, // Added for autocomplete
     ReactiveFormsModule,
-    NzCollapseModule
+    NzCollapseModule,
+    NzMessageModule
   ]
 })
 export class QuranModule {}

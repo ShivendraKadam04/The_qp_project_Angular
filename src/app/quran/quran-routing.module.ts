@@ -8,9 +8,10 @@ import { CollectionComponent } from './collection/collection.component';
 import { AppendiceComponent } from './appendice/appendice.component';
 import { AboutusComponent } from './aboutus/aboutus.component';
 import { DeleteuserComponent } from './deleteuser/deleteuser.component';
+import { FeedbackComponent } from './feedback/feedback.component';
 
 const routes: Routes = [
-  { 
+  {
     path: '', component: QuranComponent, children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'chapters', component: ChaptersComponent },
@@ -18,8 +19,8 @@ const routes: Routes = [
       { path: 'collection', component: CollectionComponent },
       { path: 'appendice', component: AppendiceComponent },
       { path: 'aboutus', component: AboutusComponent },
-            { path: 'deleteuser', component: DeleteuserComponent },
-
+      { path: 'deleteuser', component: DeleteuserComponent },
+      { path: 'feedback', component: FeedbackComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }

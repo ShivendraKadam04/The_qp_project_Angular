@@ -22,6 +22,7 @@ export class QuranComponent {
   searchQuery: string = '';
   searchSuggestions: { text: string; surahNo: number; verseNo?: number }[] = [];
   quranData: any[] = [];
+  private quranDataRequested = false;
 
   constructor(
     private authService: AuthService,
@@ -34,19 +35,19 @@ export class QuranComponent {
     this.userId = this.authService.getUserId();
     this.userRole = this.authService.getUserRole();
     this.Username = sessionStorage.getItem('userName');
-   
-    this.fetchUserByUserId();
-    this.fetchQuranData();
+
+    if (this.userId) this.fetchUserByUserId();
+    // The Quran text is only needed for search; it is fetched on first search input
+    // instead of on every page load.
   }
 
-  async fetchUserByUserId() {
-    await this.authService.fetchUserByUserId(this.userId!).subscribe({
+  fetchUserByUserId() {
+    this.authService.fetchUserByUserId(this.userId!).subscribe({
       next: async (res: any) => {
         this.userdata = res.user;
         this.file = this.userdata.profilePhoto;
         this.firstName = this.userdata.firstName;
         this.lastName = this.userdata.lastName;
-        console.log('User Data:', this.userdata);
       },
       error: (err) => {
         console.error('Error fetching user:', err);
@@ -55,14 +56,18 @@ export class QuranComponent {
   }
 
   fetchQuranData() {
+    if (this.quranDataRequested) return;
+    this.quranDataRequested = true;
     this.quranService.getQuranData('english').subscribe({
       next: (response) => {
         if (response.success) {
           this.quranData = response.data;
-          console.log('Fetched Quran Data for Search:', this.quranData);
+          // Re-run the search for whatever was typed while the data was loading.
+          if (this.searchQuery.length >= 2) this.onSearchChange(this.searchQuery);
         }
       },
       error: (error) => {
+        this.quranDataRequested = false;
         console.error('Error fetching Quran data:', error);
       }
     });
@@ -73,6 +78,10 @@ onSearchChange(query: string) {
     this.searchSuggestions = [];
 
     if (query.length < 2) return;
+    if (!this.quranData.length) {
+      this.fetchQuranData();
+      return;
+    }
 
     const lowerQuery = query.toLowerCase();
     const suggestions: { text: string; surahNo: number; verseNo?: number }[] = [];

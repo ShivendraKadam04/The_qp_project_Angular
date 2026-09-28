@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -9,15 +9,31 @@ import { environment } from '../../environments/environment';
 export class QuranService {
   private apiUrl = environment.apiUrl;
 
+  // The full Quran for a language is ~2 MB; fetch it once per language and share it
+  // between the header search and the chapters page instead of re-downloading.
+  private quranCache = new Map<string, Observable<any>>();
+
   constructor(private http: HttpClient) { }
 
-
-  
-
-    getQuranData(language: string): Observable<any> {
-      return this.http.get(`${this.apiUrl}/quran/${language}`);
-
+  getQuranData(language: string): Observable<any> {
+    let data$ = this.quranCache.get(language);
+    if (!data$) {
+      data$ = this.http.get(`${this.apiUrl}/quran/${language}`).pipe(shareReplay(1));
+      this.quranCache.set(language, data$);
+      // Drop failed requests from the cache so the next call retries.
+      data$.subscribe({ error: () => this.quranCache.delete(language) });
     }
+    return data$;
+  }
+
+  getAppendix(lang: string, title: string): Observable<{ success: boolean; message: string; data: { title: string; content: string } }> {
+    return this.http.get<any>(`${this.apiUrl}/quran/${lang}/appendices/${encodeURIComponent(title)}`);
+  }
+
+  updateAppendix(lang: string, title: string, content: string): Observable<{ success: boolean; message: string }> {
+    const headers = new HttpHeaders({ Authorization: `Bearer ${sessionStorage.getItem('authToken')}` });
+    return this.http.put<any>(`${this.apiUrl}/quran/${lang}/appendices/${encodeURIComponent(title)}`, { content }, { headers });
+  }
 
     deleteCollection(userId: string, lang: string, collectionName: string): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/quran/delete-collection`, {

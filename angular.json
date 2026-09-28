@@ -59,7 +59,7 @@
         }
       ],
       "optimization": {
-        "scripts": false,
+        "scripts": true,
         "styles": {
           "minify": true,
           "inlineCritical": true
@@ -67,7 +67,11 @@
         "fonts": true
       },
       "outputHashing": "all",
-      "sourceMap": true,
+      "sourceMap": {
+        "scripts": true,
+        "styles": false,
+        "hidden": true
+      },
       "extractLicenses": true,
       "budgets": [
         {

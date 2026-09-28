@@ -1,11 +1,23 @@
-<div class="content-container" style="max-height: 80vh; overflow-y: auto; padding: 10px; background-color: #fff;">
+<div class="content-container" style="position: relative; max-height: 80vh; overflow-y: auto; padding: 10px; background-color: #fff;">
+  <button *ngIf="isAdmin && !editing && !loading && content" type="button" class="admin-edit" (click)="startEdit()" title="Edit" aria-label="Edit appendix">
+    <span nz-icon nzType="edit" nzTheme="outline"></span>
+  </button>
+
   <div *ngIf="loading" class="loader-container">
     <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
   </div>
 
-  <div *ngIf="!loading && content" [innerHTML]="content"></div>
+  <app-rich-text-editor
+    *ngIf="editing"
+    [html]="rawContent"
+    [saving]="saving"
+    (save)="saveContent($event)"
+    (cancel)="cancelEdit()">
+  </app-rich-text-editor>
 
-  <div *ngIf="error && !loading" class="error-message">
+  <div *ngIf="!loading && !editing && content" class="appendix-content" [innerHTML]="content" (click)="onContentClick($event)"></div>
+
+  <div *ngIf="error && !loading && !editing" class="error-message">
     {{ error }}
   </div>
 </div>

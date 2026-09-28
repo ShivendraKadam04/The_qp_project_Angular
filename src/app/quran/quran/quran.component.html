@@ -1,7 +1,7 @@
   <nz-layout>
     <nz-header style="display: flex; justify-content: space-between; background-color: #14161b; height: 70px;">
       <div routerLink="dashboard" class="logo" style="display: flex;gap: 30px;">
-        <img src="assets/images/White Logo.png" alt="">
+        <img src="assets/images/web/white-logo.webp" alt="The Quran Project" width="250" height="37">
          <div class="largeScreenSearch" >
           <nz-input-group [nzSuffix]="suffixIconSearch" style="background-color: transparent; color: white; height: 40px; border-radius: 50px;width: 250px;">
             <input style="background-color: transparent; color: white; border-radius: 50px;"
@@ -9,6 +9,7 @@
               placeholder="Search Surah, Verse, or Text..."
               [(ngModel)]="searchQuery"
               (ngModelChange)="onSearchChange($event)"
+              (focus)="fetchQuranData()"
               [nzAutocomplete]="autoComplete"
             />
             <nz-autocomplete #autoComplete>
@@ -213,7 +214,7 @@
                 <ng-template #placeholder>
                   <div style="border-radius: 50%; background-color: #f2f2f2; height: 50px; display: flex; align-items: center; width: 50px; justify-content: center; font-size: 16px;">
                   <strong>
-  {{ userRole === 'guestuser' || userRole == null ? 'GS' : (firstName?.charAt(0).toUpperCase() + lastName?.charAt(0).toUpperCase()) }}
+  {{ userRole === 'guestuser' || userRole == null ? 'GS' : ((firstName?.charAt(0) || '') + (lastName?.charAt(0) || '')).toUpperCase() }}
 </strong>
                   </div>
                 </ng-template>
@@ -257,6 +258,7 @@
             placeholder="Search Surah, Verse, or Text..."
             [(ngModel)]="searchQuery"
             (ngModelChange)="onSearchChange($event)"
+              (focus)="fetchQuranData()"
             [nzAutocomplete]="autoCompleteMobile"
           />
           <nz-autocomplete #autoCompleteMobile>

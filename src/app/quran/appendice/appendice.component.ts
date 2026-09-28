@@ -1,109 +1,123 @@
-import { Component, OnInit, AfterViewChecked, ElementRef,ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { catchError, map } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { QuranService } from '../../services/quran.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-appendice',
   standalone: false,
   templateUrl: './appendice.component.html',
   styleUrl: './appendice.component.css',
-  encapsulation: ViewEncapsulation.None   // ← Add this line
+  encapsulation: ViewEncapsulation.None
 })
-export class AppendiceComponent implements OnInit, AfterViewChecked {
-  private apiUrl = environment.apiUrl;
+export class AppendiceComponent implements OnInit {
   title: string | null = null;
+  lang = 'english';
+  rawContent = '';
   content: SafeHtml | null = null;
   error: string | null = null;
-  loading: boolean = true;
+  loading = true;
 
-  private hasSetupClickListener = false;  // ← Important: prevent multiple listeners
+  isAdmin = false;
+  editing = false;
+  saving = false;
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
-    private http: HttpClient,
     private sanitizer: DomSanitizer,
-    private el: ElementRef
+    private quranService: QuranService,
+    private authService: AuthService,
+    private message: NzMessageService
   ) {}
 
   ngOnInit() {
-    this.title = history.state.title || null;
-    if (this.title) {
-      this.fetchAppendixContent(this.title);
-    } else {
-      this.error = 'No title provided.';
-      this.loading = false;
-    }
-  }
+    this.isAdmin = this.authService.isAdmin();
 
-  ngAfterViewChecked() {
-    // Setup click interception only once after content is rendered
-    if (this.content && !this.hasSetupClickListener) {
-      this.setupAnchorClickInterceptor();
-      this.hasSetupClickListener = true;
-    }
-  }
-
-  private fetchAppendixContent(title: string) {
-    this.loading = true;
-    const url = `${this.apiUrl}/quran/english/appendices/${encodeURIComponent(title)}`;
-    
-    this.http
-      .get<{ success: boolean; message: string; data: { title: string; content: string } }>(url)
-      .pipe(
-        map(response => {
-          if (response.success) {
-            return this.sanitizer.bypassSecurityTrustHtml(response.data.content);
-          } else {
-            throw new Error(response.message);
-          }
-        }),
-        catchError(error => {
-          this.error = 'Failed to load content. Please try again later.';
-          console.error('API Error:', error);
-          this.loading = false;
-          return [];
-        })
-      )
-      .subscribe(safeContent => {
-        this.content = safeContent;
+    // Title/lang live in the query string so a page refresh or shared link still
+    // works; router state is kept as a fallback for older in-app navigations.
+    this.route.queryParamMap.subscribe(params => {
+      this.title = params.get('title') || history.state?.title || null;
+      this.lang = params.get('lang') || 'english';
+      this.editing = false;
+      if (this.title) {
+        this.fetchAppendixContent();
+      } else {
+        this.error = 'No title provided.';
         this.loading = false;
-        this.hasSetupClickListener = false; // Allow re-setup on next content load
-      });
+      }
+    });
   }
 
-  // This is the magic function
-  private setupAnchorClickInterceptor() {
-    const anchors = this.el.nativeElement.querySelectorAll('a[href^="#"]');
-    
-    anchors.forEach((anchor: HTMLElement) => {
-      anchor.addEventListener('click', (event) => {
-        event.preventDefault(); // Stop normal navigation
-        event.stopPropagation();
+  startEdit() {
+    this.editing = true;
+  }
 
-        const href = anchor.getAttribute('href');
-        if (!href || href === '#') return;
+  cancelEdit() {
+    this.editing = false;
+  }
 
-        const targetId = href.substring(1); // Remove #
-        const targetElement = document.getElementById(targetId);
+  saveContent(html: string) {
+    if (!this.title) return;
+    if (!html.trim()) {
+      this.message.warning('Content cannot be empty.');
+      return;
+    }
+    this.saving = true;
+    this.quranService.updateAppendix(this.lang, this.title, html).subscribe({
+      next: () => {
+        this.saving = false;
+        this.editing = false;
+        this.message.success('Appendix saved.');
+        this.fetchAppendixContent();
+      },
+      error: err => {
+        this.saving = false;
+        const status = err?.status;
+        this.message.error(
+          status === 401 || status === 403
+            ? 'Your session has expired or you are not an admin. Please log in again.'
+            : err?.error?.error || err?.error?.message || 'Could not save. Check your connection and try again.'
+        );
+      }
+    });
+  }
 
-        if (targetElement) {
-          // Smooth scroll to the section
-          targetElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
+  /** Smooth-scrolls in-page (#id) links inside the appendix HTML. */
+  onContentClick(event: MouseEvent) {
+    const anchor = (event.target as HTMLElement).closest('a');
+    const href = anchor?.getAttribute('href');
+    if (!href || !href.startsWith('#')) return;
 
-          // Optional: Update URL without reloading (nice for back button)
-          this.router.navigate([], {
-            fragment: targetId,
-            replaceUrl: true,
-            skipLocationChange: false
-          });
-        }
-      });
+    event.preventDefault();
+    const targetId = href.substring(1);
+    const target = targetId && document.getElementById(targetId);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      this.router.navigate([], { fragment: targetId, queryParamsHandling: 'preserve', replaceUrl: true });
+    }
+  }
+
+  private fetchAppendixContent() {
+    this.loading = true;
+    this.error = null;
+    this.content = null;
+    this.rawContent = '';
+
+    this.quranService.getAppendix(this.lang, this.title!).subscribe({
+      next: response => {
+        this.rawContent = response.data.content;
+        this.content = this.sanitizer.bypassSecurityTrustHtml(this.rawContent);
+        this.loading = false;
+      },
+      error: err => {
+        this.error = err?.status === 404
+          ? 'This appendix is not available yet.'
+          : 'Failed to load content. Please try again later.';
+        this.loading = false;
+      }
     });
   }
 }

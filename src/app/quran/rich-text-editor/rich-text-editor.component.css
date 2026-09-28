@@ -1,0 +1,124 @@
+.rte {
+  border: 1px solid #e0bc5e;
+  border-radius: 8px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.rte-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  background: #faf6ea;
+  border-bottom: 1px solid #e0bc5e;
+  border-radius: 8px 8px 0 0;
+}
+
+.rte-toolbar button,
+.rte-select,
+.rte-color {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: #14161b;
+}
+
+.rte-toolbar button:hover:not(:disabled),
+.rte-color:hover {
+  border-color: #e0bc5e;
+  background: #fff;
+}
+
+.rte-toolbar button:disabled,
+.rte-select:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.rte-select {
+  border-color: #d9d9d9;
+  background: #fff;
+}
+
+.rte-color {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.rte-color input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.rte-toolbar .rte-html {
+  font-family: monospace;
+  font-weight: 700;
+}
+
+.rte-toolbar .rte-html.active {
+  background: #14161b;
+  color: #e0bc5e;
+}
+
+.rte-sep {
+  width: 1px;
+  height: 20px;
+  margin: 0 4px;
+  background: #e0bc5e;
+}
+
+.rte-visual {
+  min-height: 300px;
+  padding: 12px;
+  outline: none;
+}
+
+.rte-source {
+  min-height: 400px;
+  padding: 12px;
+  border: none;
+  outline: none;
+  resize: vertical;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #1e1e1e;
+  color: #d4d4d4;
+}
+
+.rte-actions {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+  border-radius: 0 0 8px 8px;
+}
+
+.rte-save {
+  background: #e0bc5e;
+  border-color: #e0bc5e;
+  color: #14161b;
+}

@@ -29,7 +29,7 @@
             gap: 10px;
             display: inline-flex;">
             <div class="main-card">
-              <img src="assets/images/QPmain.svg" alt="The Qur'an Project" />
+              <img src="assets/images/web/qp-main.webp" alt="The Qur'an Project" fetchpriority="high" />
               <h3 class="largeLogo">The Qur'an <nz-icon style="color:#E0BC5E;" nzType="arrow-right" nzTheme="outline" /></h3>
               <!-- <h3 class="smallLogo"><img src="assets/images/QPtransparentLogo.svg" alt=""></h3> -->
 <!-- NEW: Clean "Tap to Read" – no background -->
@@ -49,7 +49,7 @@
       </button>
       <div class="scroll-wrapper" #scrollWrapper (scroll)="checkScroll()" style="display: flex; align-items: center;">
         <div class="card" *ngFor="let item of cards" (click)="navigateToAppendice(item.title)">
-          <img [src]="item.image" [alt]="item.title" />
+          <img [src]="item.image" [alt]="item.title" loading="lazy" decoding="async" />
           <h3>{{ item.title }}</h3>
         </div>
       </div>
@@ -61,7 +61,7 @@
 
 
   <div class="card introcard" style="margin: 0px 10px;width:95%;height: 100px;"  (click)="navigateToAppendice('Introduction to the Study of the Qur’ān')" >
-      <img src="assets/images/introtoquran.jpg"  />
+      <img src="assets/images/web/introtoquran.webp" alt="Introduction to the Study of the Qur’ān" decoding="async" />
       <h3>Introduction to the Study of the Qur’ān</h3>
 
   </div>
@@ -71,7 +71,7 @@
     <div class="card" 
          *ngIf="item.title !== 'Introduction to the Study of the Qur’ān'"
          (click)="navigateToAppendice(item.title)">
-      <img [src]="item.image" [alt]="item.title" />
+      <img [src]="item.image" [alt]="item.title" loading="lazy" decoding="async" />
       <h3>{{ item.title }}</h3>
     </div>
   </ng-container>

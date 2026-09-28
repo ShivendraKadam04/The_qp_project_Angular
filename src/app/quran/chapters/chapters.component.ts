@@ -223,12 +223,15 @@ openCollectionModal(verse: any) {
     this.quranService.getQuranData(this.selectedLanguage).subscribe(
       (response) => {
         if (response.success) {
-          this.quranData = response.data;
-          this.quranData.forEach(surah => {
-            surah.verses.forEach((verse: { versesText: string }) => {
-              verse.versesText = verse.versesText.replace(/(\d+)/g, '<sup>$1</sup>');
-            });
-          });
+          // Copy instead of mutating: the response is cached and shared with search,
+          // and mutating it would wrap the numbers in <sup> again on every visit.
+          this.quranData = response.data.map((surah: any) => ({
+            ...surah,
+            verses: surah.verses.map((verse: any) => ({
+              ...verse,
+              versesText: verse.versesText.replace(/(\d+)/g, '<sup>$1</sup>')
+            }))
+          }));
           this.loading = false;
           console.log('Quran data fetched, length:', this.quranData.length);
 

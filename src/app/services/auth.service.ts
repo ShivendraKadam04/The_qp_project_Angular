@@ -219,6 +219,10 @@ verifyOtpAndDeleteAccount(payload: { email: string; otp: string }) {
     return decoded?.userRole || null;
   }
 
+  isAdmin(): boolean {
+    return this.getUserRole() === 'admin';
+  }
+
   isLoggedIn(): boolean {
     return !!this.getToken();
   }

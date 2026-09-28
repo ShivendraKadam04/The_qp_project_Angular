@@ -15,15 +15,15 @@ export class DashboardComponent {
   scrollAmount: number = 200;
 
   cards = [
-    { image: 'assets/images/introtoquran.jpg', title: 'Introduction to the Study of the Qur’ān' },
-    { image: 'assets/images/Rectangle 13.png', title: 'Scientific Miracles of the Qur’ān' },
-    { image: 'assets/images/Rectangle 14.png', title: 'Preservation and Literary Challenge of the Qur’ān' },
-    { image: 'assets/images/Rectangle 15.png', title: 'Miracles Performed' },
-    { image: 'assets/images/Rectangle 16.png', title: 'Short Guide to Ablution and Prayer' },
-    { image: 'assets/images/Rectangle 17.png', title: 'Women in Islām' },
-    { image: 'assets/images/Rectangle 18.png', title: 'The Unique Qur’ānic Generation' },
-    { image: 'assets/images/Rectangle 19.png', title: 'How do I become a Muslim?' },
-    { image: 'assets/images/Rectangle 20.png', title: 'Old and New Testament Prophecies of Muhammad' }
+    { image: 'assets/images/web/introtoquran.webp', title: 'Introduction to the Study of the Qur’ān' },
+    { image: 'assets/images/web/card-13.webp', title: 'Scientific Miracles of the Qur’ān' },
+    { image: 'assets/images/web/card-14.webp', title: 'Preservation and Literary Challenge of the Qur’ān' },
+    { image: 'assets/images/web/card-15.webp', title: 'Miracles Performed' },
+    { image: 'assets/images/web/card-16.webp', title: 'Short Guide to Ablution and Prayer' },
+    { image: 'assets/images/web/card-17.webp', title: 'Women in Islām' },
+    { image: 'assets/images/web/card-18.webp', title: 'The Unique Qur’ānic Generation' },
+    { image: 'assets/images/web/card-19.webp', title: 'How do I become a Muslim?' },
+    { image: 'assets/images/web/card-20.webp', title: 'Old and New Testament Prophecies of Muhammad' }
   ];
 
   constructor(private router: Router) {}
@@ -50,7 +50,7 @@ export class DashboardComponent {
 
   navigateToAppendice(title: string) {
     this.router.navigate(['/quran/appendice'], {
-      state: { title } // Pass title in router state
+      queryParams: { title } // In the URL so refresh / shared links keep working
     });
   }
 }

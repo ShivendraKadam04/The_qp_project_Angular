@@ -1,0 +1,33 @@
+<div class="rte">
+  <div class="rte-toolbar" (mousedown)="keepSelection($event)">
+    <select class="rte-select" [disabled]="htmlMode" (change)="setBlock($any($event.target).value); $any($event.target).selectedIndex = 0"
+            (mousedown)="$event.stopPropagation()" title="Paragraph styles">
+      <option value="" disabled selected>Styles</option>
+      <option *ngFor="let s of blockStyles" [value]="s.tag">{{ s.label }}</option>
+    </select>
+    <span class="rte-sep"></span>
+    <button type="button" [disabled]="htmlMode" (click)="exec('bold')" title="Bold"><b>B</b></button>
+    <button type="button" [disabled]="htmlMode" (click)="exec('italic')" title="Italic"><i>I</i></button>
+    <button type="button" [disabled]="htmlMode" (click)="exec('underline')" title="Underline"><u>U</u></button>
+    <button type="button" [disabled]="htmlMode" (click)="exec('strikeThrough')" title="Strikethrough"><s>ab</s></button>
+    <span class="rte-sep"></span>
+    <button type="button" [disabled]="htmlMode" (click)="exec('insertOrderedList')" title="Ordered list">1.</button>
+    <button type="button" [disabled]="htmlMode" (click)="exec('insertUnorderedList')" title="Unordered list">&bull;</button>
+    <button type="button" [disabled]="htmlMode" (click)="insertLink()" title="Insert link">🔗</button>
+    <label class="rte-color" title="Text color" (mousedown)="$event.stopPropagation()">
+      <span [style.color]="textColor">A</span>
+      <input type="color" [disabled]="htmlMode" [value]="textColor" (change)="applyColor($any($event.target).value)" />
+    </label>
+    <button type="button" [disabled]="htmlMode" (click)="exec('removeFormat')" title="Clear formatting">I<sub>x</sub></button>
+    <span class="rte-sep"></span>
+    <button type="button" class="rte-html" [class.active]="htmlMode" (click)="toggleHtmlMode()" title="Toggle HTML mode">&lt;/&gt;</button>
+  </div>
+
+  <div *ngIf="!htmlMode" #visual class="rte-visual appendix-content" contenteditable="true"></div>
+  <textarea *ngIf="htmlMode" class="rte-source" [(ngModel)]="source" spellcheck="false"></textarea>
+
+  <div class="rte-actions">
+    <button nz-button nzType="default" type="button" (click)="cancel.emit()" [disabled]="saving">Cancel</button>
+    <button nz-button nzType="primary" class="rte-save" type="button" (click)="onSave()" [nzLoading]="saving">Save</button>
+  </div>
+</div>

@@ -29,6 +29,7 @@ import { AboutusComponent } from './aboutus/aboutus.component';
 import { DeleteuserComponent } from './deleteuser/deleteuser.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { NzMessageModule } from 'ng-zorro-antd/message';
+import { RichTextEditorComponent } from './rich-text-editor/rich-text-editor.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
     AppendiceComponent,
     AboutusComponent,
     DeleteuserComponent,
-    FeedbackComponent
+    FeedbackComponent,
+    RichTextEditorComponent
   ],
   imports: [
     CommonModule,

@@ -1,33 +1,236 @@
-/* Custom Scrollbar for Webkit Browsers (Chrome, Safari) */
+/* ------------------------------------------------------------------
+   Design tokens — shared by every page so cards, radii and shadows match
+   ------------------------------------------------------------------ */
+:root {
+  --qp-gold: #E0BC5E;
+  --qp-gold-dark: #b8962e;
+  --qp-gold-soft: #f8f1de;
+  --qp-gold-tint: #fdf9ef;
+  --qp-dark: #14161b;
+  --qp-dark-2: #1f2229;
+  --qp-ink: #1d2027;
+  --qp-text: #3f434b;
+  --qp-muted: #7a7f88;
+  --qp-bg: #f3f1ec;
+  --qp-surface: #ffffff;
+  --qp-border: #ebe7dd;
+  --qp-danger: #d9483b;
+
+  --qp-radius-sm: 10px;
+  --qp-radius: 16px;
+  --qp-radius-lg: 22px;
+  --qp-shadow-sm: 0 1px 2px rgba(20, 22, 27, 0.05), 0 1px 3px rgba(20, 22, 27, 0.06);
+  --qp-shadow: 0 4px 16px rgba(20, 22, 27, 0.07);
+  --qp-shadow-lg: 0 12px 32px rgba(20, 22, 27, 0.12);
+
+  --qp-header-h: 68px;
+}
+
 html, body, * {
   font-family: 'Poppins', sans-serif !important;
 }
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--qp-bg);
+  color: var(--qp-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar for Webkit Browsers (Chrome, Safari) */
 ::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Light grey background */
-    border-radius: 10px;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: #E0BC5E; /* Darker grey scrollbar */
-    border-radius: 10px;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: #907329; /* Even darker on hover */
-    cursor: pointer;
-  }
-  
-  /* Custom Scrollbar for Firefox */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: #E0BC5E #f1f1f1;
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e3cf96;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--qp-gold-dark);
+  cursor: pointer;
+}
+
+/* Custom Scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #e3cf96 transparent;
+}
+
+/* ------------------------------------------------------------------
+   Shared building blocks
+   ------------------------------------------------------------------ */
+.qp-card {
+  background: var(--qp-surface);
+  border: 1px solid var(--qp-border);
+  border-radius: var(--qp-radius);
+  box-shadow: var(--qp-shadow-sm);
+}
+
+.qp-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 24px 40px;
+}
+
+.qp-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.qp-page-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--qp-ink);
+  line-height: 1.25;
+}
+
+.qp-page-subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--qp-muted);
+}
+
+.qp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+
+.qp-btn:active {
+  transform: translateY(1px);
+}
+
+.qp-btn-primary {
+  background: var(--qp-gold);
+  color: #fff;
+}
+
+.qp-btn-primary:hover {
+  background: var(--qp-gold-dark);
+  color: #fff;
+}
+
+.qp-btn-soft {
+  background: var(--qp-gold-soft);
+  color: var(--qp-gold-dark);
+}
+
+.qp-btn-soft:hover {
+  background: var(--qp-gold);
+  color: #fff;
+}
+
+.qp-btn:disabled {
+  background: #e5e5e5;
+  color: #a5a5a5;
+  cursor: not-allowed;
+}
+
+.qp-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #b9bcc2;
+  font-size: 19px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.qp-icon-btn:hover {
+  background: var(--qp-gold-soft);
+  color: var(--qp-gold-dark);
+}
+
+.qp-icon-btn.danger:hover {
+  background: #fdecea;
+  color: var(--qp-danger);
+}
+
+.qp-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+}
+
+@media (max-width: 600px) {
+  .qp-page {
+    padding: 18px 14px 32px;
   }
 
-  
-  .ant-popover {
-    border-radius: 20px!important;
+  .qp-page-title {
+    font-size: 19px;
   }
+
+  .qp-btn {
+    height: 38px;
+    padding: 0 18px;
+    font-size: 14px;
+  }
+}
+
+/* ------------------------------------------------------------------
+   ng-zorro overrides
+   ------------------------------------------------------------------ */
+.ant-popover {
+  border-radius: 20px !important;
+}
+
+.ant-popover-inner {
+  border-radius: 14px !important;
+}
+
+.ant-modal-content {
+  border-radius: var(--qp-radius) !important;
+  overflow: hidden;
+}
+
+.ant-dropdown-menu {
+  border-radius: 12px !important;
+  padding: 6px !important;
+}
+
+.ant-dropdown-menu-item {
+  border-radius: 8px !important;
+}
+
+/* Header search suggestions: allow long verse previews to wrap */
+.qp-search-panel .ant-select-item-option {
+  white-space: normal;
+  line-height: 1.45;
+  padding: 8px 12px;
+}

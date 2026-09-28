@@ -1,12 +1,12 @@
-import { Component, ViewChild, ElementRef, AfterViewInit,OnDestroy } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { QuranService } from '../../services/quran.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Router, NavigationExtras, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { filter } from 'rxjs/operators';
+import { Subject, takeUntil } from 'rxjs';
 import { SearchService } from '../../services/search.service';
 @Component({
   selector: 'app-chapters',
@@ -14,7 +14,7 @@ import { SearchService } from '../../services/search.service';
   templateUrl: './chapters.component.html',
   styleUrls: ['./chapters.component.css']
 })
-export class ChaptersComponent implements AfterViewInit {
+export class ChaptersComponent implements OnInit, OnDestroy {
   quranData: any[] = [];
   selectedSurah: any = null;
   selectedLanguage: string = 'english';
@@ -29,7 +29,11 @@ export class ChaptersComponent implements AfterViewInit {
   lang = 'english';
   collectionForm: FormGroup;
   highlightedVerse: number | null = null; // Track the highlighted verse
-  private scrollTriggered = false;
+  surahListOpen = false; // Slide-in surah list on tablets / phones
+  surahFilter = '';
+  private highlightTimer?: ReturnType<typeof setTimeout>;
+  private initialState: { surahNo?: number; verseNo?: number } | null = null;
+  private destroy$ = new Subject<void>();
 
   @ViewChild('verseContainer') verseContainer!: ElementRef;
 
@@ -47,38 +51,51 @@ export class ChaptersComponent implements AfterViewInit {
       collectionName: ['', [Validators.required, Validators.minLength(3)]]
     });
 
-    // Listen to navigation events to check state after navigation
-   this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
-      const state = history.state as { surahNo: number; verseNo?: number };
-      if (state?.verseNo && !this.scrollTriggered) {
-        this.targetVerseNo = state.verseNo;
-        this.scrollToVerse(this.targetVerseNo);
-        this.scrollTriggered = true;
-      }
-    });
+    // Surah / verse picked from the header search on another page.
+    this.initialState = (this.router.getCurrentNavigation()?.extras.state ?? history.state) as any;
   }
-  isCollapsed = false;
+
+  get filteredSurahs(): any[] {
+    const q = this.surahFilter.trim().toLowerCase();
+    if (!q) return this.quranData;
+    return this.quranData.filter(s =>
+      String(s.surahNo) === q || s.surahName?.toLowerCase().includes(q)
+    );
+  }
+
+  get isFirstSurah(): boolean {
+    return !this.selectedSurah || this.quranData.indexOf(this.selectedSurah) <= 0;
+  }
+
+  get isLastSurah(): boolean {
+    return !this.selectedSurah || this.quranData.indexOf(this.selectedSurah) >= this.quranData.length - 1;
+  }
+
+  goToAdjacentSurah(offset: number) {
+    const next = this.quranData[this.quranData.indexOf(this.selectedSurah) + offset];
+    if (next) this.onSurahClick(next);
+  }
+
+  trackBySurah = (_: number, surah: any) => surah.surahNo;
+  trackByVerse = (_: number, verse: any) => verse.versesNo;
 
   handleSearch(surahNo: number, verseNo?: number) {
     const surah = this.quranData.find(s => s.surahNo === surahNo);
     if (surah) {
+      this.surahListOpen = false;
       this.selectSurah(surah);
       if (verseNo) {
-        setTimeout(() => {
-          this.scrollToVerse(verseNo);
-        }, 1000); // 1-second delay
+        this.scrollToVerse(verseNo);
+      } else {
+        this.scrollContentToTop();
       }
     } else {
       this.message.error(`Surah ${surahNo} not found`);
     }
   }
 
-  onBreakpoint(broken: boolean) {
-    this.isCollapsed = broken;
-  }
-
-  toggleCollapsed() {
-    this.isCollapsed = !this.isCollapsed;
+  toggleSurahList() {
+    this.surahListOpen = !this.surahListOpen;
   }
 
   openCreateCollectionModal(): void {
@@ -113,39 +130,22 @@ export class ChaptersComponent implements AfterViewInit {
   }
 
 ngOnInit() {
-  this.fetchQuranData();
-  this.fetchCollections();
-  this.userId = this.authService.getUserId();
-  this.userRole = this.authService.getUserRole();
-  if (!this.userId) {
-    console.log('User not logged in. Please log in to create a collection.');
-    return;
-  }
+    this.userId = this.authService.getUserId();
+    this.userRole = this.authService.getUserRole();
 
-  const navigation = this.router.getCurrentNavigation();
-  const state = navigation?.extras.state as { surahNo: number; verseNo?: number };
-  if (state) {
-    this.targetVerseNo = state.verseNo || null;
-  }
+    // Header search while already on this page (works for guests too).
+    this.searchService.search$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ surahNo, verseNo }) => this.handleSearch(surahNo, verseNo));
 
-  this.fetchQuranData();
-  this.fetchCollections();
-
-  // Subscribe to search events
-  this.searchService.search$.subscribe(({ surahNo, verseNo }) => {
-    this.handleSearch(surahNo, verseNo);
-  });
-}
-
- ngAfterViewInit() {
-    if (this.targetVerseNo && !this.scrollTriggered) {
-      this.scrollToVerse(this.targetVerseNo);
-      this.scrollTriggered = true;
-    }
+    this.fetchQuranData();
+    if (this.userId) this.fetchCollections();
   }
 
   ngOnDestroy() {
-    this.scrollTriggered = false; // Reset on component destroy
+    this.destroy$.next();
+    this.destroy$.complete();
+    clearTimeout(this.highlightTimer);
   }
 
   fetchCollections() {
@@ -169,6 +169,7 @@ openCollectionModal(verse: any) {
   }
 
   // If user is logged in → proceed normally
+  if (!this.collections.length) this.fetchCollections();
   this.selectedVerse = verse;
   this.isCollectionModalVisible = true;
 }
@@ -218,43 +219,38 @@ openCollectionModal(verse: any) {
   }
 
   fetchQuranData() {
-   
     this.loading = true;
-    this.quranService.getQuranData(this.selectedLanguage).subscribe(
-      (response) => {
-        if (response.success) {
-          // Copy instead of mutating: the response is cached and shared with search,
-          // and mutating it would wrap the numbers in <sup> again on every visit.
-          this.quranData = response.data.map((surah: any) => ({
-            ...surah,
-            verses: surah.verses.map((verse: any) => ({
-              ...verse,
-              versesText: verse.versesText.replace(/(\d+)/g, '<sup>$1</sup>')
-            }))
-          }));
-          this.loading = false;
-          console.log('Quran data fetched, length:', this.quranData.length);
+    this.quranService.getQuranData(this.selectedLanguage).pipe(takeUntil(this.destroy$)).subscribe({
+      next: (response) => {
+        this.loading = false;
+        if (!response.success) return;
 
-          const navigation = this.router.getCurrentNavigation();
-          const state = navigation?.extras.state as { surahNo: number; verseNo?: number };
-          if (state?.surahNo) {
-            this.selectSurahByNumber(state.surahNo);
-          } else if (this.quranData.length > 0) {
-            this.selectSurah(this.quranData[0]);
-          }
-        }
+        // Copy instead of mutating: the response is cached and shared with search,
+        // and mutating it would wrap the numbers in <sup> again on every visit.
+        this.quranData = response.data.map((surah: any) => ({
+          ...surah,
+          verses: (surah.verses || []).map((verse: any) => ({
+            ...verse,
+            footnotes: verse.footnotes || [],
+            versesText: (verse.versesText || '').replace(/(\d+)/g, '<sup>$1</sup>')
+          }))
+        }));
+
+        const target = this.initialState?.surahNo
+          ? this.quranData.find(s => s.surahNo === this.initialState!.surahNo)
+          : this.quranData.find(s => s.surahNo === this.selectedSurah?.surahNo);
+        const verseNo = this.initialState?.verseNo;
+        this.initialState = null;
+
+        if (target || this.quranData.length) this.selectSurah(target || this.quranData[0]);
+        if (target && verseNo) this.scrollToVerse(verseNo);
       },
-      (error) => {
+      error: (error) => {
         this.loading = false;
         console.error('Error fetching Quran data:', error);
-      },
-      () => {
-        const state = history.state as { surahNo: number; verseNo?: number };
-        if (state?.surahNo) {
-          this.selectSurahByNumber(state.surahNo);
-        }
+        this.message.error('Could not load the Qur\'an. Please check your connection and try again.');
       }
-    );
+    });
   }
 
   selectSurahByNumber(surahNo: number) {
@@ -269,23 +265,20 @@ openCollectionModal(verse: any) {
   }
   @ViewChild('contentContainer', { read: ElementRef }) contentContainer!: ElementRef<HTMLElement>;
 
-    onSurahClick(surah: any) {
-    // 1. select it
+  onSurahClick(surah: any) {
+    this.surahListOpen = false;
     this.selectSurah(surah);
-    // 2. then scroll the content pane back to top
-    //    use a small timeout so that the new verses have rendered
-    setTimeout(() => {
-      this.contentContainer.nativeElement.scrollTop = 0;
-    }, 0);
+    this.scrollContentToTop();
   }
 
   selectSurah(surah: any) {
     this.selectedSurah = surah;
-    console.log('Selected surah in selectSurah:', this.selectedSurah.surahNo, this.selectedSurah.surahName);
     this.cdr.detectChanges();
-    if (this.targetVerseNo) {
-      this.scrollToVerse(this.targetVerseNo);
-    }
+  }
+
+  private scrollContentToTop() {
+    // Timeout so the new verses have rendered before resetting the scroll.
+    setTimeout(() => this.contentContainer?.nativeElement.scrollTo({ top: 0 }), 0);
   }
 
  
@@ -306,25 +299,21 @@ scrollToVerse(verseNo: number) {
       console.warn('Verse 0 is not displayed');
       return;
     }
+    clearTimeout(this.highlightTimer);
     this.highlightedVerse = verseNo;
     setTimeout(() => {
       const verseElement = this.verseContainer?.nativeElement.querySelector(`#verse-${verseNo}`);
-      if (verseElement) {
-        verseElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        verseElement.style.backgroundColor = '#E0BC5E';
-        verseElement.style.color = 'white';
-        setTimeout(() => {
-          this.highlightedVerse = null;
-          verseElement.style.backgroundColor = '';
-          verseElement.style.color = '';
-          this.targetVerseNo = null;
-          this.scrollTriggered = false;
-          this.cdr.detectChanges();
-        }, 2000);
-      } else {
+      if (!verseElement) {
         console.error(`Verse ${verseNo} not found in the DOM. Check if #verse-${verseNo} exists.`);
+        return;
       }
-    }, 500);
+      verseElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      this.highlightTimer = setTimeout(() => {
+        this.highlightedVerse = null;
+        this.targetVerseNo = null;
+        this.cdr.detectChanges();
+      }, 2500);
+    }, 300);
   }
 
   playAudio(audioUrl: string) {

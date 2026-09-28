@@ -1,81 +1,41 @@
-<div style="height: 85vh; display: flex; flex-direction: column; ">
-
-  <div class="teachingseafarermain" style=" flex-shrink: 0;">
-    <div class="teachingseafarermain1">
-      <div>
-        <div class="teachingtext">The Qur'an Project</div>
-      </div>
-      <div class="courssecategoriesdiv2">
-        <p style="color: #828282; font-size: 30px;">
-          Read,Think and Discover
-        </p>
-      </div>
+<div class="dashboard qp-page">
+  <!-- ============ Hero ============ -->
+  <section class="hero">
+    <div class="hero-copy">
+      <h1 class="hero-title">The Qur'an Project</h1>
+      <p class="hero-tagline">Read, Think and Discover</p>
     </div>
-    <div class="teachingseafarermain2" routerLink="/quran/chapters">
-      <div class="teachingseafarermain2box">
-        <div style="
-          background: transparent;
-          border-radius: 20px;
-          overflow: hidden;
-          border: 1px #cbd5e1 solid;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: center;
-          display: inline-flex;">
-          <div style="
-            background-image: url(https://via.placeholder.com/600x399);
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            display: inline-flex;">
-            <div class="main-card">
-              <img src="assets/images/web/qp-main.webp" alt="The Qur'an Project" fetchpriority="high" />
-              <h3 class="largeLogo">The Qur'an <nz-icon style="color:#E0BC5E;" nzType="arrow-right" nzTheme="outline" /></h3>
-              <!-- <h3 class="smallLogo"><img src="assets/images/QPtransparentLogo.svg" alt=""></h3> -->
-<!-- NEW: Clean "Tap to Read" – no background -->
-  <div style="margin-top: 10px" class="tap-to-read">Tap to Read</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-
-  <div class="horizontal-layout" >
-    <div class="scroll-container" style="display: flex; justify-content: space-between; width: 100%; gap: 5px;">
-      <button class="nav-button left-btn" id="scrollLeft" [disabled]="isAtStart" (click)="scrollLeft()">
-        <nz-icon style="color: #E0BC5E; font-size: 30px;" nzType="left" nzTheme="outline" />
-      </button>
-      <div class="scroll-wrapper" #scrollWrapper (scroll)="checkScroll()" style="display: flex; align-items: center;">
-        <div class="card" *ngFor="let item of cards" (click)="navigateToAppendice(item.title)">
-          <img [src]="item.image" [alt]="item.title" loading="lazy" decoding="async" />
-          <h3>{{ item.title }}</h3>
-        </div>
+    <a class="hero-card" routerLink="/quran/chapters" aria-label="Open The Qur'an">
+      <img src="assets/images/web/qp-main.webp" alt="The Qur'an Project" fetchpriority="high" />
+      <div class="hero-card-overlay">
+        <h2>The Qur'an <nz-icon nzType="arrow-right" nzTheme="outline" /></h2>
+        <span class="tap-to-read">Tap to Read</span>
       </div>
-      <button class="nav-button right-btn" id="scrollRight" [disabled]="isAtEnd" (click)="scrollRight()">
-        <nz-icon style="color: #E0BC5E; font-size: 30px;" nzType="right" nzTheme="outline" />
+    </a>
+  </section>
+
+  <!-- ============ Explore ============ -->
+  <section class="explore">
+    <button type="button" class="arrow-btn" [disabled]="isAtStart" (click)="scrollLeft()" aria-label="Scroll left">
+      <nz-icon nzType="left" nzTheme="outline" />
+    </button>
+
+    <div class="explore-track" #scrollWrapper (scroll)="checkScroll()">
+      <button
+        type="button"
+        class="topic-card"
+        *ngFor="let item of cards; let first = first"
+        [class.featured]="first"
+        (click)="navigateToAppendice(item.title)"
+      >
+        <img [src]="item.image" [alt]="item.title" loading="lazy" decoding="async" />
+        <span class="topic-title">{{ item.title }}</span>
       </button>
     </div>
-  </div>
 
-
-  <div class="card introcard" style="margin: 0px 10px;width:95%;height: 100px;"  (click)="navigateToAppendice('Introduction to the Study of the Qur’ān')" >
-      <img src="assets/images/web/introtoquran.webp" alt="Introduction to the Study of the Qur’ān" decoding="async" />
-      <h3>Introduction to the Study of the Qur’ān</h3>
-
-  </div>
-
-  <div class="grid-layout">
-  <ng-container *ngFor="let item of cards">
-    <div class="card" 
-         *ngIf="item.title !== 'Introduction to the Study of the Qur’ān'"
-         (click)="navigateToAppendice(item.title)">
-      <img [src]="item.image" [alt]="item.title" loading="lazy" decoding="async" />
-      <h3>{{ item.title }}</h3>
-    </div>
-  </ng-container>
-</div>
-
-
+    <button type="button" class="arrow-btn" [disabled]="isAtEnd" (click)="scrollRight()" aria-label="Scroll right">
+      <nz-icon nzType="right" nzTheme="outline" />
+    </button>
+  </section>
 </div>

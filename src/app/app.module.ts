@@ -18,7 +18,8 @@ import {
   DownOutline, EditOutline, EyeInvisibleOutline, EyeOutline, FolderAddOutline, FolderOutline,
   GoogleOutline, HeartOutline, HomeOutline, InfoCircleOutline, LeftOutline, LoadingOutline,
   LoginOutline, LogoutOutline, MenuOutline, MessageOutline, PlayCircleOutline, RightOutline,
-  SearchOutline, SendOutline, UploadOutline, UserOutline
+  SearchOutline, SendOutline, UploadOutline, UserOutline,
+  ArrowLeftOutline, GlobalOutline, InstagramOutline, MailOutline, ReadOutline, TeamOutline, UnorderedListOutline
 } from '@ant-design/icons-angular/icons';
 
 // Bundle the icons the app uses so NG-ZORRO doesn't fetch each SVG over HTTP at runtime.
@@ -28,7 +29,8 @@ const icons = [
   DownOutline, EditOutline, EyeInvisibleOutline, EyeOutline, FolderAddOutline, FolderOutline,
   GoogleOutline, HeartOutline, HomeOutline, InfoCircleOutline, LeftOutline, LoadingOutline,
   LoginOutline, LogoutOutline, MenuOutline, MessageOutline, PlayCircleOutline, RightOutline,
-  SearchOutline, SendOutline, UploadOutline, UserOutline
+  SearchOutline, SendOutline, UploadOutline, UserOutline,
+  ArrowLeftOutline, GlobalOutline, InstagramOutline, MailOutline, ReadOutline, TeamOutline, UnorderedListOutline
 ];
 
 registerLocaleData(en);

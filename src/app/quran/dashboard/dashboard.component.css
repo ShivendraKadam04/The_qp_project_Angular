@@ -1,428 +1,325 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-body {
-    overflow-x: hidden;
-}
-
-body::-webkit-scrollbar {
-  display: none; /* Hides scrollbar in Chrome and Edge */
-}
-
-
-
-.scroll-container {
-  overflow: hidden;
-  position: relative;
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.scroll-wrapper {
-  gap:10px;
-  display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding: 10px;
-  white-space: nowrap;
-  scrollbar-width: none; /* Hides scrollbar in Firefox */
-}
-
-.scroll-wrapper::-webkit-scrollbar {
-  display: none; /* Hides scrollbar in Chrome */
-}
-
-.card {
-  flex: 0 0 auto;
-  width: 200px;
-  border-radius: 12px;           /* Slightly more modern */
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-}
-
-/* Image fills card */
-.card img {
-  width: 100%;
-  height: 165px;
- object-fit: cover;              /* This is the magic */
-  object-position: center center; /* Forces perfect centering */
+:host {
   display: block;
 }
 
-.card h3 {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+.dashboard {
+  max-width: 1640px;
+}
+
+/* ---------------- Hero ---------------- */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: 40px;
+  padding: 8px 0 28px;
+}
+
+.hero-title {
   margin: 0;
-  padding: 28px 12px 14px 12px;        /* Extra top padding = gradient space */
-  color: white;
-  /* font-family: 'Poppins', Arial, sans-serif; */
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 1.45;
-  text-align: center;
-  z-index: 2;
-  pointer-events: none;
+  font-size: clamp(28px, 3.2vw, 44px);
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--qp-ink);
+  letter-spacing: -0.5px;
+}
 
-  /* This is the magic – soft fade from bottom, no sharp line */
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.85) 0%,
-    rgba(0, 0, 0, 0.65) 40%,
-    rgba(0, 0, 0, 0.35) 70%,
-    transparent 100%
-  );
+.hero-tagline {
+  margin: 10px 0 0;
+  font-size: clamp(15px, 1.5vw, 20px);
+  color: var(--qp-muted);
+}
 
-  /* Allow 2 lines + clean wrap */
-  white-space: normal;
-  display: -webkit-box;
-  -webkit-line-clamp: 4 ;
-  -webkit-box-orient: vertical;
+.hero-card {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--qp-radius-lg);
   overflow: hidden;
-
-  /* Rounded bottom only – top stays open for soft merge */
-  border-radius: 0 0 12px 12px;
-}
-
-.card::before {
-  display: none !important;        /* Removes the black tint */
-}
-
-/* Navigation Buttons */
-.nav-button {
-  border: none;
+  box-shadow: var(--qp-shadow-lg);
   cursor: pointer;
-  padding: 10px;
-  font-size: 18px;
-  border-radius: 50%;
-  z-index: 10;
-  background-color: transparent;
 }
 
-.nav-button:disabled {
-  opacity: 0.3;
+.hero-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.hero-card:hover img {
+  transform: scale(1.03);
+}
+
+.hero-card-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.05) 70%);
+}
+
+.hero-card-overlay h2 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 700;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.hero-card-overlay h2 nz-icon {
+  color: var(--qp-gold);
+  transition: transform 0.3s;
+}
+
+.hero-card:hover .hero-card-overlay h2 nz-icon {
+  transform: translateX(4px);
+}
+
+.tap-to-read {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 500;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+  animation: tapPulse 3.2s ease-in-out infinite;
+}
+
+@keyframes tapPulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+/* ---------------- Explore ---------------- */
+.explore {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.arrow-btn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--qp-border);
+  border-radius: 50%;
+  background: var(--qp-surface);
+  color: var(--qp-gold-dark);
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: var(--qp-shadow-sm);
+  transition: background-color 0.2s, color 0.2s, opacity 0.2s;
+}
+
+.arrow-btn:hover:not(:disabled) {
+  background: var(--qp-gold);
+  border-color: var(--qp-gold);
+  color: #fff;
+}
+
+.arrow-btn:disabled {
+  opacity: 0.35;
   cursor: default;
 }
 
-.left-btn {
-  left: 10px;
-}
-
-.right-btn {
-  right: 10px;
-}
-
-
-.main-card {
-    width: 600px;
-    height: 350px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-
-/* .main-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.17);
-  z-index: 1;
-} */
-
-.main-card::before {
- display: none !important; 
-}
-
-.main-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    
-}
-
-.teachingseafarermain2box:hover {
-  transform: scale(1.009);
-  cursor: pointer; /* Scale the image on hover */
-}
-.card:hover {
-  transform: scale(1.009);
-  cursor: pointer; /* Scale the image on hover */
-}
-
-.main-card h3 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    padding: 10px 20px;
-    font-weight: bold;
-    font-size: 24px;
-    border-radius: 5px;
-    text-align: center;
-}
-
-
-.teachingseafarermain {
-  width: 100%;
-  /* background-color: white; */
-  padding:20px 100px;
+/* Carousel on tablet / desktop */
+.explore-track {
+  flex: 1;
+  min-width: 0;
   display: flex;
-  justify-content: space-between;
-  gap: 40px;
-  /* border-bottom: 1px dotted; */
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 4px 2px 14px;
+  scrollbar-width: none;
 }
 
-.teachingseafarermain1 {
-  width: 50%;
-  /* background-color: white; */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.teachingseafarermain2 {
-  width: 50%;
-  /* background-color: white; */
-  display: flex;
-  align-items: center;
-}
-
-.teachingtext {
-  align-self: stretch;
-  font-size: 50px;
-  font-weight: 900;
-  font-style: normal;
-  line-height: 69px;
-}
-
-.textingtext2 {
-  align-self: stretch;
-  color: #4f4f4f;
-  font-size: 24px;
-
-  font-weight: 400;
-  line-height: 36px;
-  word-wrap: break-word;
-}
-
-.teachingseafarermain2box {
-  width: 100%;
-  text-align: center;
-  align-items: center;
-}
-
-.grid-layout {
+.explore-track::-webkit-scrollbar {
   display: none;
 }
 
-.horizontal-layout {
-  flex-grow: 1;
-   display: flex;
-    justify-content: center;
-     align-items: center;
+.topic-card {
+  position: relative;
+  flex: 0 0 210px;
+  height: 220px;
+  padding: 0;
+  border: none;
+  border-radius: var(--qp-radius);
+  overflow: hidden;
+  background: var(--qp-dark-2);
+  box-shadow: var(--qp-shadow);
+  cursor: pointer;
+  scroll-snap-align: start;
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.introcard{
-  
-
+.topic-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--qp-shadow-lg);
 }
 
-@media screen and (min-width: 680px) {
+.topic-card:focus-visible {
+  outline: 3px solid var(--qp-gold);
+  outline-offset: 2px;
+}
 
-  .introcard{
+.topic-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.topic-card:hover img {
+  transform: scale(1.06);
+}
+
+.topic-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 44px 12px 14px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.55) 55%, transparent 100%);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 1000px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: center;
+    padding-top: 0;
+  }
+
+
+  .hero-card {
+    order: -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    gap: 14px;
+    padding-bottom: 18px;
+  }
+
+  .hero-title {
+    font-size: 24px;
+  }
+
+  .hero-tagline {
+    margin-top: 4px;
+    font-size: 14px;
+  }
+
+  .hero-card-overlay h2 {
+    font-size: 20px;
+  }
+
+  .tap-to-read {
+    font-size: 12px;
+  }
+
+
+
+
+  /* Phones: grid instead of a carousel, intro card spans the full row */
+  .explore-track {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    overflow: visible;
+    scroll-snap-type: none;
+    padding: 0;
+  }
+
+  .explore {
+    display: block;
+  }
+
+  .arrow-btn {
     display: none;
   }
 
-.smallLogo{
-  display: none;
-}}
-
-@media screen and (max-width: 1000px) {
-  
-  .teachingseafarermain {
-    width: 100%;
-    padding: 25px 0px;
-    gap: 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .teachingseafarermain1 {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .teachingseafarermain2 {
-    width: 100%;
-    display: flex;
-    align-items: center;
-  }
-
-  .teachingtext {
-    word-wrap: break-word;
-    color: #333333;
-    text-align: center;
-    font-size: 30px;
-    font-weight: 800;
-    line-height: 50px;
-  }
-
-  .textingtext2 {
-    color: #828282;
-    font-size: 10px;
-    font-weight: 400;
-  }
-
-  .videoplayer {
-    object-fit: cover;
+  .topic-card {
     height: 160px;
-    width: 300px;
   }
 
-  .videoplayer2 {
-    object-fit: cover;
-    height: 300px;
-    width: 100%;
+  .topic-card.featured {
+    grid-column: 1 / -1;
+    height: 140px;
   }
-}
 
-
-@media screen and (max-width: 680px) {
-  .main-card {
-      width: 85vw;  /* 80% of viewport width */
-      height: calc(80vw * 0.58); /* Maintain aspect ratio similar to 600px x 350px */
-  }
-  .main-card h3 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    padding: 10px 20px;
-    font-weight: bold;
-    font-size: 24px;
-    border-radius: 5px;
-    width: 100%;
-}
-.horizontal-layout {
-  display: none; /* Hide horizontal scrolling */
-}
-
-.grid-layout {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
-  gap: 10px;
-  justify-content: space-between; /* Space between cards in the same row */
-  padding: 10px;
-}
-
-.card {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%; /* Makes sure each card takes full width of its column */
-}
-/* .largeLogo{
-  display: none;
-} */
-
-.teachingseafarermain1{
-  display: none;
-}
-
-}
-/* Responsive "Tap to Read" – always stays close to "The Qur'an" text */
-.tap-to-read {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  color: white;
-  font-weight: 500;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 3;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.7);
-  white-space: nowrap;
-
-      font-size: 15px;
-
-
-  /* Key: Use top instead of bottom + calculate distance from center */
-  top: 60%;                         /* Start a bit below center */
-  transform: translateX(-50%) translateY(20px);
-
-  /* Dual animation: show text + push title up */
-  animation: showTap 6s infinite, pushTitleUp 6s infinite;
-  animation-delay: 2s, 2s;
-}
-
-@keyframes showTap {
-  0%, 12% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(30px);
-  }
-  18%, 42% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  50%, 100% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(30px);
+  .topic-title {
+    font-size: 12px;
+    padding: 32px 8px 10px;
   }
 }
 
-@keyframes pushTitleUp {
-  0%, 15%   { transform: translate(-50%, -50%); }
-  20%, 40%  { transform: translate(-50%, -66%); }   /* pushes up smoothly */
-  48%, 100% { transform: translate(-50%, -50%); }
-}
-
-/* Make sure the main title animates smoothly */
-.largeLogo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  font-weight: bold;
-  font-size: clamp(20px, 4vw, 28px);
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  margin: 0;
-  text-align: center;
-  z-index: 2;
-}
-
-/* Optional: Fine-tune distance on very small screens */
-@media (max-width: 480px) {
-  .tap-to-read {
-    top: 65%;
-    font-size: 15px;
+/* Desktop: fit hero + card row in one screen; the hero card absorbs the
+   leftover height so the appendix cards are always visible. */
+@media (min-width: 1001px) and (min-height: 600px) {
+  :host {
+    height: 100%;
   }
-  @keyframes pushTitleUp {
-    20%, 40% { transform: translate(-50%, -70%); }
+
+  .dashboard {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .hero {
+    flex: 1;
+    min-height: 0;
+    grid-template-rows: minmax(0, 1fr);
+    padding: 0 0 20px;
+  }
+
+  .hero-card {
+    aspect-ratio: auto;
+    height: 100%;
+    max-height: 440px;
+    min-height: 220px;
+    align-self: center;
+  }
+
+  .explore {
+    flex-shrink: 0;
+  }
+
+  .topic-card {
+    height: clamp(170px, 24vh, 220px);
+  }
+}
+
+/* Desktop: line the heading up with the first card (arrow 40px + 10px gap) */
+@media (min-width: 1001px) {
+  .hero-copy {
+    padding-left: 50px;
   }
 }

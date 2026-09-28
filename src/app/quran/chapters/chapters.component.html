@@ -1,201 +1,164 @@
-<nz-layout class="inner-layout" style="max-height: 80vh; overflow-y: auto;">
-  <!-- Sidebar -->
-  <nz-sider
-    nzWidth="250px"
-    nzTheme="light"
-    nzCollapsible
-    [nzCollapsed]="isCollapsed"
-    (nzCollapsedChange)="isCollapsed = $event"
-    [nzCollapsedWidth]="0"
-    nzBreakpoint="md"
-    style="height: 80vh; overflow-y: auto;"
-  >
-    <ul nz-menu nzMode="inline" class="sider-menu">
-      <li
-        *ngFor="let surah of quranData"
-        nz-menu-item
-        [ngClass]="{ 'selected-surah': selectedSurah?.surahNo === surah.surahNo }"
-        
-        (click)="onSurahClick(surah)"
-
-      >
-        {{ surah.surahNo }}. {{ surah.surahName }}
-      </li>
-    </ul>
-  </nz-sider>
-
-  <nz-layout class="main-layout" style="max-height: 80vh; overflow-y: auto;">
-    <!-- Mobile toggle button -->
-    <button
-      nz-button
-      nzShape="circle"
-      nzType="default"
-      class="mobile-toggle"
-      (click)="toggleCollapsed()"
-    >
-      <i nz-icon [nzType]="isCollapsed ? 'right' : 'left'" nzTheme="outline"></i>
-    </button>
-
-    <!-- Content -->
-    <nz-content style="max-height: 80vh; overflow-y: auto; padding: 10px;" #contentContainer>
-      <div #verseContainer> <!-- Reference here -->
-        <h2 style="color: #E0BC5E; font-weight: 700; font-size: 18px;">
-          {{ selectedSurah?.surahNo }}. {{ selectedSurah?.surahName }}
-        </h2>
-        
-        <nz-collapse style="margin: 16px 0; background: #f8f9fa; border-radius: 8px;">
-  <nz-collapse-panel nzHeader="Introduction" [nzActive]="false">
-    <div class="introduction-text">
-      <ng-container *ngIf="selectedSurah?.introduction; else noIntro">
-        <p 
-      
-          *ngFor="let paragraph of splitIntroduction(selectedSurah.introduction)" 
-          class="intro-paragraph"
-          [innerHTML]="paragraph"
-        ></p>
-      </ng-container>
-      <ng-template #noIntro>
-        <p style="color: #888; font-style: italic;">No introduction available for this Surah.</p>
-      </ng-template>
+<div class="reader">
+  <!-- ============ Surah list ============ -->
+  <aside class="surah-panel" [class.open]="surahListOpen" aria-label="Surah list">
+    <div class="surah-panel-head">
+      <div class="surah-panel-title">
+        <h3>Surahs</h3>
+        <button type="button" class="qp-icon-btn panel-close" (click)="surahListOpen = false" aria-label="Close surah list">
+          <nz-icon nzType="close" />
+        </button>
+      </div>
+      <nz-input-group [nzPrefix]="filterIcon" class="surah-filter">
+        <input nz-input [(ngModel)]="surahFilter" placeholder="Find a surah..." aria-label="Filter surahs" />
+      </nz-input-group>
+      <ng-template #filterIcon><nz-icon nzType="search" class="filter-icon" /></ng-template>
     </div>
-  </nz-collapse-panel>
-</nz-collapse>
 
-        <div class="verses-container">
-          <ng-container *ngFor="let verse of selectedSurah?.verses">
-            <div  class="verse-card" [id]="'verse-' + verse.versesNo">
-              <div style="display: flex; width: 100%; justify-content: space-between; gap: 5px;">
-                <div style="display: flex; flex-direction: column; gap: 5px; align-items: center;">
-                  <div
-                    style="
-                      background-color: #DEDFE2;
-                      color: #E0BC5E;
-                      font-size: 18px;
-                      font-weight: 700;
-                      border-radius: 50%;
-                      width: 40px;
-                      height: 40px;
-                      display: flex;
-                      justify-content: center;
-                      align-items: center;
-                    "
-                  >
-                    {{ verse.versesNo }}
-                  </div>
+    <ul class="surah-list">
+      <li
+        *ngFor="let surah of filteredSurahs; trackBy: trackBySurah"
+        class="surah-item"
+        [class.active]="selectedSurah?.surahNo === surah.surahNo"
+        (click)="onSurahClick(surah)"
+      >
+        <span class="surah-no">{{ surah.surahNo }}</span>
+        <span class="surah-name">{{ surah.surahName }}</span>
+        <span class="surah-count">{{ surah.verses?.length }}</span>
+      </li>
+      <li *ngIf="!loading && filteredSurahs.length === 0" class="surah-empty">No surah matches "{{ surahFilter }}"</li>
+    </ul>
+  </aside>
+  <div class="surah-backdrop" [class.open]="surahListOpen" (click)="surahListOpen = false"></div>
 
-                  <!-- Play Audio -->
-                  <!-- <div class="icon-wrapper" (click)="playAudio(verse.audioFile)">
-                    <nz-icon nzType="play-circle" nzTheme="outline"></nz-icon>
-                  </div> -->
+  <!-- ============ Reading pane ============ -->
+  <section class="reader-main" #contentContainer>
+    <div class="reader-toolbar" *ngIf="selectedSurah">
+      <button type="button" class="list-toggle" (click)="surahListOpen = true" aria-label="Open surah list">
+        <nz-icon nzType="unordered-list" /> <span>Surahs</span>
+      </button>
 
-                  <!-- Favorite (Heart Icon) -->
-                  <div  class="icon-wrapper" (click)="openCollectionModal(verse)">
-                    <nz-icon nzType="heart" nzTheme="outline"></nz-icon>
-                  </div>
-                </div>
+      <div class="toolbar-title">
+        <span class="toolbar-kicker">Surah {{ selectedSurah.surahNo }} · {{ selectedSurah.verses?.length }} verses</span>
+        <h2>{{ selectedSurah.surahName }}</h2>
+      </div>
 
-                <!-- Verse Text & Footnote Popover -->
-                <div
-                  style="
-                    width: 85%;
-                    display: flex;
-                    align-items: center;
-                    cursor: pointer;
-                    justify-content: start;
-                  "
-                  *ngIf="verse.footnotes && verse.footnotes.length > 0"
-                >
-                  <h3 style="color: #6C6C6C;" [innerHTML]="verse.versesText"></h3>
-                </div>
+      <div class="toolbar-nav">
+        <button type="button" class="qp-icon-btn nav-arrow" [disabled]="isFirstSurah" (click)="goToAdjacentSurah(-1)" aria-label="Previous surah" title="Previous surah">
+          <nz-icon nzType="left" />
+        </button>
+        <button type="button" class="qp-icon-btn nav-arrow" [disabled]="isLastSurah" (click)="goToAdjacentSurah(1)" aria-label="Next surah" title="Next surah">
+          <nz-icon nzType="right" />
+        </button>
+      </div>
+    </div>
 
-                <!-- Show text without popover if no footnotes -->
-                <h3
-                  *ngIf="!verse.footnotes || verse.footnotes.length === 0"
-                  style="
-                    color: #6C6C6C;
-                    width: 85%;
-                    display: flex;
-                    align-items: center;
-                    cursor: pointer;
-                    justify-content: start;
-                  "
-                >
-                  {{ verse.versesText }}
-                </h3>
-
-                <div *ngIf="verse.footnotes.length > 0" style="height: 100%;">
-                  <div
-                    class="icon-wrapper"
-                    [nzPopoverTrigger]="'click'"
-                    [nzPopoverTitle]="''"
-                    [nzPopoverContent]="verse.footnotes && verse.footnotes.length > 0 ? footnotesTemplate : undefined"
-                    nz-popover
-                  >
-                    <nz-icon nzType="info-circle" nzTheme="outline" />
-                  </div>
-                </div>
-                <div *ngIf="verse.footnotes.length === 0" style="height: 100%;">
-                  <div
-                    class="icon-wrapper"
-                    [nzPopoverTrigger]="'click'"
-                    [nzPopoverTitle]="''"
-                    [nzPopoverContent]="verse.footnotes && verse.footnotes.length > 0 ? footnotesTemplate : undefined"
-                    nz-popover
-                  >
-                    <nz-icon style="color: transparent;" nzType="info-circle" nzTheme="outline" />
-                  </div>
-                </div>
-              </div>
-
-              <!-- Popover Template -->
-              <ng-template #footnotesTemplate>
-                <div style="max-width: 300px; max-height: 400px; overflow-y: auto;">
-                  <p *ngFor="let footnote of verse.footnotes">
-                    <strong style="color: #E0BC5E;">{{ footnote.footnoteNo }}]</strong> {{ footnote.note }}
-                  </p>
-                </div>
+    <div class="reader-body" #verseContainer>
+      <ng-container *ngIf="selectedSurah">
+        <!-- Introduction -->
+        <nz-collapse class="intro-card" [nzBordered]="false">
+          <nz-collapse-panel nzHeader="Introduction" [nzActive]="false">
+            <div class="introduction-text">
+              <ng-container *ngIf="selectedSurah?.introduction; else noIntro">
+                <p
+                  *ngFor="let paragraph of splitIntroduction(selectedSurah.introduction)"
+                  class="intro-paragraph"
+                  [innerHTML]="paragraph"
+                ></p>
+              </ng-container>
+              <ng-template #noIntro>
+                <p class="intro-empty">No introduction available for this Surah.</p>
               </ng-template>
             </div>
-          </ng-container>
-        </div>
-      </div>
+          </nz-collapse-panel>
+        </nz-collapse>
 
-      <!-- Loading Spinner -->
-      <div *ngIf="loading" style="display: flex; align-items: center; justify-content: center; height: 80vh;">
-        <nz-spin nzSize="large"></nz-spin>
-      </div>
-    </nz-content>
-  </nz-layout>
-</nz-layout>
+        <!-- Verses -->
+        <div class="verses-container">
+          <article
+            *ngFor="let verse of selectedSurah?.verses; trackBy: trackByVerse"
+            class="verse-card"
+            [id]="'verse-' + verse.versesNo"
+            [class.highlighted]="highlightedVerse === verse.versesNo"
+          >
+            <span class="verse-badge">{{ verse.versesNo }}</span>
+
+            <p class="verse-text" [innerHTML]="verse.versesText"></p>
+
+            <div class="verse-actions">
+                <button
+                  *ngIf="verse.footnotes?.length > 0"
+                  type="button"
+                  class="qp-icon-btn"
+                  title="Footnotes"
+                  aria-label="Show footnotes"
+                  nz-popover
+                  nzPopoverTrigger="click"
+                  nzPopoverPlacement="bottomRight"
+                  [nzPopoverContent]="footnotesTemplate"
+                >
+                  <nz-icon nzType="info-circle" nzTheme="outline" />
+                </button>
+                <button type="button" class="qp-icon-btn" title="Save to collection" aria-label="Save verse to collection" (click)="openCollectionModal(verse)">
+                  <nz-icon nzType="heart" nzTheme="outline" />
+                </button>
+            </div>
+
+            <ng-template #footnotesTemplate>
+              <div class="footnotes">
+                <p *ngFor="let footnote of verse.footnotes">
+                  <strong>{{ footnote.footnoteNo }}]</strong> {{ footnote.note }}
+                </p>
+              </div>
+            </ng-template>
+          </article>
+        </div>
+
+        <!-- Bottom prev / next -->
+        <div class="reader-footer">
+          <button type="button" class="qp-btn qp-btn-soft" *ngIf="!isFirstSurah" (click)="goToAdjacentSurah(-1)">
+            <nz-icon nzType="left" /> Previous Surah
+          </button>
+          <span class="spacer"></span>
+          <button type="button" class="qp-btn qp-btn-primary" *ngIf="!isLastSurah" (click)="goToAdjacentSurah(1)">
+            Next Surah <nz-icon nzType="right" />
+          </button>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div *ngIf="loading && !selectedSurah" class="loading-spinner">
+      <nz-spin nzSize="large"></nz-spin>
+    </div>
+  </section>
+</div>
 
 <!-- Collection Modal -->
 <nz-modal
   [(nzVisible)]="isCollectionModalVisible"
-  nzTitle="Add to Collection"
+  nzTitle="Save to Collection"
   (nzOnCancel)="closeCollectionModal()"
   [nzFooter]="null"
 >
   <ng-container *nzModalContent>
-    <div *ngIf="collections.length > 0; else noCollections">
-      <ul style="list-style: none; padding: 0;">
-        <li
-          *ngFor="let collection of collections"
-          (click)="saveToCollection(collection)"
-          class="collection-item"
-          style="padding: 8px; cursor: pointer; border-bottom: 1px solid #f0f0f0;"
-        >
-          {{ collection }}
-        </li>
-      </ul>
-    </div>
+    <p class="modal-hint" *ngIf="selectedVerse">
+      {{ selectedSurah?.surahName }} · Verse {{ selectedVerse.versesNo }}
+    </p>
+    <ul *ngIf="collections.length > 0; else noCollections" class="collection-list">
+      <li *ngFor="let collection of collections" (click)="saveToCollection(collection)" class="collection-item">
+        <nz-icon nzType="folder" nzTheme="outline" />
+        <span>{{ collection }}</span>
+        <nz-icon nzType="right" class="collection-go" />
+      </li>
+    </ul>
     <ng-template #noCollections>
-      <div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
-        <p>No collections found!</p>
-        <button nz-button nzType="primary" (click)="openCreateCollectionModal()">
-          <i nz-icon nzType="folder-add" nzTheme="outline"></i> New Collection
-        </button>
-      </div>
+      <p class="no-collections">No collections found!</p>
     </ng-template>
+    <div class="modal-actions">
+      <button class="qp-btn qp-btn-soft" (click)="openCreateCollectionModal()">
+        <nz-icon nzType="folder-add" nzTheme="outline" /> New Collection
+      </button>
+    </div>
   </ng-container>
 </nz-modal>
 
@@ -210,27 +173,21 @@
   (nzOnOk)="submitCollection()"
 >
   <ng-container *nzModalContent>
-    <div style="padding: 0px 25px;">
-      <form [formGroup]="collectionForm" nz-form [nzLayout]="'vertical'">
-        <nz-form-item>
-          <nz-form-label nzRequired>Collection Name</nz-form-label>
-          <nz-form-control [nzErrorTip]="nameErrorTip">
-            <input
-              nz-input
-              formControlName="collectionName"
-              placeholder="Enter collection name"
-            />
-            <ng-template #nameErrorTip>
-              <span *ngIf="collectionForm.get('collectionName')?.hasError('required')">
-                Collection name is required
-              </span>
-              <span *ngIf="collectionForm.get('collectionName')?.hasError('minlength')">
-                Minimum 3 characters required
-              </span>
-            </ng-template>
-          </nz-form-control>
-        </nz-form-item>
-      </form>
-    </div>
+    <form [formGroup]="collectionForm" nz-form [nzLayout]="'vertical'" (ngSubmit)="submitCollection()">
+      <nz-form-item>
+        <nz-form-label nzRequired>Collection Name</nz-form-label>
+        <nz-form-control [nzErrorTip]="nameErrorTip">
+          <input nz-input nzSize="large" formControlName="collectionName" placeholder="Enter collection name" />
+          <ng-template #nameErrorTip>
+            <span *ngIf="collectionForm.get('collectionName')?.hasError('required')">
+              Collection name is required
+            </span>
+            <span *ngIf="collectionForm.get('collectionName')?.hasError('minlength')">
+              Minimum 3 characters required
+            </span>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
   </ng-container>
 </nz-modal>

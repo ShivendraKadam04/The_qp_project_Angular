@@ -1,3 +1,10 @@
+.delete-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 16px;
+}
+
 .form {
     display: flex;
     flex-direction: column;
@@ -5,8 +12,10 @@
     background-color: #ffffff;
     padding: 30px;
     width: 450px;
-    border-radius: 20px;
-    border: 1px solid #ededef;
+    max-width: 100%;
+    border-radius: var(--qp-radius-lg);
+    border: 1px solid var(--qp-border);
+    box-shadow: var(--qp-shadow);
     height: fit-content;
   }
 
@@ -17,7 +26,13 @@
 
   @media (max-width: 700px) {
   .form {
-     width: 90vw;
+     width: 100%;
+     padding: 22px 18px;
+  }
+
+  .otpInput {
+    width: 42px;
+    height: 46px;
   }
 }
   

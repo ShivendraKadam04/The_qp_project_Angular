@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,7 +12,6 @@ export class DashboardComponent {
 
   isAtStart: boolean = true;
   isAtEnd: boolean = false;
-  scrollAmount: number = 200;
 
   cards = [
     { image: 'assets/images/web/introtoquran.webp', title: 'Introduction to the Study of the Qur’ān' },
@@ -29,23 +28,30 @@ export class DashboardComponent {
   constructor(private router: Router) {}
 
   ngAfterViewInit() {
-    this.checkScroll();
+    // After first render so the arrow state doesn't change mid change-detection.
+    setTimeout(() => this.checkScroll());
   }
 
   scrollLeft() {
-    this.scrollWrapper.nativeElement.scrollBy({ left: -this.scrollAmount, behavior: 'smooth' });
-    setTimeout(() => this.checkScroll(), 400);
+    this.scrollByPage(-1);
   }
 
   scrollRight() {
-    this.scrollWrapper.nativeElement.scrollBy({ left: this.scrollAmount, behavior: 'smooth' });
-    setTimeout(() => this.checkScroll(), 400);
+    this.scrollByPage(1);
   }
 
+  private scrollByPage(direction: number) {
+    const element = this.scrollWrapper.nativeElement as HTMLElement;
+    element.scrollBy({ left: direction * element.clientWidth * 0.8, behavior: 'smooth' });
+  }
+
+  @HostListener('window:resize')
   checkScroll() {
-    const element = this.scrollWrapper.nativeElement;
-    this.isAtStart = element.scrollLeft === 0;
-    this.isAtEnd = element.scrollLeft + element.clientWidth >= element.scrollWidth;
+    const element = this.scrollWrapper?.nativeElement as HTMLElement | undefined;
+    if (!element) return;
+    // 2px tolerance: scroll positions are fractional on zoomed / high-DPI screens.
+    this.isAtStart = element.scrollLeft <= 2;
+    this.isAtEnd = element.scrollLeft + element.clientWidth >= element.scrollWidth - 2;
   }
 
   navigateToAppendice(title: string) {

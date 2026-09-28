@@ -1,89 +1,139 @@
-.loader-container {
+/* ViewEncapsulation.None (the appendix HTML comes from the API), so every rule
+   is scoped under .appendix-page to avoid leaking into other pages. */
+.appendix-page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 16px 28px 48px;
+}
 
+.appendix-page .appendix-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.appendix-page .appendix-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--qp-border);
+  color: var(--qp-text);
+  font-size: 14px;
+  font-weight: 600;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.appendix-page .appendix-back:hover {
+  border-color: var(--qp-gold);
+  color: var(--qp-gold-dark);
+}
+
+.appendix-page .loader-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 80vh;
- 
+  min-height: 60vh;
 }
 
-.error-message {
-  color: red;
+.appendix-page .error-message {
+  color: var(--qp-danger);
   text-align: center;
-  padding: 20px;
+  padding: 40px 20px;
 }
 
-.content-container a {
- 
-  word-wrap: break-word !important;     /* Legacy fallback */
-  
+/* Readable article typography for the API-provided HTML */
+.appendix-page .appendix-content {
+  font-size: 16.5px;
+  line-height: 1.85;
+  color: var(--qp-text);
+  overflow-wrap: break-word;
 }
 
-.content-container img {
-        /* scales down on small screens */
-  max-width: 400px !important;          /* ← THIS is the key change: cap at 300px */
-  height: auto !important;
+.appendix-page .appendix-content h1,
+.appendix-page .appendix-content h2,
+.appendix-page .appendix-content h3 {
+  color: var(--qp-ink);
+  line-height: 1.3;
+  scroll-margin-top: 64px;
+}
+
+.appendix-page .appendix-content h1 {
+  font-size: clamp(24px, 3.4vw, 32px);
+}
+
+.appendix-page .appendix-content [id] {
+  scroll-margin-top: 64px;
+}
+
+.appendix-page a {
+  word-wrap: break-word !important;
+}
+
+.appendix-page img {
+  max-width: min(400px, 100%) !important;
   height: auto !important;
   display: block !important;
-  margin: 12px auto !important;
+  margin: 16px auto !important;
   object-fit: contain !important;
+  border-radius: 12px;
 }
 
 @media (max-width: 660px) {
-  .content-container img {
+  .appendix-page {
+    padding: 8px 14px 32px;
+  }
+
+  .appendix-page .appendix-content {
+    font-size: 15.5px;
+  }
+
+  .appendix-page img {
     width: 100% !important;
-    max-width: 100vw !important;
+    max-width: 100% !important;
   }
 }
 
-
-.content-container table {
-  width: 90%;
-  max-width: 90%;
-}
-
-.content-container table {
+/* Wide tables scroll sideways instead of stretching the page */
+.appendix-page table {
   display: block;
+  max-width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 
-.content-container table thead,
-.content-container table tbody {
-  display: table;
-  width: 90%;
+.appendix-page table th,
+.appendix-page table td {
+  white-space: nowrap;
 }
 
-.content-container table tr {
-  display: table-row;
-}
-
-.content-container table th,
-.content-container table td {
-  display: table-cell;
-  white-space: nowrap;           /* ← key: prevents wrapping, forces scroll */
-}
-/* Admin edit pencil — sits beside the appendix title */
-.admin-edit {
-  position: absolute;
-  top: 26px;
-  right: 18px;
-  z-index: 2;
-  width: 34px;
-  height: 34px;
+/* Admin edit pencil */
+.appendix-page .admin-edit {
+  width: 36px;
+  height: 36px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: #b8962e;
+  color: var(--qp-gold-dark);
   font-size: 18px;
   cursor: pointer;
   transition: background 0.2s;
 }
 
-.admin-edit:hover {
-  background: #f5edd6;
+.appendix-page .admin-edit:hover {
+  background: var(--qp-gold-soft);
 }

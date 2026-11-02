@@ -1,161 +1,161 @@
 <div class="app-shell">
-  <!-- ============ Header ============ -->
-  <header class="app-header">
-    <a class="brand" routerLink="dashboard" aria-label="The Qur'an Project – Home">
-      <img src="assets/images/web/white-logo.webp" alt="The Quran Project" width="250" height="37">
-    </a>
-
-    <!-- Search (single instance; moves to its own row on phones) -->
-    <div class="header-search">
-      <nz-input-group [nzPrefix]="searchIcon" class="search-group">
-        <input
-          nz-input
-          class="search-input"
-          placeholder="Search Surah, Verse, or Text..."
-          aria-label="Search the Qur'an"
-          [(ngModel)]="searchQuery"
-          (ngModelChange)="onSearchChange($event)"
-          (focus)="fetchQuranData()"
-          [nzAutocomplete]="autoComplete"
-        />
-      </nz-input-group>
-      <ng-template #searchIcon>
-        <nz-icon nzType="search" class="search-icon" />
-      </ng-template>
-      <nz-autocomplete #autoComplete nzOverlayClassName="qp-search-panel">
-        <nz-auto-option
-          *ngFor="let suggestion of searchSuggestions"
-          [nzValue]="suggestion.text"
-          (selectionChange)="$event.isUserInput && selectSuggestion(suggestion)"
-        >
-          {{ suggestion.text }}
-        </nz-auto-option>
-      </nz-autocomplete>
-    </div>
-
-    <!-- Desktop navigation -->
-    <nav class="desktop-nav" aria-label="Main">
-      <a routerLink="dashboard" routerLinkActive="active" class="nav-link">
-        <nz-icon nzType="home" nzTheme="outline" /> Home
+  <!-- ============ Sidebar (fixed on desktop, slide-in on tablet / mobile) ============ -->
+  <div class="sidebar-overlay" [class.open]="drawerOpen" (click)="drawerOpen = false"></div>
+  <aside class="sidebar" [class.open]="drawerOpen" aria-label="Main menu">
+    <div class="sidebar-head">
+      <a class="sidebar-brand" routerLink="dashboard" aria-label="The Qur'an Project – Home">
+        <img src="assets/images/web/white-logo.webp" alt="The Quran Project" width="220" height="33">
       </a>
-      <a routerLink="chapters" routerLinkActive="active" class="nav-link">
-        <nz-icon nzType="book" nzTheme="outline" /> Surahs
-      </a>
-      <a routerLink="aboutus" routerLinkActive="active" class="nav-link">
-        <nz-icon nzType="team" nzTheme="outline" /> About Us
-      </a>
-      <a *ngIf="isLoggedIn" routerLink="collection" routerLinkActive="active" class="nav-link">
-        <nz-icon nzType="folder" nzTheme="outline" /> Saved
-      </a>
-      <a class="nav-link" nz-dropdown [nzDropdownMenu]="moreMenu" nzTrigger="hover" nzPlacement="bottomRight">
-        <nz-icon nzType="appstore" nzTheme="outline" /> More
-        <nz-icon nzType="down" class="nav-caret" />
-      </a>
-    </nav>
-
-    <div class="header-actions">
-      <!-- Desktop profile -->
-      <a class="profile-chip" nz-dropdown nzTrigger="click" [nzDropdownMenu]="profileMenu" nzPlacement="bottomRight">
-        <span class="avatar">
-          <img *ngIf="userdata?.profilePhoto; else initialsTpl" [src]="file" alt="Profile photo">
-          <ng-template #initialsTpl>{{ initials }}</ng-template>
-        </span>
-        <span class="profile-name">{{ displayName }}</span>
-        <nz-icon nzType="down" class="nav-caret" />
-      </a>
-
-      <!-- Mobile / tablet menu button -->
-      <button type="button" class="menu-btn" (click)="drawerOpen = true" aria-label="Open menu">
-        <nz-icon nzType="menu" nzTheme="outline" />
+      <button type="button" class="sidebar-close" (click)="drawerOpen = false" aria-label="Close menu">
+        <lucide-icon name="x"></lucide-icon>
       </button>
     </div>
-  </header>
 
-  <!-- ============ Page content ============ -->
-  <main class="app-main">
-    <div class="page-surface" #pageSurface>
-      <router-outlet></router-outlet>
-    </div>
-  </main>
-</div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Explore</div>
+      <a routerLink="dashboard" routerLinkActive="active" class="side-link">
+        <lucide-icon name="house"></lucide-icon> Home
+      </a>
+      <a routerLink="chapters" routerLinkActive="active" class="side-link">
+        <lucide-icon name="book-open"></lucide-icon> Surahs
+      </a>
+      <a routerLink="aboutus" routerLinkActive="active" class="side-link">
+        <lucide-icon name="users"></lucide-icon> About Us
+      </a>
+      <a *ngIf="isLoggedIn" routerLink="collection" routerLinkActive="active" class="side-link">
+        <lucide-icon name="folder"></lucide-icon> Saved
+      </a>
+      <a *ngIf="isLoggedIn" routerLink="profile" routerLinkActive="active" class="side-link">
+        <lucide-icon name="user"></lucide-icon> Profile
+      </a>
 
-<!-- ============ Dropdown menus (desktop) ============ -->
-<nz-dropdown-menu #moreMenu="nzDropdownMenu">
-  <ul nz-menu>
-    <ng-container *ngFor="let link of moreLinks">
-      <li nz-menu-item *ngIf="link.href" class="menu-row">
-        <a [href]="link.href" target="_blank" rel="noopener noreferrer">
-          <nz-icon [nzType]="link.icon" nzTheme="outline" /> {{ link.label }}
+      <div class="sidebar-section">More</div>
+      <ng-container *ngFor="let link of moreLinks">
+        <a *ngIf="link.href" [href]="link.href" target="_blank" rel="noopener noreferrer" class="side-link">
+          <lucide-icon [name]="link.icon"></lucide-icon> {{ link.label }}
         </a>
-      </li>
-      <li nz-menu-item *ngIf="link.route" [routerLink]="link.route" class="menu-row">
-        <nz-icon [nzType]="link.icon" nzTheme="outline" /> {{ link.label }}
-      </li>
-    </ng-container>
-  </ul>
-</nz-dropdown-menu>
+        <a *ngIf="link.route" [routerLink]="link.route" routerLinkActive="active" class="side-link">
+          <lucide-icon [name]="link.icon"></lucide-icon> {{ link.label }}
+        </a>
+        <a *ngIf="link.action === 'newsletter'" class="side-link" role="button" tabindex="0"
+           (click)="openNewsletter()" (keydown.enter)="openNewsletter()">
+          <lucide-icon [name]="link.icon"></lucide-icon> {{ link.label }}
+        </a>
+      </ng-container>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="store-badges">
+        <a [href]="storeLinks.ios" target="_blank" rel="noopener noreferrer" aria-label="Download on the App Store">
+          <img src="assets/images/web/app-store-badge.png" alt="Download on the App Store" width="498" height="150">
+        </a>
+        <a [href]="storeLinks.android" target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play">
+          <img src="assets/images/web/google-play-badge.png" alt="Get it on Google Play" width="564" height="168">
+        </a>
+      </div>
+      <button type="button" class="side-auth" (click)="logout()">
+        <lucide-icon [name]="userRole == null ? 'log-in' : 'log-out'"></lucide-icon>
+        {{ userRole == null ? 'Login' : 'Logout' }}
+      </button>
+    </div>
+  </aside>
+
+  <div class="app-content">
+    <!-- ============ Header ============ -->
+    <header class="app-header">
+      <button type="button" class="menu-btn" (click)="drawerOpen = true" aria-label="Open menu">
+        <lucide-icon name="menu"></lucide-icon>
+      </button>
+
+      <a class="brand" routerLink="dashboard" aria-label="The Qur'an Project – Home">
+        <img src="assets/images/web/white-logo.webp" alt="The Quran Project" width="250" height="37">
+      </a>
+
+      <!-- Search (single instance; moves to its own row on phones) -->
+      <div class="header-search">
+        <nz-input-group [nzPrefix]="searchIcon" class="search-group">
+          <input
+            nz-input
+            class="search-input"
+            placeholder="Search Surah, Verse, or Text..."
+            aria-label="Search the Qur'an"
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="onSearchChange($event)"
+            (focus)="fetchQuranData()"
+            [nzAutocomplete]="autoComplete"
+          />
+        </nz-input-group>
+        <ng-template #searchIcon>
+          <lucide-icon name="search" class="search-icon"></lucide-icon>
+        </ng-template>
+        <nz-autocomplete #autoComplete nzOverlayClassName="qp-search-panel">
+          <nz-auto-option
+            *ngFor="let suggestion of searchSuggestions"
+            [nzValue]="suggestion.text"
+            (selectionChange)="$event.isUserInput && selectSuggestion(suggestion)"
+          >
+            {{ suggestion.text }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </div>
+
+      <div class="header-actions">
+        <a class="profile-chip" nz-dropdown nzTrigger="click" [nzDropdownMenu]="profileMenu" nzPlacement="bottomRight">
+          <span class="avatar">
+            <img *ngIf="userdata?.profilePhoto; else initialsTpl" [src]="file" alt="Profile photo">
+            <ng-template #initialsTpl>{{ initials }}</ng-template>
+          </span>
+          <span class="profile-name">{{ displayName }}</span>
+          <lucide-icon name="chevron-down" class="nav-caret"></lucide-icon>
+        </a>
+      </div>
+    </header>
+
+    <!-- ============ Page content ============ -->
+    <main class="app-main">
+      <div class="page-surface" #pageSurface>
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+</div>
 
 <nz-dropdown-menu #profileMenu="nzDropdownMenu">
   <ul nz-menu>
     <li nz-menu-item routerLink="profile" *ngIf="isLoggedIn" class="menu-row">
-      <nz-icon nzType="user" nzTheme="outline" /> Profile
+      <lucide-icon name="user"></lucide-icon> Profile
     </li>
     <li nz-menu-item (click)="logout()" class="menu-row">
-      <nz-icon [nzType]="userRole == null ? 'login' : 'logout'" nzTheme="outline" />
+      <lucide-icon [name]="userRole == null ? 'log-in' : 'log-out'"></lucide-icon>
       {{ userRole == null ? 'Login' : 'Logout' }}
     </li>
   </ul>
 </nz-dropdown-menu>
 
-<!-- ============ Mobile drawer ============ -->
-<div class="drawer-overlay" [class.open]="drawerOpen" (click)="drawerOpen = false"></div>
-<aside class="drawer" [class.open]="drawerOpen" [attr.aria-hidden]="!drawerOpen" aria-label="Menu">
-  <div class="drawer-head">
-    <span class="avatar avatar-lg">
-      <img *ngIf="userdata?.profilePhoto; else drawerInitials" [src]="file" alt="Profile photo">
-      <ng-template #drawerInitials>{{ initials }}</ng-template>
-    </span>
-    <div class="drawer-user">
-      <strong>{{ userRole == null ? 'Welcome' : displayName }}</strong>
-      <span>{{ isLoggedIn ? 'Signed in' : 'Browsing as guest' }}</span>
-    </div>
-    <button type="button" class="drawer-close" (click)="drawerOpen = false" aria-label="Close menu">
-      <nz-icon nzType="close" />
-    </button>
-  </div>
-
-  <nav class="drawer-nav">
-    <a routerLink="dashboard" routerLinkActive="active" class="drawer-link">
-      <nz-icon nzType="home" nzTheme="outline" /> Home
-    </a>
-    <a routerLink="chapters" routerLinkActive="active" class="drawer-link">
-      <nz-icon nzType="book" nzTheme="outline" /> Surahs
-    </a>
-    <a routerLink="aboutus" routerLinkActive="active" class="drawer-link">
-      <nz-icon nzType="team" nzTheme="outline" /> About Us
-    </a>
-    <a *ngIf="isLoggedIn" routerLink="collection" routerLinkActive="active" class="drawer-link">
-      <nz-icon nzType="folder" nzTheme="outline" /> Saved
-    </a>
-    <a *ngIf="isLoggedIn" routerLink="profile" routerLinkActive="active" class="drawer-link">
-      <nz-icon nzType="user" nzTheme="outline" /> Profile
-    </a>
-
-    <div class="drawer-section">More</div>
-    <ng-container *ngFor="let link of moreLinks">
-      <a *ngIf="link.href" [href]="link.href" target="_blank" rel="noopener noreferrer" class="drawer-link">
-        <nz-icon [nzType]="link.icon" nzTheme="outline" /> {{ link.label }}
-      </a>
-      <a *ngIf="link.route" [routerLink]="link.route" routerLinkActive="active" class="drawer-link">
-        <nz-icon [nzType]="link.icon" nzTheme="outline" /> {{ link.label }}
-      </a>
-    </ng-container>
-  </nav>
-
-  <div class="drawer-foot">
-    <button type="button" class="qp-btn qp-btn-soft drawer-auth" (click)="logout()">
-      <nz-icon [nzType]="userRole == null ? 'login' : 'logout'" nzTheme="outline" />
-      {{ userRole == null ? 'Login' : 'Logout' }}
-    </button>
-  </div>
-</aside>
+<!-- ============ Newsletter modal ============ -->
+<nz-modal
+  [(nzVisible)]="newsletterOpen"
+  nzTitle="Subscribe to our Newsletter"
+  [nzFooter]="null"
+  [nzCentered]="true"
+  [nzWidth]="420"
+  (nzOnCancel)="closeNewsletter()">
+  <ng-container *nzModalContent>
+    <form class="newsletter-form" (ngSubmit)="submitNewsletter()" novalidate>
+      <p class="newsletter-text">Enter your email to get updates from The Qur'an Project.</p>
+      <input
+        nz-input
+        type="email"
+        name="newsletterEmail"
+        autocomplete="email"
+        placeholder="your@email.com"
+        [(ngModel)]="newsletterEmail"
+        [disabled]="newsletterSubmitting" />
+      <div class="newsletter-error" *ngIf="newsletterError">{{ newsletterError }}</div>
+      <button type="submit" class="qp-btn qp-btn-primary newsletter-submit" [disabled]="newsletterSubmitting">
+        <lucide-icon [name]="newsletterSubmitting ? 'loader-circle' : 'mail'" [class.spin]="newsletterSubmitting"></lucide-icon>
+        {{ newsletterSubmitting ? 'Subscribing...' : 'Subscribe' }}
+      </button>
+    </form>
+  </ng-container>
+</nz-modal>

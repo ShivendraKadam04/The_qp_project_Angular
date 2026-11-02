@@ -1,10 +1,10 @@
 <div class="appendix-page content-container">
   <div class="appendix-toolbar">
     <a class="appendix-back" routerLink="/quran/dashboard">
-      <nz-icon nzType="arrow-left" /> Home
+      <lucide-icon name="arrow-left"></lucide-icon> Home
     </a>
     <button *ngIf="isAdmin && !editing && !loading && content" type="button" class="admin-edit" (click)="startEdit()" title="Edit" aria-label="Edit appendix">
-      <span nz-icon nzType="edit" nzTheme="outline"></span>
+      <lucide-icon name="pencil"></lucide-icon>
     </button>
   </div>
 

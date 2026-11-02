@@ -191,7 +191,7 @@
   color: #fff;
 }
 
-.contact-item nz-icon {
+.contact-item lucide-icon {
   font-size: 22px;
   color: var(--qp-gold);
 }

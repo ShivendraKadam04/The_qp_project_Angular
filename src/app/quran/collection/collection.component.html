@@ -5,7 +5,7 @@
       <p class="qp-page-subtitle">Your collections of saved verses</p>
     </div>
     <button class="qp-btn qp-btn-primary" (click)="showModal()">
-      <nz-icon nzType="folder-add" nzTheme="outline" /> New Collection
+      <lucide-icon name="folder-plus"></lucide-icon> New Collection
     </button>
   </div>
 
@@ -19,7 +19,7 @@
       <span>No collection, add one</span>
     </ng-template>
     <button class="qp-btn qp-btn-soft" (click)="showModal()">
-      <nz-icon nzType="folder-add" nzTheme="outline" /> Create your first collection
+      <lucide-icon name="folder-plus"></lucide-icon> Create your first collection
     </button>
   </div>
 
@@ -27,7 +27,7 @@
   <div *ngIf="!isLoading && collectionsLength > 0" class="collection-grid">
     <div class="qp-card collection-card" *ngFor="let collection of collections" (click)="showVerses(collection)">
       <div class="folder-icon">
-        <nz-icon nzType="folder" nzTheme="outline" />
+        <lucide-icon name="folder"></lucide-icon>
       </div>
       <div class="collection-info">
         <h3>{{ collection.collectionName }}</h3>
@@ -40,7 +40,7 @@
         aria-label="Delete collection"
         (click)="$event.stopPropagation(); deleteCollection(collection.collectionName)"
       >
-        <nz-icon nzType="delete" nzTheme="outline" />
+        <lucide-icon name="trash-2"></lucide-icon>
       </button>
     </div>
   </div>
@@ -92,7 +92,7 @@
             aria-label="Remove verse"
             (click)="deleteVerse(verse, selectedCollection.collectionName)"
           >
-            <nz-icon nzType="delete" nzTheme="outline" />
+            <lucide-icon name="trash-2"></lucide-icon>
           </button>
         </div>
         <p>{{ verse.versesText }}</p>

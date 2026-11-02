@@ -405,7 +405,7 @@
   text-overflow: ellipsis;
 }
 
-.collection-item nz-icon {
+.collection-item lucide-icon {
   color: var(--qp-gold-dark);
 }
 

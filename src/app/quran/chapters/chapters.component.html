@@ -5,13 +5,13 @@
       <div class="surah-panel-title">
         <h3>Surahs</h3>
         <button type="button" class="qp-icon-btn panel-close" (click)="surahListOpen = false" aria-label="Close surah list">
-          <nz-icon nzType="close" />
+          <lucide-icon name="x"></lucide-icon>
         </button>
       </div>
       <nz-input-group [nzPrefix]="filterIcon" class="surah-filter">
         <input nz-input [(ngModel)]="surahFilter" placeholder="Find a surah..." aria-label="Filter surahs" />
       </nz-input-group>
-      <ng-template #filterIcon><nz-icon nzType="search" class="filter-icon" /></ng-template>
+      <ng-template #filterIcon><lucide-icon name="search" class="filter-icon"></lucide-icon></ng-template>
     </div>
 
     <ul class="surah-list">
@@ -34,7 +34,7 @@
   <section class="reader-main" #contentContainer>
     <div class="reader-toolbar" *ngIf="selectedSurah">
       <button type="button" class="list-toggle" (click)="surahListOpen = true" aria-label="Open surah list">
-        <nz-icon nzType="unordered-list" /> <span>Surahs</span>
+        <lucide-icon name="list"></lucide-icon> <span>Surahs</span>
       </button>
 
       <div class="toolbar-title">
@@ -44,10 +44,10 @@
 
       <div class="toolbar-nav">
         <button type="button" class="qp-icon-btn nav-arrow" [disabled]="isFirstSurah" (click)="goToAdjacentSurah(-1)" aria-label="Previous surah" title="Previous surah">
-          <nz-icon nzType="left" />
+          <lucide-icon name="chevron-left"></lucide-icon>
         </button>
         <button type="button" class="qp-icon-btn nav-arrow" [disabled]="isLastSurah" (click)="goToAdjacentSurah(1)" aria-label="Next surah" title="Next surah">
-          <nz-icon nzType="right" />
+          <lucide-icon name="chevron-right"></lucide-icon>
         </button>
       </div>
     </div>
@@ -96,10 +96,10 @@
                   nzPopoverPlacement="bottomRight"
                   [nzPopoverContent]="footnotesTemplate"
                 >
-                  <nz-icon nzType="info-circle" nzTheme="outline" />
+                  <lucide-icon name="info"></lucide-icon>
                 </button>
                 <button type="button" class="qp-icon-btn" title="Save to collection" aria-label="Save verse to collection" (click)="openCollectionModal(verse)">
-                  <nz-icon nzType="heart" nzTheme="outline" />
+                  <lucide-icon name="heart"></lucide-icon>
                 </button>
             </div>
 
@@ -116,11 +116,11 @@
         <!-- Bottom prev / next -->
         <div class="reader-footer">
           <button type="button" class="qp-btn qp-btn-soft" *ngIf="!isFirstSurah" (click)="goToAdjacentSurah(-1)">
-            <nz-icon nzType="left" /> Previous Surah
+            <lucide-icon name="chevron-left"></lucide-icon> Previous Surah
           </button>
           <span class="spacer"></span>
           <button type="button" class="qp-btn qp-btn-primary" *ngIf="!isLastSurah" (click)="goToAdjacentSurah(1)">
-            Next Surah <nz-icon nzType="right" />
+            Next Surah <lucide-icon name="chevron-right"></lucide-icon>
           </button>
         </div>
       </ng-container>
@@ -146,9 +146,9 @@
     </p>
     <ul *ngIf="collections.length > 0; else noCollections" class="collection-list">
       <li *ngFor="let collection of collections" (click)="saveToCollection(collection)" class="collection-item">
-        <nz-icon nzType="folder" nzTheme="outline" />
+        <lucide-icon name="folder"></lucide-icon>
         <span>{{ collection }}</span>
-        <nz-icon nzType="right" class="collection-go" />
+        <lucide-icon name="chevron-right" class="collection-go"></lucide-icon>
       </li>
     </ul>
     <ng-template #noCollections>
@@ -156,7 +156,7 @@
     </ng-template>
     <div class="modal-actions">
       <button class="qp-btn qp-btn-soft" (click)="openCreateCollectionModal()">
-        <nz-icon nzType="folder-add" nzTheme="outline" /> New Collection
+        <lucide-icon name="folder-plus"></lucide-icon> New Collection
       </button>
     </div>
   </ng-container>

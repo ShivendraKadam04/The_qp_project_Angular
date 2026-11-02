@@ -74,12 +74,12 @@
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
 }
 
-.hero-card-overlay h2 nz-icon {
+.hero-card-overlay h2 lucide-icon {
   color: var(--qp-gold);
   transition: transform 0.3s;
 }
 
-.hero-card:hover .hero-card-overlay h2 nz-icon {
+.hero-card:hover .hero-card-overlay h2 lucide-icon {
   transform: translateX(4px);
 }
 

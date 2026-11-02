@@ -9,7 +9,7 @@
     <a class="hero-card" routerLink="/quran/chapters" aria-label="Open The Qur'an">
       <img src="assets/images/web/qp-main.webp" alt="The Qur'an Project" fetchpriority="high" />
       <div class="hero-card-overlay">
-        <h2>The Qur'an <nz-icon nzType="arrow-right" nzTheme="outline" /></h2>
+        <h2>The Qur'an <lucide-icon name="arrow-right"></lucide-icon></h2>
         <span class="tap-to-read">Tap to Read</span>
       </div>
     </a>
@@ -18,7 +18,7 @@
   <!-- ============ Explore ============ -->
   <section class="explore">
     <button type="button" class="arrow-btn" [disabled]="isAtStart" (click)="scrollLeft()" aria-label="Scroll left">
-      <nz-icon nzType="left" nzTheme="outline" />
+      <lucide-icon name="chevron-left"></lucide-icon>
     </button>
 
     <div class="explore-track" #scrollWrapper (scroll)="checkScroll()">
@@ -35,7 +35,7 @@
     </div>
 
     <button type="button" class="arrow-btn" [disabled]="isAtEnd" (click)="scrollRight()" aria-label="Scroll right">
-      <nz-icon nzType="right" nzTheme="outline" />
+      <lucide-icon name="chevron-right"></lucide-icon>
     </button>
   </section>
 </div>

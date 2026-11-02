@@ -5,6 +5,12 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { QuranComponent } from './quran/quran.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import {
+  LucideAngularModule, ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronLeft, ChevronRight,
+  CircleCheck, CircleX, Download, Eye, EyeOff, Folder, FolderPlus, Globe, Heart, House, Info,
+  Instagram, List, LoaderCircle, LogIn, LogOut, Mail, Menu, MessageCircle, Pencil, Search,
+  Send, Trash2, Upload, User, Users, X
+} from 'lucide-angular';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { ChaptersComponent } from './chapters/chapters.component';
@@ -54,7 +60,13 @@ import { RichTextEditorComponent } from './rich-text-editor/rich-text-editor.com
     NzModalModule,
     NzCheckboxModule,
     NzBreadCrumbModule,
-    NzIconModule,
+    NzIconModule, // still needed by ng-zorro's own components (modal, message, select, ...)
+    LucideAngularModule.pick({
+      ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronLeft, ChevronRight, CircleCheck, CircleX,
+      Download, Eye, EyeOff, Folder, FolderPlus, Globe, Heart, House, Info, Instagram, List,
+      LoaderCircle, LogIn, LogOut, Mail, Menu, MessageCircle, Pencil, Search, Send, Trash2,
+      Upload, User, Users, X
+    }),
     NzMenuModule,
     NzDropDownModule,
     NzLayoutModule,

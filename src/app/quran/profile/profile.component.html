@@ -15,7 +15,7 @@
           <span *ngIf="!userForm.value.profilePhoto">{{ userInitials }}</span>
         </div>
         <label for="avatar-input-file" class="edit-icon" title="Change photo">
-          <nz-icon nzType="edit" nzTheme="outline" />
+          <lucide-icon name="pencil"></lucide-icon>
         </label>
         <input type="file" id="avatar-input-file" (change)="onFileSelected($event)" accept="image/*" hidden />
       </div>
@@ -116,13 +116,13 @@
             </div>
           </form>
           <ng-template #suffixTemplate1>
-            <nz-icon class="eye" [nzType]="passwordVisible1 ? 'eye-invisible' : 'eye'" (click)="passwordVisible1 = !passwordVisible1" />
+            <lucide-icon class="eye" [name]="passwordVisible1 ? 'eye-off' : 'eye'" (click)="passwordVisible1 = !passwordVisible1"></lucide-icon>
           </ng-template>
           <ng-template #suffixTemplate2>
-            <nz-icon class="eye" [nzType]="passwordVisible2 ? 'eye-invisible' : 'eye'" (click)="passwordVisible2 = !passwordVisible2" />
+            <lucide-icon class="eye" [name]="passwordVisible2 ? 'eye-off' : 'eye'" (click)="passwordVisible2 = !passwordVisible2"></lucide-icon>
           </ng-template>
           <ng-template #suffixTemplate3>
-            <nz-icon class="eye" [nzType]="passwordVisible3 ? 'eye-invisible' : 'eye'" (click)="passwordVisible3 = !passwordVisible3" />
+            <lucide-icon class="eye" [name]="passwordVisible3 ? 'eye-off' : 'eye'" (click)="passwordVisible3 = !passwordVisible3"></lucide-icon>
           </ng-template>
         </nz-tab>
       </nz-tabset>

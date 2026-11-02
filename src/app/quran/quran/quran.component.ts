@@ -4,6 +4,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 import { QuranService } from '../../services/quran.service';
 import { SearchService } from '../../services/search.service';
+import { NewsletterService } from '../../services/newsletter.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-quran',
@@ -31,21 +33,65 @@ export class QuranComponent implements OnInit, OnDestroy {
   // Rendering thousands of autocomplete rows freezes the page on short queries.
   private readonly maxSuggestions = 50;
 
-  readonly moreLinks: { label: string; icon: string; href?: string; route?: string }[] = [
-    { label: 'Order Free Copy', icon: 'book', href: 'https://www.quranproject.org/The-Quran-Project-1-p' },
+  readonly moreLinks: { label: string; icon: string; href?: string; route?: string; action?: 'newsletter' }[] = [
+    { label: 'Order Free Copy', icon: 'book-open', href: 'https://www.quranproject.org/The-Quran-Project-1-p' },
     { label: 'Make a Donation', icon: 'heart', href: 'https://www.quranproject.org/donations' },
     { label: 'Download PDF', icon: 'download', href: 'https://www.quranproject.org/go_files/pdf/Online-Version-9th-Edition.pdf' },
-    { label: 'Feedback', icon: 'message', route: 'feedback' },
-    { label: 'Play Store - Android', icon: 'google', href: 'https://play.google.com/store/apps/details?id=com.thequranproject' },
-    { label: 'iOS - Apple', icon: 'apple', href: 'https://apps.apple.com/in/app/quran-project/id525443558' }
+    { label: 'Feedback', icon: 'message-circle', route: 'feedback' },
+    { label: 'Newsletter', icon: 'mail', action: 'newsletter' }
   ];
+
+  readonly storeLinks = {
+    android: 'https://play.google.com/store/apps/details?id=com.thequranproject',
+    ios: 'https://apps.apple.com/in/app/quran-project/id525443558'
+  };
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private quranService: QuranService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private newsletterService: NewsletterService,
+    private message: NzMessageService
   ) {}
+
+  // ----- Newsletter modal -----
+  newsletterOpen = false;
+  newsletterEmail = '';
+  newsletterSubmitting = false;
+  newsletterError = '';
+
+  openNewsletter() {
+    this.drawerOpen = false;
+    this.newsletterEmail = '';
+    this.newsletterError = '';
+    this.newsletterOpen = true;
+  }
+
+  closeNewsletter() {
+    this.newsletterOpen = false;
+  }
+
+  submitNewsletter() {
+    const email = this.newsletterEmail.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) {
+      this.newsletterError = 'Please enter a valid email address.';
+      return;
+    }
+    this.newsletterError = '';
+    this.newsletterSubmitting = true;
+    this.newsletterService.subscribe(email, 'web').subscribe({
+      next: (res: any) => {
+        this.newsletterSubmitting = false;
+        this.newsletterOpen = false;
+        this.message.success(res?.message || 'Thank you for subscribing!');
+      },
+      error: (err) => {
+        this.newsletterSubmitting = false;
+        this.newsletterError = err?.error?.message || 'Could not subscribe. Please try again.';
+      }
+    });
+  }
 
   ngOnInit() {
     this.userId = this.authService.getUserId();

@@ -38,7 +38,7 @@ export class QuranComponent implements OnInit, OnDestroy {
     { label: 'Make a Donation', icon: 'heart', href: 'https://www.quranproject.org/donations' },
     { label: 'Download PDF', icon: 'download', href: 'https://www.quranproject.org/go_files/pdf/Online-Version-9th-Edition.pdf' },
     { label: 'Feedback', icon: 'message-circle', route: 'feedback' },
-    { label: 'Newsletter', icon: 'mail', action: 'newsletter' }
+    { label: 'Join Our Newsletter', icon: 'mail', action: 'newsletter' }
   ];
 
   readonly storeLinks = {

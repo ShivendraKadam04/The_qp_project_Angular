@@ -26,6 +26,7 @@ export class ChaptersComponent implements OnInit, OnDestroy {
     { value: 'danish', label: 'Dansk' },
     { value: 'russian', label: 'Русский' }
   ];
+  isAdmin = false; // language dropdown is admin-only while in testing
   selectedLanguage: string = ChaptersComponent.loadSavedLanguage();
   userId: any;
   collections: string[] = [];
@@ -148,8 +149,12 @@ ngOnInit() {
       .pipe(takeUntil(this.destroy$))
       .subscribe(({ surahNo, verseNo }) => this.handleSearch(surahNo, verseNo));
 
-    if (this.authService.hasAccount()) {
-      // Logged-in users get the language saved on their account.
+    // Language switching is still in testing: only admins can use it, everyone else reads English.
+    this.isAdmin = this.authService.isAdmin();
+    if (!this.isAdmin) this.selectedLanguage = 'english';
+
+    if (this.isAdmin && this.authService.hasAccount()) {
+      // Admins get the language saved on their account.
       this.loading = true;
       this.authService.getPreferredLanguage().pipe(takeUntil(this.destroy$)).subscribe({
         next: (res) => {
@@ -360,7 +365,7 @@ scrollToVerse(verseNo: number) {
   }
 
   changeLanguage(lang: string) {
-    if (!lang || lang === this.selectedLanguage) return;
+    if (!this.isAdmin || !lang || lang === this.selectedLanguage) return;
     this.selectedLanguage = lang;
     try { localStorage.setItem('quran_lang', lang); } catch { /* storage unavailable */ }
     if (this.authService.hasAccount()) {

@@ -49,7 +49,7 @@
         <h2>{{ selectedSurah.surahName }}</h2>
       </div>
 
-      <nz-select class="lang-select" [ngModel]="selectedLanguage" (ngModelChange)="changeLanguage($event)" aria-label="Translation language">
+      <nz-select *ngIf="isAdmin" class="lang-select" [ngModel]="selectedLanguage" (ngModelChange)="changeLanguage($event)" aria-label="Translation language">
         <nz-option *ngFor="let l of languages" [nzValue]="l.value" [nzLabel]="l.label"></nz-option>
       </nz-select>
 

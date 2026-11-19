@@ -22,7 +22,8 @@ export class LanguageService {
   /** Language the header search should use right now. */
   searchLanguage(): Observable<string> {
     const userId = this.authService.getUserId();
-    if (!userId || !this.authService.hasAccount()) return of('english');
+    // Language switching is admin-only for now; everyone else searches English.
+    if (!userId || !this.authService.hasAccount() || !this.authService.isAdmin()) return of('english');
     if (this.cache?.userId === userId) return of(this.cache.lang);
 
     return this.authService.getPreferredLanguage().pipe(

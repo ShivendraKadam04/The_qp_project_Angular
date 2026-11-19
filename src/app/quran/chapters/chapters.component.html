@@ -42,6 +42,10 @@
         <h2>{{ selectedSurah.surahName }}</h2>
       </div>
 
+      <nz-select class="lang-select" [ngModel]="selectedLanguage" (ngModelChange)="changeLanguage($event)" aria-label="Translation language">
+        <nz-option *ngFor="let l of languages" [nzValue]="l.value" [nzLabel]="l.label"></nz-option>
+      </nz-select>
+
       <div class="toolbar-nav">
         <button type="button" class="qp-icon-btn nav-arrow" [disabled]="isFirstSurah" (click)="goToAdjacentSurah(-1)" aria-label="Previous surah" title="Previous surah">
           <lucide-icon name="chevron-left"></lucide-icon>

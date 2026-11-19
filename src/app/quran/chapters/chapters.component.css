@@ -549,3 +549,8 @@
     font-size: 14px;
   }
 }
+
+.lang-select {
+  width: 120px;
+  flex-shrink: 0;
+}

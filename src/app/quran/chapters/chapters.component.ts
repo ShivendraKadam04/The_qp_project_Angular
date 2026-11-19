@@ -17,7 +17,15 @@ import { SearchService } from '../../services/search.service';
 export class ChaptersComponent implements OnInit, OnDestroy {
   quranData: any[] = [];
   selectedSurah: any = null;
-  selectedLanguage: string = 'english';
+  readonly languages = [
+    { value: 'english', label: 'English' },
+    { value: 'arabic', label: 'العربية' },
+    { value: 'spanish', label: 'Español' },
+    { value: 'romanian', label: 'Română' },
+    { value: 'danish', label: 'Dansk' },
+    { value: 'russian', label: 'Русский' }
+  ];
+  selectedLanguage: string = ChaptersComponent.loadSavedLanguage();
   userId: any;
   collections: string[] = [];
   isCollectionModalVisible = false;
@@ -26,7 +34,6 @@ export class ChaptersComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   targetVerseNo: number | null = null;
   userRole: any;
-  lang = 'english';
   collectionForm: FormGroup;
   highlightedVerse: number | null = null; // Track the highlighted verse
   surahListOpen = false; // Slide-in surah list on tablets / phones
@@ -110,7 +117,7 @@ export class ChaptersComponent implements OnInit, OnDestroy {
     }
 
     const { collectionName } = this.collectionForm.value;
-    this.quranService.createCollection(this.userId, this.lang, collectionName).subscribe({
+    this.quranService.createCollection(this.userId, this.selectedLanguage, collectionName).subscribe({
       next: (res: { message: any }) => {
         this.message.success(res.message || 'Collection created successfully');
         this.collectionForm.reset({ lang: 'en' });
@@ -224,6 +231,10 @@ openCollectionModal(verse: any) {
       next: (response) => {
         this.loading = false;
         if (!response.success) return;
+        if (!response.data?.length) {
+          this.message.warning('This language has not been added yet.');
+          return;
+        }
 
         // Copy instead of mutating: the response is cached and shared with search,
         // and mutating it would wrap the numbers in <sup> again on every visit.
@@ -321,8 +332,14 @@ scrollToVerse(verseNo: number) {
     audio.play();
   }
 
+  private static loadSavedLanguage(): string {
+    try { return localStorage.getItem('quran_lang') || 'english'; } catch { return 'english'; }
+  }
+
   changeLanguage(lang: string) {
+    if (!lang || lang === this.selectedLanguage) return;
     this.selectedLanguage = lang;
+    try { localStorage.setItem('quran_lang', lang); } catch { /* storage unavailable */ }
     this.fetchQuranData();
   }
 

@@ -14,7 +14,14 @@
       <ng-template #filterIcon><lucide-icon name="search" class="filter-icon"></lucide-icon></ng-template>
     </div>
 
-    <ul class="surah-list">
+    <ul class="surah-list" *ngIf="loading">
+      <li *ngFor="let n of skeletonRows" class="surah-item skeleton-row">
+        <span class="sk sk-circle"></span>
+        <span class="sk sk-line"></span>
+      </li>
+    </ul>
+
+    <ul class="surah-list" *ngIf="!loading">
       <li
         *ngFor="let surah of filteredSurahs; trackBy: trackBySurah"
         class="surah-item"
@@ -76,8 +83,19 @@
           </nz-collapse-panel>
         </nz-collapse>
 
+        <!-- Verses skeleton while a language is loading -->
+        <div class="verses-container" *ngIf="loading" aria-busy="true" aria-label="Loading verses">
+          <article *ngFor="let n of skeletonRows.slice(0, 6)" class="verse-card skeleton-card">
+            <span class="sk sk-circle"></span>
+            <div class="sk-lines">
+              <span class="sk sk-line"></span>
+              <span class="sk sk-line short"></span>
+            </div>
+          </article>
+        </div>
+
         <!-- Verses -->
-        <div class="verses-container">
+        <div class="verses-container" *ngIf="!loading">
           <article
             *ngFor="let verse of selectedSurah?.verses; trackBy: trackByVerse"
             class="verse-card"

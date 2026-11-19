@@ -497,3 +497,38 @@
   width: 100%;
   justify-content: center;
 }
+
+/* ---------------- Collapsible sidebar (desktop only) ---------------- */
+.sidebar-collapse {
+  display: none;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.sidebar-collapse:hover { background: rgba(224, 188, 94, 0.25); }
+
+@media (min-width: 1200px) {
+  .sidebar { transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; }
+  .sidebar-collapse { display: inline-flex; }
+
+  .sidebar.collapsed { width: 76px; }
+  .sidebar.collapsed .sidebar-head { justify-content: center; padding: 0; }
+  .sidebar.collapsed .sidebar-brand { display: none; }
+  .sidebar.collapsed .sidebar-nav { padding: 10px 10px 14px; align-items: stretch; }
+  .sidebar.collapsed .sidebar-section { height: 1px; margin: 12px 10px; padding: 0; background: rgba(255, 255, 255, 0.12); }
+  .sidebar.collapsed .sidebar-section .lbl { display: none; }
+  .sidebar.collapsed .side-link { justify-content: center; padding: 12px 0; gap: 0; }
+  .sidebar.collapsed .side-link .lbl { display: none; }
+  .sidebar.collapsed .side-link.active::before { left: -10px; }
+  .sidebar.collapsed .sidebar-foot { padding: 14px 10px 18px; }
+  .sidebar.collapsed .side-auth { gap: 0; }
+  .sidebar.collapsed .side-auth .lbl { display: none; }
+}

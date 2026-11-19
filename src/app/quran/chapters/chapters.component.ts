@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { SearchService } from '../../services/search.service';
+import { LanguageService } from '../../services/language.service';
 @Component({
   selector: 'app-chapters',
   standalone: false,
@@ -32,6 +33,7 @@ export class ChaptersComponent implements OnInit, OnDestroy {
   isModalVisible = false;
   selectedVerse: any = null;
   loading: boolean = false;
+  readonly skeletonRows = Array.from({ length: 10 });
   targetVerseNo: number | null = null;
   userRole: any;
   collectionForm: FormGroup;
@@ -52,7 +54,8 @@ export class ChaptersComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private message: NzMessageService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private languageService: LanguageService
   ) {
     this.collectionForm = this.fb.group({
       collectionName: ['', [Validators.required, Validators.minLength(3)]]
@@ -144,6 +147,26 @@ ngOnInit() {
     this.searchService.search$
       .pipe(takeUntil(this.destroy$))
       .subscribe(({ surahNo, verseNo }) => this.handleSearch(surahNo, verseNo));
+
+    if (this.authService.hasAccount()) {
+      // Logged-in users get the language saved on their account.
+      this.loading = true;
+      this.authService.getPreferredLanguage().pipe(takeUntil(this.destroy$)).subscribe({
+        next: (res) => {
+          if (res?.language && this.languages.some(l => l.value === res.language)) {
+            this.selectedLanguage = res.language;
+            try { localStorage.setItem('quran_lang', res.language); } catch { /* ignore */ }
+          }
+          if (res?.language) {
+            this.languageService.remember(this.selectedLanguage);
+          }
+          this.fetchQuranData();
+          this.fetchCollections();
+        },
+        error: () => { this.fetchQuranData(); this.fetchCollections(); }
+      });
+      return;
+    }
 
     this.fetchQuranData();
     if (this.userId) this.fetchCollections();
@@ -340,6 +363,12 @@ scrollToVerse(verseNo: number) {
     if (!lang || lang === this.selectedLanguage) return;
     this.selectedLanguage = lang;
     try { localStorage.setItem('quran_lang', lang); } catch { /* storage unavailable */ }
+    if (this.authService.hasAccount()) {
+      this.languageService.remember(lang);
+      this.authService.savePreferredLanguage(lang).pipe(takeUntil(this.destroy$)).subscribe({
+        error: () => console.warn('Could not save language preference')
+      });
+    }
     this.fetchQuranData();
   }
 

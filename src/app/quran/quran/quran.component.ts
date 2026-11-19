@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 import { QuranService } from '../../services/quran.service';
 import { SearchService } from '../../services/search.service';
+import { LanguageService } from '../../services/language.service';
 import { NewsletterService } from '../../services/newsletter.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
@@ -28,6 +29,18 @@ export class QuranComponent implements OnInit, OnDestroy {
   searchSuggestions: { text: string; surahNo: number; verseNo?: number }[] = [];
   quranData: any[] = [];
   private quranDataRequested = false;
+  collapsed = QuranComponent.loadCollapsed(); // desktop icon-only sidebar
+
+  private static loadCollapsed(): boolean {
+    try { return localStorage.getItem('quran_sidebar_collapsed') === '1'; } catch { return false; }
+  }
+
+  toggleCollapsed() {
+    this.collapsed = !this.collapsed;
+    try { localStorage.setItem('quran_sidebar_collapsed', this.collapsed ? '1' : '0'); } catch { /* ignore */ }
+  }
+
+  private searchLang = ''; // language of the text currently loaded for search
   private routerSub?: Subscription;
 
   // Rendering thousands of autocomplete rows freezes the page on short queries.
@@ -51,6 +64,7 @@ export class QuranComponent implements OnInit, OnDestroy {
     private router: Router,
     private quranService: QuranService,
     private searchService: SearchService,
+    private languageService: LanguageService,
     private newsletterService: NewsletterService,
     private message: NzMessageService
   ) {}
@@ -151,12 +165,13 @@ export class QuranComponent implements OnInit, OnDestroy {
     });
   }
 
-  fetchQuranData() {
+  fetchQuranData(lang: string = 'english') {
     if (this.quranDataRequested) return;
     this.quranDataRequested = true;
-    this.quranService.getQuranData('english').subscribe({
+    this.quranService.getQuranData(lang).subscribe({
       next: (response) => {
-        if (response.success) {
+        this.quranDataRequested = false;
+        if (response.success && response.data?.length && lang === this.searchLang) {
           this.quranData = response.data;
           // Re-run the search for whatever was typed while the data was loading.
           if (this.searchQuery.length >= 2) this.onSearchChange(this.searchQuery);
@@ -174,11 +189,24 @@ onSearchChange(query: string) {
     this.searchSuggestions = [];
 
     if (query.length < 2) return;
-    if (!this.quranData.length) {
-      this.fetchQuranData();
-      return;
-    }
 
+    // Logged-in users search their saved language; everyone else searches English.
+    this.languageService.searchLanguage().subscribe(lang => {
+      if (lang !== this.searchLang) {
+        this.searchLang = lang;
+        this.quranData = [];
+        this.quranDataRequested = false;
+      }
+      if (!this.quranData.length) {
+        this.fetchQuranData(lang);
+        return;
+      }
+      this.runSearch(this.searchQuery);
+    });
+  }
+
+  private runSearch(query: string) {
+    if (query.length < 2) return;
     const lowerQuery = query.toLowerCase();
     const suggestions: { text: string; surahNo: number; verseNo?: number }[] = [];
 

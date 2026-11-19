@@ -59,6 +59,23 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/update-profile`, formData);
   }
 
+  /** True for a real (non-guest) logged-in user. */
+  hasAccount(): boolean {
+    return this.isLoggedIn() && this.getUserRole() !== 'guestuser' && sessionStorage.getItem('isGuest') !== 'true';
+  }
+
+  getPreferredLanguage(): Observable<{ success: boolean; language: string }> {
+    return this.http.get<any>(`${this.apiUrl}/auth/language`, { headers: this.authHeaders() });
+  }
+
+  savePreferredLanguage(language: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/auth/language`, { language }, { headers: this.authHeaders() });
+  }
+
+  private authHeaders(): HttpHeaders {
+    return new HttpHeaders({ Authorization: `Bearer ${this.getToken()}` });
+  }
+
   updateUserAddress(addressData: any) {
     return this.http.post(`${this.apiUrl}/auth/update-address`, addressData);
   }
